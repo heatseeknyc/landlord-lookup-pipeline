@@ -100,22 +100,22 @@ select x.bbl, first(x.cb_id) as cb_id from (
     select bbl, cb_id from push.registrations group by bbl, cb_id order by bbl, cb_id
 ) as x group by x.bbl;
 
--- A final, crucial aggregation view providing important row counts and other 
--- fields that depend only on the BBL.  It also ends up being pushed over to 
--- the 'hard' schema, and the counts are returned through the initial /lookup 
--- query to inform the user whether we have an overly-large dataset to display 
--- or not.
+-- A final, crucial joining view providing all the basic, high-level 
+-- information we currently provide per BBL.  It also ends up being pushed 
+-- over to the 'hard' schema, and the counts are returned through the initial 
+-- lookup query to inform the user whether we have an overly-large dataset 
+-- to display or not.
 create view meta.property_summary as
 select 
   t.bbl, 
+  t.owner_name      as taxbill_owner_name,  
+  t.mailing_address as taxbill_owner_address,  
+  t.active_date     as taxbill_active_date,
   a.regid_count, a.building_count, b.contact_count, 
-  cast(t.bbl/1000000000 as smallint) as boro_id, c.cb_id,
-  d.geo_lat, d.geo_lon
+  cast(t.bbl/1000000000 as smallint) as boro_id
 from      flat.taxbills as t 
 left join meta.count_registrations_by_bbl as a on a.bbl = t.bbl
-left join meta.count_contacts_by_bbl      as b on b.bbl = a.bbl
-left join meta.first_cbid_by_bbl          as c on c.bbl = a.bbl
-left join push.mapdata                    as d on d.bbl = a.bbl;
+left join meta.count_contacts_by_bbl      as b on b.bbl = a.bbl;
 
 
 
