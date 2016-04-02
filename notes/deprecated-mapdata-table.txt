@@ -1,0 +1,31 @@
+Some snippets of code related to the now-deprecated 'mapdata' table.
+(In case we decide to resurrect it again).
+
+create table flat.mapdata (
+    lat float,
+    lng float,
+    bbl bigint
+);
+
+#!/bin/bash -ue
+stage='./stage'
+COMMAARGS='(DELIMITER \",\", FORMAT CSV, HEADER TRUE)'
+echo '[import] inserting data ...'
+python bin/dopg.py -c '"\copy flat.mapdata FROM '$stage/bbl_lat_lng.txt' '$COMMAARGS';"' 
+echo '[import] done.'
+
+
+create index on flat.mapdata(bbl);
+
+-- Re-orders the columns (so the primary key comes first), 
+-- and gives the lat/lon columns prefixed names as they'll 
+-- appear in the REST api.
+create view core.mapdata as
+select bbl, lat as geo_lat, lng as geo_lon
+from flat.mapdata;
+
+
+create table push.mapdata as
+select * from core.mapdata;
+
+
