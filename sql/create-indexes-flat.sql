@@ -12,7 +12,6 @@ create index on flat.registrations(registrationid);
 create index on flat.registrations(buildingid);
 create index on flat.registrations(housenumber,streetname,zip);
 create index on flat.registrations(housenumber,streetname,boroid);
-create index on flat.mapdata(bbl);
 create index on flat.taxbills(bbl);
 
 -- presently these are needed for the scrubbing phase only.

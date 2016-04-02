@@ -24,9 +24,6 @@ from core.registrations;
 create table push.contacts as
 select * from core.contacts;
 
-create table push.mapdata as
-select * from core.mapdata;
-
 --
 -- A reference table specifying pre-defined sorting order for contact_type fields. 
 --

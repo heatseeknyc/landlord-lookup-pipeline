@@ -13,7 +13,5 @@ create index on push.registrations(building_id);
 create index on push.registrations(house_number,street_name,zip);
 create index on push.registrations(house_number,street_name,boro_id);
 
-create index on push.mapdata(bbl);
-
 create index on push.contact_rank(contact_type);
 commit;

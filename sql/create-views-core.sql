@@ -43,13 +43,6 @@ select
     businesszip           as business_zip
 from flat.contacts;
 
--- Re-orders the columns (so the primary key comes first), 
--- and gives the lat/lon columns prefixed names as they'll 
--- appear in the REST api.
-create view core.mapdata as
-select bbl, lat as geo_lat, lng as geo_lon
-from flat.mapdata;
-
 commit;
 
 

@@ -51,12 +51,6 @@ create table flat.contacts (
     businesszip text
 );
 
-create table flat.mapdata (
-    lat float,
-    lng float,
-    bbl bigint
-);
-
 create table flat.taxbills (
     bbl bigint,
     active_date date,
