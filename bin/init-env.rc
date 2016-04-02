@@ -1,0 +1,5 @@
+export PGROOT=/opt/pg9
+export PATH=$PGROOT/bin:$PATH
+export DYLD_FALLBACK_LIBRARY_PATH=$PGROOT/lib
+# export PYTHONPATH=$PYTHONPATH:pylib
+
