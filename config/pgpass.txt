@@ -1,0 +1,2 @@
+localhost:5432:nyc1:writeuser:sekret
+localhost:5432:nyc1:readuser:sekret
