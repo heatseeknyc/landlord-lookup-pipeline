@@ -1,0 +1,2 @@
+python --version
+psql --version

@@ -1,0 +1,16 @@
+
+To export from database 'nyc1':
+
+  sudo su postgres
+  /opt/pg9/bin/pg_dump -n hard -U postgres nyc1 > /var/tmp/pgdump-hard-YYYYMMDD.sql
+  gzip -9 /var/tmp/pgdump-hard-YYYYMMDD.sql
+
+To export into another database 'nyc2' (on the same host):
+
+  sudo su postgres
+  gunzip /var/tmp/pgdump-hard-YYYYMMDD.sql.gz
+  /opt/pg9/bin/psql -U postgres -d nyc2 -f /var/tmp/pgdump-hard-YYYYMMDD.sql
+
+However to import to a fresh new host:
+
+  /opt/pg9/bin/psql -U postgres -d nyc2 -f sql/create-roles.sql

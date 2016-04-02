@@ -1,0 +1,38 @@
+Some words about the high-level database design, as such.
+
+In the fully "rolled-out" version of the database, there are
+currently 5 schema (if you're new to PostgreSQL, a 'schema'
+is basically just a namespace).  Currently these are
+
+   flat, core, push, meta, hard
+
+As it happens, the "odd" schemas (`flat`,`push`,`hard`) are table-only, 
+while the "even" schemas (`core`,`meta`) are view-only.  (This is simply
+a convention, not any kind of a constraint imposed on the schemas 
+themselves).
+
+The schema names themselves don't have much significance; I just 
+made them up as I went along, realizing at some point it would be 
+nice if they were all of the same character width (a quirky design 
+preference of mine). 
+
+The main thing to understand is that the ordering of the 5 schema 
+(moving from left to right) corresponds to the dataflow from raw 
+(or "flat") sources, that is, the first loads from the NYC HPD 
+datafiles.  These subsequently get transformed ...
+ending up with the set of table in the "hard" schema on the
+right:
+
+   flat -> push -> hard
+
+The idea being that the `hard` schema represents all the data
+you need for the backend service layer (and just what you need,
+nothing more), suitably de-normalized for performance and 
+ease of access.
+
+Consequently, when running the services, it suffices to drop 
+the other 4 schema (or equivalently, to "ship" just the `hard`
+schema, omitting the other 4).  
+
+
+

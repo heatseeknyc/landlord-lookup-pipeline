@@ -1,0 +1,42 @@
+(1) PostgreSQL basics
+
+TODO: initdb
+
+If you haven't used postgres in a while, recall that the 
+service start goes like this:
+
+  postgres -D $PGROOT/data/
+
+While the interactive terminal (with superuser login) 
+goes like this:
+
+  psql -U postgres
+
+The first thing you'll want to do is set a new superuser 
+password:
+
+  alter user postgres with password 'newpassword';
+
+(2) Choose a database name + create a database: 
+
+  create database nyc1;
+
+*IF* you've chosen something other than 'nyc1' for your
+database name, you'll need to push it to the following files:
+  
+  TODO: config/postgres.json
+  TODO: config/pgpass.txt
+  TODO: sql/create-roles.sql
+
+(3) Create write + read users:
+
+  sudo su postgres
+  /opt/pg9/bin/psql -U postgres -d nyc1 -f sql/create-roles.sql
+
+This should be the last command we need to do via either the
+system or the database 'postgres' user.
+
+TODO: bin/push-pgpass.sh
+
+
+

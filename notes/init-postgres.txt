@@ -1,0 +1,24 @@
+Initializing PosgreSQL
+
+TODO: initdb
+
+  pg_ctl -D /path/to/data-old stop
+
+  sudo su postgres
+  initdb -D /path/to/data-new
+  pg_ctl -D /path/to/data-old start
+
+
+  psql -U postgres
+  % create database nyc3;
+  CREATE DATABASE
+  % postgres=# \q
+
+  % psql -U postgres -d nyc3 -f /var/tmp/create-roles.sql 
+  BEGIN
+  CREATE ROLE
+  CREATE ROLE
+  GRANT
+  COMMIT
+
+

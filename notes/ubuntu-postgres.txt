@@ -1,0 +1,18 @@
+
+  /etc/postgresql/9.3/main/postgresql.conf
+  # data_directory = '/var/lib/postgresql/9.3/main'
+
+  /etc/init.d/postgresql stop
+
+
+  # vi /etc/postgresql/9.3/main/pg_hba.conf
+
+  # local   all             all                                     peer
+  local   all             all                                     md5
+
+
+notes:
+
+  ERROR:  unrecognized configuration parameter "row_security"
+
+  psql: FATAL:  Peer authentication failed for user "readuser"

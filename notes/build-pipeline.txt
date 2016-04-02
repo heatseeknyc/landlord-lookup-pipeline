@@ -1,0 +1,92 @@
+
+(1) Staging
+
+TODO: describe how to get rawfiles + place into staging dir. 
+
+  ln -s $stagepath stage
+  bin/dedup.py stage/RegistrationContact20160229.txt > stage/contacts-dedup.txt
+  cd stage
+  ln -s Registration20160229.txt registrations.txt
+  cd ..
+
+Also note the YYYYMMDD part of the registrations dump,
+which we'll need in Step 3.
+
+(2) Create new database.
+
+  bin/dopg.py -f sql/create-database.sql 
+
+
+(3) Create public functions.
+
+Not used until later, but we might as well create them now:
+
+  bin/dopg.py -f sql/create-functions.sql 
+  bin/dopg.py -f sql/create-first-last.sql
+
+
+(4) Create 'flat' schema, and import raw data:
+
+  bin/dopg.py -f sql/create-schema-flat.sql
+  bin/import-rawdata.sh 
+
+(5) Scrub addresses + build indices:
+
+  # These might take few minutes each. 
+  bin/dopg.py -f sql/fix-contact-addresses.sql 
+  bin/dopg.py -f sql/fix-registrations-addresses.sql 
+  bin/dopg.py -f sql/create-indexes-flat.sql 
+
+(6) 'core' schema
+
+  bin/dopg.py -f sql/create-schema-core.sql 
+  bin/dopg.py -f sql/create-views-core.sql 
+
+(7) 'push' schema
+
+This phase is slightly different, in that the 'create schema'
+script also populates its tables:
+
+  bin/dopg.py -f sql/create-schema-push.sql 
+  bin/dopg.py -f sql/create-indexes-push.sql
+
+(8) 'meta' schema
+
+  bin/dopg.py -f sql/create-schema-meta.sql 
+  bin/dopg.py -f sql/create-views-meta.sql 
+
+(9) 'hard' schema
+
+The 'create' statement also populates the tables + grants 
+privilegs to our read user:
+
+  bin/dopg.py -f sql/create-schema-hard.sql 
+  bin/dopg.py -f sql/create-indexes-hard.sql
+
+BTW it'd be worth nothing the psql output at for the 'create'
+script; it should emit meaningful rowcounts for the tables we're 
+creating, e.g.:
+
+  DROP SCHEMA
+  CREATE SCHEMA
+  SELECT 157666
+  SELECT 577071
+  SELECT 141341
+  GRANT
+  GRANT
+  COMMIT
+
+
+TODO: provide detail
+
+  We're now ready to export the 'hard' schema as per the steps 
+  given in notes/export-database.txt.
+
+  However, if you're running the REST gateway on the same host
+  then you can also start running the daemon scrips to connect to
+  these tables directly.
+
+
+
+
+
