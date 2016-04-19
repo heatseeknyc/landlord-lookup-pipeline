@@ -4,12 +4,11 @@
 
 begin;
 
-create index on hard.contact_info(id);
-create index on hard.contact_info(bbl);
-create index on hard.registrations(id);
-create index on hard.registrations(bbl);
-create index on hard.registrations(house_number,street_name,boro_id);
-create index on hard.property_summary(bbl);
+create index on hard.contact_info(contact_id);
+create index on hard.contact_info(bbl,bin);
+create index on hard.property_summary(bbl,bin);
+create index on hard.property_summary(bbl,bin,boro_id);
+create index on hard.property_summary(boro_id);
 
 commit;
 

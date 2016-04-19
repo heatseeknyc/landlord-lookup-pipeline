@@ -1,8 +1,88 @@
 begin;
 
+-- These two views are analagous to the originals in the flat/push schema,
+-- but purged of "rogue" BBL and BIN partial keys that can't be reliably 
+-- joined on.  (The filtering is nearly the same in both joins; except the 
+-- equality check in BBL isn't necessary in the registrations view, because 
+-- this constraint is already enforced in the table it pulls from).
+
+create view meta.dhcr_tuples as
+select * from flat.dhcr_tuples 
+where 
+  bbl is not null and bbl >= 1000000000 and 
+  bin is not null and bin not in (0,1000000,2000000,3000000,4000000,5000000);
+
+create view meta.registrations as
+select * from push.registrations 
+where 
+  bbl is not null and 
+  bin is not null and bin not in (0,1000000,2000000,3000000,4000000,5000000);
+
 --
--- Aggregation Views 
--- These end up getting mapped 1-1 with tables in the 'hard' schema.
+-- The following two views are simple aggregations that tell us what we need
+-- to know about a given property from the DHCR and HPD data sets respectively,
+-- given a composite key (BBL,BIN), and feed into the 'partial_summary' view
+-- defined below.
+--
+-- The "_active" flags are slotted in to make the query syntax in the 
+-- 'partial_summary' view a bit simpler (even though they would of course be 
+-- superfluous for these views, considered in isolation). 
+--
+create view meta.dhcr_status as
+select bbl,bin,1 as dhcr_active from meta.dhcr_tuples group by bbl,bin;
+
+create view meta.registration_status as
+select a.bbl, a.bin, count(distinct b.id) as contact_count, 1 as nychpd_active
+from      meta.registrations as a
+left join push.contacts      as b on b.registration_id = a.id
+group by a.bbl,a.bin;
+
+
+--
+-- A crucial joining view on the two above views.
+--
+-- Equivalent to a full outer join on the above two tables (but with the 
+-- BBL/BIN keys coalesced on cases where they match in one  of the views but 
+-- not the other).  Basically it tells us everything (of current interest) that 
+-- the DHCR + NYCHPD datasets can tell us about a property for a given property 
+-- (going by bbl/bin as a composite key, which may not be present in each
+-- table separately).
+--
+create view meta.partial_summary as
+select a.bbl, a.bin, a.dhcr_active, b.contact_count, b.nychpd_active
+from      meta.dhcr_status         as a 
+left join meta.registration_status as b on b.bbl = a.bbl and b.bin = a.bin
+union
+select b.bbl, b.bin, a.dhcr_active, b.contact_count, b.nychpd_active
+from      meta.registration_status as b 
+left join meta.dhcr_status         as a on a.bbl = b.bbl and a.bin = b.bin;
+
+-- Finally, our big happy view that tells us everything we need to know
+-- about a property given a combination of (BBL,BIN).  Feeds into the "hard"
+-- table of the same name, which is consumed by our REST service.
+create view meta.property_summary as
+select 
+  a.bbl, b.bin, cast(a.bbl/1000000000 as smallint) as boro_id,
+  b.dhcr_active, b.nychpd_active, b.contact_count,
+  a.owner_name      as taxbill_owner_name,  
+  a.mailing_address as taxbill_owner_address,  
+  a.active_date     as taxbill_active_date
+from      flat.taxbills        as a 
+left join meta.partial_summary as b on b.bbl = a.bbl;
+
+-- Equivalent to the above, but with shorter column names (and truncated 
+-- values for taxbill fields), for more convenient browsing.  For internal 
+-- troubleshooting only.
+create view meta.property_summary_tidy as
+select 
+  bbl, bin, boro_id as boro, 
+  dhcr_active as dhcr, nychpd_active as nychpd, contact_count as contacts
+from meta.property_summary;
+
+
+--
+-- The next two view feed into the "contact_info" view in this schema
+-- (and into the "hard" table of the same name).
 --
 
 -- A simplified view of push.contacts with some column names, other columns 
@@ -10,7 +90,7 @@ begin;
 -- ordering rank for contact_type slotted in.
 create view meta.contacts_simple as 
 select 
-  a.id, registration_id, a.contact_type, b.id as contact_rank, 
+  a.id as contact_id, registration_id, a.contact_type, b.id as contact_rank, 
   contact_description as description, corporation_name as corpname, 
   public.make_contact_name(contact_first_name,contact_middle_initial,contact_last_name) as contact_name,
   public.make_contact_addr(
@@ -19,163 +99,26 @@ select
 from push.contacts               as a
 left join push.contact_rank as b on b.contact_type = a.contact_type;
 
--- A crucial aggregation showing distinct tuples of (contact_id, registration_id, bbl) 
--- with building + result counts slotted in.  Since registration_id depeends strictly on 
--- contact_id, we have as an effective composite key the tuple (contact_id, bbl).
+--
+-- And this view provides all contacts for a given (BBL,BIN) using shortened 
+-- contact information fields defined above, and registration fields of potential
+-- interest slotted in (some of which are useful for diagnostic purposes, even
+-- though they don't appear in the UI). It also gets pushed to the "hard" scheme, 
+-- into a table of the same name.
+--
+-- Note that because we're left-joining on registrations, we aren't guaranteed 
+-- that all our contacts records will be retrieved; and indeed (as of Feb 2016)
+-- around 1 % of all contact records are thusly "orphaned" -- due to the fact 
+-- they were orphaned in the original data (i.e. had no registration IDs in 
+-- the files as they came to us from the NYCHPD).
 -- 
--- Note that in general, this result set will be slightly larger than our initial
--- contacts set; for example, currently we have:
---
---    select count(*) from push.contacts;         576582
---    select count(*) from meta.lookup_contacts;  577052
---
--- This is to account for the fact that certain Contact IDs are associated with more 
--- than one BBL (through their associated Reg IDs).  At the same time, we're guaranteed
--- that for a given BBL, Contact IDs will be unique throughout that result set.  
---
--- The intended use case is generally "select * where bbl = ?" which gets you a 
--- list of distinct Contact IDs, with RegIDs slotted in.
---
-create view meta.lookup_contacts as
-select 
-  a.id as contact_id, a.registration_id, b.bbl, 
-  count(distinct building_id) as building_count,
-  count(*)                    as result_count
-from      push.contacts      as a
-left join push.registrations as b on b.id = a.registration_id
-group by a.id, a.registration_id, b.bbl;
-
-
--- A front-end view (equivalent to a hard table we'll be accessing directly 
--- from the REST API) providing (basically) the same result set as above, but
--- with simplified contact info slotted in.  The idea is that you can just do
---
---   "select * where bbl = ?" 
---
--- to get simplified contact info by BBL, suitable for consumption over the 
--- REST API.
---
--- Caveats:
---
--- (1) A significant number (currently 2231) of the BBL in push.registrations 
--- will not appear in this result set (for the simple reason that none of their
--- associated Reg IDs appear in push.contacts).  Hence selects on these BBLs will 
--- turn up empty. Such BBLs are called "orphaned", and the empty result sets need 
--- to be explained to front-end users.  See the section on "Analytical Views"
--- below for some simple queries to isolate these cases.
---
--- (2) In addition, for a very small number of BBLs (currently 10), the result
--- sets will contain repeated Contact IDs with nearly identical attributes. 
--- This is due to a small number of Contact IDs appearing twice in push.contacts;
--- these are also treated in section on Analytical Views, below. 
---
 create view meta.contact_info as
-select a.bbl, b.*
-from      meta.lookup_contacts as a
-left join meta.contacts_simple as b on b.id = a.contact_id;
-
-
-
-
-
--- A few intermediate views (used by our last aggregation view). 
-
-create view meta.count_registrations_by_bbl as 
-select bbl, count(distinct id) as regid_count, count(distinct building_id) as building_count 
-from push.registrations group by bbl;
-
-create view meta.count_contacts_by_bbl as
-select a.bbl, count(distinct b.id) as contact_count
-from      push.registrations as a
-left join push.contacts      as b on b.registration_id = a.id
-group by a.bbl;
-
--- Takes care of a very small number of BBLs which have more than one 
--- cb_id for some reason (which seems to happen quite often).   
--- Joining on this view forces the cb_id to be unique to a given BBL
--- (and the ordering in the inner select forces the association to be
--- reproducible).
-create view meta.first_cbid_by_bbl as
-select x.bbl, first(x.cb_id) as cb_id from (
-    select bbl, cb_id from push.registrations group by bbl, cb_id order by bbl, cb_id
-) as x group by x.bbl;
-
--- A final, crucial joining view providing all the basic, high-level 
--- information we currently provide per BBL.  It also ends up being pushed 
--- over to the 'hard' schema, and the counts are returned through the initial 
--- lookup query to inform the user whether we have an overly-large dataset 
--- to display or not.
-create view meta.property_summary as
 select 
-  t.bbl, 
-  t.owner_name      as taxbill_owner_name,  
-  t.mailing_address as taxbill_owner_address,  
-  t.active_date     as taxbill_active_date,
-  a.regid_count, a.building_count, b.contact_count, 
-  cast(t.bbl/1000000000 as smallint) as boro_id
-from      flat.taxbills as t 
-left join meta.count_registrations_by_bbl as a on a.bbl = t.bbl
-left join meta.count_contacts_by_bbl      as b on b.bbl = a.bbl;
-
-
-
---
--- Analytical Views
---
--- These are for troubleshooting only; they help highlight corner cases 
--- in the the data that don't occur very often for users, but can throw 
--- off row counts or be difficult to troubleshoot for other reasons.
---
-
--- A Reg ID is said to be orphaned if it doesn't appear in push.contacts.
-create view meta.orphaned_registrations as
-select a.* 
-from      push.registrations as a
-left join push.contacts      as b on b.registration_id = a.id 
-where b.id is NULL;
-
--- A BBL is "entirely orphaned" if all of its Reg IDs are orphaned.
-create view meta.entirely_orphaned_contacts as
-select * from meta.contact_info where bbl in (
-  select distinct bbl from meta.count_contacts_by_bbl where contact_count = 0
-);
-
--- A BBL is "partially orphaned" if some, but not all of its Reg IDs are orphaned.  
-create view meta.partially_orphaned_bbls as
-select * from meta.orphaned_registrations where bbl not in (
-  select distinct bbl from meta.count_contacts_by_bbl where contact_count = 0
-);
-
---
--- The views concern Contact IDs appearing more than once in push.contacts, which, 
--- while small in number, can throw off summaries + checksums (and be mildly confusing 
--- to end-users, when they show up in result sets.
---
-
--- All duplicate contact IDs (yields 13 instances in the Dec 2015 dataset).
-create view meta.degenerate_contacts as 
-select id, count(*) from meta.contacts_simple group by id having count(*) > 1;
-
---
--- Pairs of (registration_id, contact_id) appearing more than once in push.contacts.
--- Currently these are always many-to-one (i.e. sometimes multiple registration IDs per 
--- contact ID, but never the other way around); as long as this holds, contact IDs are 
--- unique in this set (and hence the row count is the number of such degenerate IDs).
---
-create view meta.degenerate_contact_pairs as 
-select registration_id, id as contact_id, count(*) from push.contacts where id in (
-  select id from push.contacts group by id having count(*) > 1
-) group by registration_id, id;
-
-
--- All result sets from meta.contact_info containing at least one degenerate contact ID.
--- Currently 62 rows over 10 BBLs.
-create view meta.degenerate_contact_info as
-select * from meta.contact_info where bbl in (
-  select distinct bbl from push.registrations where id in (
-    select distinct registration_id from meta.degenerate_contact_pairs
-  )
-) order by bbl;
+  a.id as registration_id, bin, bbl, building_id, last_date, end_date,
+  b.contact_id, b.contact_type, b.contact_rank, b.description, 
+  b.corpname, b.contact_name, b.business_address
+from meta.registrations        as a
+left join meta.contacts_simple as b on b.registration_id = a.id;
 
 commit;
 
