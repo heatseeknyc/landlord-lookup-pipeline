@@ -2,7 +2,7 @@
 Data Model for the NYC Landlord Lookup Tool
 ===========================================
 
-High level description of the data model as such.
+High level description of primary data sources, ETL pipeline, and the internal data model as such. 
 
 Primary Sources 
 ===============
@@ -48,8 +48,11 @@ In this sense, the "pipeline" and "gateway" are fully compartmentalized
 projects, in general built in complete isolation from one another and 
 connecting via the manual shipping process described above.
 
-Join Strategy
-=============
+Data Model
+==========
+
+Joining Strategy
+----------------
 
 The most important thing to know about how the various tables are 
 joined (together with the responses from the NYC Geoclient) is that
