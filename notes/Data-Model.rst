@@ -8,11 +8,10 @@ Primary Sources
 ===============
 
 One way or another, data gets pulled and mixed from the following sources:
-
-NYC Geoclient API
-taxbills.nyc
-HPD registered contacts
-DHCR rent stabilization
+- NYC Geoclient API
+- taxbills.nyc
+- HPD registered contacts
+- DHCR rent stabilization
 
 Within the running application, the NYC Geoclient API is always accessed 
 dynamically (that is, its results are never cached or ETL'd into a local 
