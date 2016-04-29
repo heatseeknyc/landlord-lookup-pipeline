@@ -1,0 +1,16 @@
+Once the ETL process has made it through its final steps (with the "hard") schema populated, we need to ship the tables we need (i.e. just the "hard" schema) over to the gateway host.  Here's how that happens. 
+
+Let's say we just finished the ETL process on database 'nyc1'.  Here's how we make a dump:
+
+  sudo su postgres
+  /opt/pg9/bin/pg_dump -n hard -U postgres nyc1 > /var/tmp/pgdump-hard-YYYYMMDD.sql
+  gzip -9 /var/tmp/pgdump-hard-YYYYMMDD.sql
+
+The YYYYMMDD datestamp is just a record-keeping convention so that we have at least some idea of what version of the 3 combined datasets were' looking at.  Since it's most likely the HPD dataset which was most recently updated, 
+
+So, one way or another we get it to the gateway host, and from there consult the note
+
+  notes/HOWTO-import-database.txt
+
+In the landlord-lookup-gateway repo.
+
