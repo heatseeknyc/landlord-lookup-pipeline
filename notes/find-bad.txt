@@ -1,3 +1,0 @@
-
-select * from push.registrations as a left join flat.taxbills as b on b.bbl = a.bbl where b.bbl is NULL;
-
