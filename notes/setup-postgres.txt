@@ -1,42 +1,81 @@
-(1) PostgreSQL basics
+Notes on setting up postgres, out-of-the-box.
 
-TODO: initdb
+The setup is not complicated, but assumes you have some basic familiar
+with the installation process + basic admin practices for postgres, or 
+can brush up on them quickly.
 
-If you haven't used postgres in a while, recall that the 
-service start goes like this:
 
-  postgres -D $PGROOT/data/
+(1) Installation + Setup 
 
-While the interactive terminal (with superuser login) 
-goes like this:
+We prefer to do a custom install (apart from whatever you might
+already have installed locally), to the following location (which
+should be owned by root):
 
-  psql -U postgres
+    /opt/pg9
 
-The first thing you'll want to do is set a new superuser 
-password:
+Which will correspond to the environment settings in the .rc file:
 
-  alter user postgres with password 'newpassword';
+    bin/init-env.rc
+
+which you'll want to source every time you do admin-level stuff in 
+this project.
+
+If you haven't used postgres in a while, recall that the service 
+start goes like this:
+
+    postgres -D $PGROOT/data/
+
+While the interactive terminal (with superuser login) goes like this:
+
+    psql -U postgres
+
+It should require no password (or perhaps password 'postgres') the
+first time you run it.  The first thing you'll want to do is set a new 
+superuser password:
+
+    alter user postgres with password 'newpassword';
+
 
 (2) Choose a database name + create a database: 
 
-  create database nyc1;
+Pick a name, any name, for the database you'll be using:
 
-*IF* you've chosen something other than 'nyc1' for your
-database name, you'll need to push it to the following files:
+    create database nyc1;
+
+Whatever you call your database, you'll need to propogate this name
+to the following script / config files:
   
-  TODO: config/postgres.json
-  TODO: config/pgpass.txt
-  TODO: sql/create-roles.sql
+    config/postgres.json
+    config/pgpass.txt
+    sql/create-roles.sql
 
-(3) Create write + read users:
 
-  sudo su postgres
-  /opt/pg9/bin/psql -U postgres -d nyc1 -f sql/create-roles.sql
+(3) Create 'readuser' and 'writeuser' roles:
+
+    sudo su postgres
+    /opt/pg9/bin/psql -U postgres -d nyc1 -f sql/create-roles.sql
 
 This should be the last command we need to do via either the
 system or the database 'postgres' user.
 
-TODO: bin/push-pgpass.sh
+
+(4) Push pgpass file
+
+The 'pgpass' file is the preferred mechanism for managing stored
+database user passwords in a postgres environment.  If desired, you
+can edit the source file to change the default password settings: 
+
+   vi config/pgpass.txt
+
+Then run the following script to push it out to its working location: 
+
+   sudo bin/push-pgpass.sh
+
+It may be good at this point to verify that the password settings 
+actually work in regard to the roles just created: 
+
+   psql -U readuser nyc1
+
 
 
 
