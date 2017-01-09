@@ -17,7 +17,10 @@ Which live under this link:
 
    http://www1.nyc.gov/site/hpd/about/registration-open-data.page
 
-Note that you should pull the dataset most closely matching the date of the taxbills scrape.
+Note that you should pull the dataset most closely matching the date of the taxbills scrape.  The exact path may change by the time you run this, but one way or another you want to grab that file, and unpack it in the staging directory: 
+
+   curl -O Registrations20161101.zip
+   unzip Registrations20161101.zip
 
 
 DHCR Rent Stablization Data 
