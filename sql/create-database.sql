@@ -1,3 +1,3 @@
 
-create database nyc4
-grant all privileges on database nyc4 to writeuser;
+create database nyc1
+grant all privileges on database nyc1 to writeuser;

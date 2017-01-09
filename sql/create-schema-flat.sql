@@ -10,7 +10,6 @@ begin;
 drop schema if exists flat cascade;
 create schema flat; 
 
-
 create table flat.registrations (
     registrationid integer,
     buildingid integer,
@@ -61,7 +60,7 @@ create table flat.taxbills (
 create table flat.dhcr_tuples (
     bbl bigint,
     bin integer 
-}
+);
 
 commit;
 
