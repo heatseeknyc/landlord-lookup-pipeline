@@ -1,20 +1,10 @@
 
 (1) Staging
 
-TODO: describe how to get rawfiles + place into staging dir. 
+As a pre-requisite, make sure the steps in the Data Staging writeup 
+have been tended to:
 
-  ln -s $stagepath stage
-  bin/dedup.py stage/RegistrationContact20160229.txt > stage/contacts-dedup.txt
-  cd stage
-  ln -s Registration20160229.txt registrations.txt
-  cd ..
-
-Also note the YYYYMMDD part of the registrations dump,
-which we'll need in Step 3.
-
-(2) Create new database.
-
-  psql -U postgres -f sql/create-database.sql 
+   notes/Data-Staging.rst
 
 
 (3) Create public functions.
@@ -23,7 +13,6 @@ Not used until later, but we might as well create them now:
 
   bin/dopg.py -f sql/create-functions.sql 
   bin/dopg.py -f sql/create-first-last.sql
-
 
 (4) Create 'flat' schema, and import raw data:
 
