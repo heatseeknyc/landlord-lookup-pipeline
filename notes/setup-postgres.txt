@@ -65,17 +65,19 @@ The 'pgpass' file is the preferred mechanism for managing stored
 database user passwords in a postgres environment.  If desired, you
 can edit the source file to change the default password settings: 
 
-   vi config/pgpass.txt
+    vi config/pgpass.txt
 
 Then run the following script to push it out to its working location: 
 
-   sudo bin/push-pgpass.sh
+    sudo bin/push-pgpass.sh
 
 It may be good at this point to verify that the password settings 
 actually work in regard to the roles just created: 
 
-   psql -U readuser nyc1
+    psql -U readuser nyc1
 
 
+(5) Grant writeuser priveleges
 
+   psql -U postgres -f sql/grant-privileges-writeuser.sql
 
