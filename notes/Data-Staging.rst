@@ -9,12 +9,11 @@
 
 (1) HPD registrations + contacts
 
-TODO: describe how to get rawfiles + place into staging dir.
+These just require unpacking, deduping + renaming.
 
-  ln -s $stagepath stage
     cd stage
     unzip Registrations20161101.zip
-    python ../bin/dedup.py RegistrationContact20161031.txt > contacts-dedup.txt
+    python ../bin/dedup.py < RegistrationContact20161031.txt > contacts-dedup.txt
     ln -s Registration20161031.txt registrations.txt
 
 Also, make a note the YYYYMMDD part of the registrations file; which we'll need in Step X. 
