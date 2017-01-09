@@ -40,6 +40,12 @@ The data we have access dates from 2013 (and could use updating).  Here's the to
 
 Because the raw file is somewhat big, GitHub creates a special location for it, which has changed over time.  Here's the current directly accessible URL:
 
+    cd stage
     curl -O https://raw.githubusercontent.com/clhenrick/dhcr-rent-stabilized-data/master/csv/dhcr_all_geocoded.csv
+
+Once available, the file needs to be filtered before loading:
+
+    cd ..
+    bin/filter-dhcr.sh
 
 

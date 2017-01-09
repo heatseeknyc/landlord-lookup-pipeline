@@ -10,6 +10,7 @@ JK's taxbill scrapes, performed aperiodically:
 
     curl -O http://taxbills.nyc/rawdata.csv.gz
 
+
 HPD Registered Contacts
 =======================
 
@@ -19,19 +20,16 @@ Which live under this link:
 
 Note that you should pull the dataset most closely matching the date of the taxbills scrape.  The exact path may change by the time you run this, but one way or another you want to grab that file, and unpack it in the staging directory: 
 
-   curl -O Registrations20161101.zip
+   curl -O http://www1.nyc.gov/assets/hpd/downloads/misc/Registrations20161101.zip
    unzip Registrations20161101.zip
 
 
 DHCR Rent Stablization Data 
 ===========================
 
-The reults of FOIA requests, last done in 2013 -- by now a bit stale (but better than nothing):
+The reults of FOIA requests, last done in 2013 -- by now a bit stale (but better than nothing.  Here's the top-level location for these files:
+  
+    https://github.com/clhenrick/dhcr-rent-stabilized-data/tree/master/csv
 
-    curl -O https://github.com/clhenrick/dhcr-rent-stabilized-data/blob/master/csv/dhcr_all_geocoded.csv
-
-Recently I've found out about efforts to modernize the DHCR collection process, and hope to update this pipeline to make use of such efforts shortly. 
-
-
-
+See the instructions in 'Data-Staging.rst' for exact instructions on how to get the file of interest.
 
