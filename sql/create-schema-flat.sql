@@ -62,5 +62,32 @@ create table flat.dhcr_tuples (
     bin integer 
 );
 
-commit;
+-- MAPPluto version 16v2
+create table flat.pluto (
+    BBL bigint,
+    Address text,
+    AssessLand float, 
+    AssessTot float, 
+    BldgArea integer,
+    BldgClass text, 
+    CD integer, 
+    CondoNo integer,
+    HistDist text, 
+    LandUse text, 
+    Landmark text, 
+    NumBldgs integer,
+    NumFloors float, 
+    OwnerName text, 
+    OwnerType text, 
+    PLUTOMapID integer,
+    UnitsRes integer, 
+    UnitsTotal integer, 
+    YearBuilt integer, 
+    ZoneDist1 text, 
+    ZoneDist2 text, 
+    ZoneDist3 text, 
+    ZoneDist4 text, 
+    ZoneMap text 
+);
 
+commit;
