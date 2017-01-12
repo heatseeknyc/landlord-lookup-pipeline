@@ -1,0 +1,51 @@
+
+Notes about issues we've observed with with the 'RegistrationContactsYYYYMMDD.txt' file (as of the 20161031 version), and how to address them. 
+
+
+Basically the contacts file, as it comes down the pipe from HPD, tends to have certain "glitches" that are typical with CSV-like files produced in not-so-robust environments.  Each of these presents itself when attempting to run the 'bin/import-rawdata.sh' or 'bin/import-contacts.sh' scripts (the former is used on production; the latter is used for troubleshooting just the copy operation on the contacts dataset). 
+
+Our current approach is to apply a manual fix (i.e. go in and hand-edit the file), given that an automated fix would be too cumbersome to produce at this point (especially when we have no guarantee that such a fix would be stable in regard to future releases of this file); and given that we currently don't have to do this loading process all that often.
+
+The 3 basic error types and their manual fixes, are as follows:
+
+(1) "ERROR: missing data for column "--whatever--"
+
+So when you attempt to run the import scripts, you'll see this happening:
+
+
+    EXEC: psql -U writeuser -d nyc1 -c "\copy flat.contacts FROM ./stage/contacts-dedup.txt (DELIMITER \"|\", FORMAT CSV, HEADER TRUE);"
+    Password for user writeuser: 
+    ERROR:  missing data for column "businessstate"
+    CONTEXT:  COPY contacts, line 128786: "10001513|100015|SiteManager|CO-OP|||PERSAVOL "BUDDY||RAMDEHOLL||||||
+    81114403|811144|CorporateOwner|..."
+
+
+What's happening is that the non-escaped double-quote character ('"'), which causes the COPY man to keep looking forward -- even skipping end of line characters -- until it finds the "enclosing" quote character, however many lines down.  When it does so, and that "enclosing" quote occurs in a column position before that of starting quote character -- it thinks thar row is too short, and that you're missing data. 
+
+FIX:  For now we just remove all double-quote characters from the file.
+
+Note that this "FIX" will also take care of the error source describd in item (3).
+
+
+(2) ERROR:  extra data after last expected column
+
+    ERROR:  extra data after last expected column
+    CONTEXT:  COPY contacts, line 575463: "37838514|378385|Lessee|GEN.PART|104 WASHINGTON LLC||ARON||ZUPNICK|130|RUTLEDGE STREET|||BROOKLYN|NY|..."
+    [import] done.
+
+This can have two causes: either there's a double-quote character embedded in the line, but -after- the position of the starting quote (in which case the fix, again, is to remove all double-quote characters from the file).  
+
+Or -- as in the excerpt above -- there are no double-quote characters; but a count of pipe symbols reveals that there are one too many (15 instead of 14 as expected).  So apparently one of these slipped in, unescapped -- you just have to figure out where.  In the above case, it appears to be between the street name and city fields.  Simply remove the offending pipe symbol, and re-load. 
+
+
+(3) The file seems to load, but the copied line count is way too low!
+
+    ERROR:  missing data for column "businessapartment"
+    CONTEXT:  COPY contacts, line 217036: "33544204|335442|Agent|LLC|MC O"BRIEN SERVICE CORP||SHELLY||LAVA|4718|AVENUE N||BKLYN|NY|11234
+    335442..."
+
+Which seems strange, given that the file itself has some 593864 rows.  What's happening here is similar to error case (1) except the enclosing quote (however many lines down) occurs in the same position as the starting quote -- so the COPY command happily slurps all those intermediate lines into one giant textblob for that column position.
+
+FIX:  As with error case (1), for now we just remove all double-quote characters from the file.
+
+

@@ -14,12 +14,20 @@ Which our 'bin/import-rawdata.sh' script can act on directly.
 
 (1) + (2) HPD registrations + contacts
 
-These just require unpacking, deduping + renaming.
+These just require the following steps: 
+- first unpacking from the zip
+- renaming one of the files (the registrations file)
+- performing a dedup step on the other file (the contacts file), outputing to a new file
+- then (most likely) performing a (quick) manual cleanup step on the newly dedup'd contacts file. 
+
+Which goes like this:
 
     cd stage
     unzip Registrations20161101.zip
-    python ../bin/dedup.py < RegistrationContact20161031.txt > contacts-dedup.txt
     ln -s Registration20161031.txt registrations.txt
+    python ../bin/dedup.py < RegistrationContact20161031.txt > contacts-dedup.txt
+
+The manual cleanup step on the 'contacts-dedup.txt' file is described in the note 'fixing-registration-contacts.txt'. 
 
 Also, make a note the YYYYMMDD part of the registrations file; which we'll need in Step X. 
 
