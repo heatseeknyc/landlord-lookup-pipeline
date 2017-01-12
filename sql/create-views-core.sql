@@ -43,6 +43,34 @@ select
     businesszip           as business_zip
 from flat.contacts;
 
+create view core.pluto as 
+select
+    BBL                   as bbl, 
+    Address               as address, 
+    AssessLand            as assess_land, 
+    AssessTot             as assess_total, 
+    BldgArea              as bldg_area, 
+    BldgClass             as bldg_class,  
+    CD                    as comm_dist,
+    CondoNo               as condo_number,
+    HistDist              as hist_dist, 
+    LandUse               as land_use, 
+    Landmark              as landmark, 
+    NumBldgs              as num_bldgs, 
+    NumFloors             as num_floors, 
+    OwnerName             as owner_name, 
+    OwnerType             as owner_type,  
+    PLUTOMapID            as map_id, 
+    UnitsRes              as units_res, 
+    UnitsTotal            as units_total, 
+    YearBuilt             as year_built,
+    ZoneDist1             as zone_dist1, 
+    ZoneDist2             as zone_dist2, 
+    ZoneDist3             as zone_dist3, 
+    ZoneDist4             as zone_dist4, 
+    ZoneMap               as zone_map 
+from flat.pluto;
+
 commit;
 
 
