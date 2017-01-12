@@ -1,3 +1,4 @@
+Mental snippets of how we worked around certain glitches in the Ubuntu-specific installation. 
 
   /etc/postgresql/9.3/main/postgresql.conf
   # data_directory = '/var/lib/postgresql/9.3/main'
