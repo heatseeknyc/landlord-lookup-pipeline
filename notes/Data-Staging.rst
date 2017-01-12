@@ -11,6 +11,8 @@ Basically the idea is that we want to end up with the following 5 CSV(-like) fil
 
 Which our 'bin/import-rawdata.sh' script can act on directly.
 
+PLEASE NOTE: The instructions in this writeup are in reference to external data sources in their current (2016 Q4) shape.  In the future, these external sources -- if they are still available -- are likely to mutate slightly (e.g. in regard to file names and archive structure, etc).  So you may have to adapt these instructions, accordingly. 
+
 
 (1) + (2) HPD registrations + contacts
 
@@ -27,23 +29,37 @@ Which goes like this:
     ln -s Registration20161031.txt registrations.txt
     python ../bin/dedup.py < RegistrationContact20161031.txt > contacts-dedup.txt
 
-The manual cleanup step on the 'contacts-dedup.txt' file is described in the note 'fixing-registration-contacts.txt'. 
+So the output files will be:
 
-Also, make a note the YYYYMMDD part of the registrations file; which we'll need in Step X. 
+    stage/registrations.txt
+    stage/contacts-dedup.txt
+
+You'll then need to perform the manual cleanup step on the 'contacts-dedup.txt' file as described in the note 'fixing-registration-contacts.txt'. 
+
+BTW, make a note the YYYYMMDD part of the registrations file; it's basically the "as-of" date of the HPD snapshot.
+
 
 
 (3) Taxbills
 
-The processing on the raw taxbills scrape is a bit more complex; after uncompressing, 
-we need to select what appeas to bthe most recent ownership record for each BBL (containing
-at least an "owner name" field), and emit a new CSV that's 1-to-1 between these records 
-and BBLs (narrowing out file from about 56M rows to just over 1M in the process).
+The processing on the raw taxbills scrape requires an algorithm step (in which we select 
+what appears to bthe most recent ownership record for each BBL, each containing at least 
+an "owner name" field), and emit a new CSV that's 1-to-1 between these records 
+and BBLs  -- narrowing out file from about 56M rows to just over 1M in the process).
 
-The script takes a while to run, but it goes like this:
+Which goes like this:
 
     cd ..
     gunzip stage/rawdata.csv.gz
-    python -m taxbills --infile=stage/rawdata.csv --outfile=stage/taxbills-latest.csv
+    python -m apps.taxbills --srcdir=stage
+
+It takes about 4-5 minutes to run, and, given a source directory, references both
+input files and output files from fixed locations relative to that directory. 
+
+It takes about 4-5 minutes to run and, references the input input file relative 
+to the given source directory, and outputs to a fixed location:
+
+    stage/taxbills-latest.csv
 
 
 (4) DHCR tuples
@@ -62,7 +78,28 @@ Once available, the file needs to be filtered before loading:
     cd ..
     bin/filter-dhcr.sh
 
+Which is hard-coded to expect 'stage' as the directory to find the raw input file,
+and outputs to
+
+    stage/dhcr_tuples.csv
+
 
 (5) MAPPluto
 
-tba
+First we unpack the 
+
+Which might go like this:
+
+    mkdir stage/pluto
+    unzip nyc_pluto_16v2%20.zip -d /var/tmp
+    mv /var/tmp/BORO_zip_files_csv/\*.csv stage/pluto
+    ls stage/pluto/
+    BK.csv  BX.csv  MN.csv  QN.csv  SI.csv
+    python -m apps.pluto --srcdir=stage
+
+It takes about 40 seconds to run and, like the taxbills script, references the input 
+input files relative to the given source directory, and outputs to a fixed location:
+
+    stage/pluto-latest.csv
+
+
