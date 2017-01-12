@@ -1,0 +1,24 @@
+Some quick stats on the overlap between the pluto + taxbills datasets (16v2 and Sep 2016, respectively).
+
+    select count(*) from flat.taxbills; 1082459
+    select count(*) from core.pluto; 858370
+
+    select count(*) from flat.taxbills as a left join core.pluto as b on b.bbl = a.bbl where b.bbl is not null; 848703
+    select count(*) from flat.taxbills as a left join core.pluto as b on b.bbl = a.bbl where b.bbl is null; 233756
+
+    select count(*) from flat.taxbills as a right join core.pluto as b on b.bbl = a.bbl where a.bbl is not null; 848703
+    select count(*) from flat.taxbills as a right join core.pluto as b on b.bbl = a.bbl where a.bbl is null; 9667
+
+Or equivalently:
+
+    select count(*) from core.pluto as a left join flat.taxbills as b on b.bbl = a.bbl where b.bbl is null; 9667
+
+Of special interest are the 9667 rows in pluto that are -not- in the taxbills dataset.
+
+We suspect many of these might be "stale" records from adjoined lots, e.g.: 
+
+    1005240070 | 181 MERCER STREET           | NEW YORK UNIVERSITY   | P          |          0 |          0 |           0
+    1005350020 | 251 MERCER STREET           | NEW YORK UNIVERSITY   | P          |          0 |          0 |           0
+    1005358020 | 251 MERCER STREET           | NEW YORK UNIVERSITY   | P          |          0 |          0 |           0
+
+But we don't really know, and need to investigate.
