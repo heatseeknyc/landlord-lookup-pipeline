@@ -1,3 +1,3 @@
 
-Look at my `cool internal link <foo.rst_>`_, will you?
+Look at my `cool internal link <foo.rst>`_, will you?
 
