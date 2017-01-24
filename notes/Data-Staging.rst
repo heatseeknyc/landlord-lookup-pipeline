@@ -4,7 +4,7 @@ Notes about the "data staging" step, by which is meant the process of taking raw
 Basically the idea is that we want to end up with the following 5 CSV(-like) files:
 
     stage/registrations.txt
-    stage/contacts-dedup.txt
+    stage/contacts-clean.txt
     stage/taxbills-latest.csv
     stage/dhcr_tuples.csv
     stage/pluto-latest.csv
@@ -27,14 +27,16 @@ Which goes like this:
     cd stage
     unzip Registrations20161101.zip
     ln -s Registration20161031.txt registrations.txt
-    python ../bin/dedup.py < RegistrationContact20161031.txt > contacts-dedup.txt
+    ln -s RegistrationContact20161031.txt contacts-raw.txt
+    python -m apps.contacts --srcdir=stage
 
 So the output files will be:
 
     stage/registrations.txt
-    stage/contacts-dedup.txt
+    stage/contacts-clean.txt
+    stage/contacts-rejected.txt
 
-You'll then need to perform the manual cleanup step on the 'contacts-dedup.txt' file as described in the note 'fixing-registration-contacts.txt'. 
+As the suffices on the contacts files imply, the "-clean" file is the one that will be loaded; the "-rejected" file should contain a (very small) number o lines rejected as unfit for loading.
 
 BTW, make a note the YYYYMMDD part of the registrations file; it's basically the "as-of" date of the HPD snapshot.
 

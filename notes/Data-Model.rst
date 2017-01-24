@@ -7,18 +7,27 @@ High level description of primary data sources, ETL pipeline, and the internal d
 Primary Sources 
 ===============
 
-One way or another, data gets pulled and mixed from the following sources:
-- NYC Geoclient API
-- taxbills.nyc
+From the perspective of the frontend client, holisitically speaking the data we use
+has two main components -- which we'll refer to as the "hot" and "cold" components.
+
+The "cold" component is a simple Postgres database which resides behind the 
+REST gateway, and represents a cleansed and normalized aggregation of the following 
+4 datasets from various city agencies:
+- Taxbill scrapes, courtesy of taxbills.nyc
 - HPD registered contacts
 - DHCR rent stabilization
+- MAPPluto 16v2
+
+The exact origin of these datasets is described in more detail in the `Data Provenance <Data-Provenance.rst>` note.
+
+The "hot" component is the NYC Geoclient API, an external service provided by the City of New York.
 
 Within the running application, the NYC Geoclient API is always accessed 
 dynamically (that is, its results are never cached or ETL'd into a local 
 table); hence it is conceptually thought of as a "hot" data source.
 
 It's also are sole authority address geocoding and property identifier 
-(BBL+BIN) lookup, which we use to join on the latter 3 previously loaded
+(BBL+BIN) lookup, which we use to join on the latter 4 previously loaded
 (or "cold") data sources.  How exactly these sources are loaded, filtered
 and normalized is described in the next section.
 

@@ -10,6 +10,6 @@ PIPEARGS='(DELIMITER \"|\", FORMAT CSV, HEADER TRUE)'
 COMMAARGS='(DELIMITER \",\", FORMAT CSV, HEADER TRUE)'
 
 echo '[import] inserting data ...'
-python bin/dopg.py -c '"\copy flat.contacts FROM '$stage/contacts-dedup.txt' '$PIPEARGS';"' 
+python bin/dopg.py -c '"\copy flat.contacts FROM '$stage/contacts-clean.txt' '$PIPEARGS';"' 
 echo '[import] done.'
 

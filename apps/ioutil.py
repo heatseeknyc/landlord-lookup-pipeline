@@ -34,3 +34,8 @@ def save_recs(path,recs,header,encoding="utf-8",csvargs=None):
              count += 1
     return count
 
+
+def save_lines(path,lines,encoding="utf-8"):
+    with open(path,"wt",encoding=encoding) as f:
+        for line in lines:
+            f.write(line + "\n")
