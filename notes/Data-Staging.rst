@@ -52,7 +52,8 @@ and BBLs  -- narrowing out file from about 56M rows to just over 1M in the proce
 Which goes like this:
 
     cd ..
-    gunzip stage/rawdata.csv.gz
+    gunzip stage/rawdata-2016-june.csv.gz
+    ln -s stage/rawdata-2016-june.csv state/rawdata.csv
     python -m apps.taxbills --srcdir=stage
 
 It takes about 4-5 minutes to run, and, given a source directory, references both
