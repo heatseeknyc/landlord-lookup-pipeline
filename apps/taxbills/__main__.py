@@ -28,13 +28,13 @@ def main():
     print("slurp '%s' .." % infile)
     recs = read_recs(infile)
     t0 = time.time()
-    t = consume(recs,args.limit)
+    table = consume(recs,args.limit)
     delta = time.time() - t0
-    print("Slurp'd %d distinct BBLs in %.3f sec.." % (len(t['active']),delta))
+    print("Slurp'd %d recs with %d distinct BBLs in %.3f sec.." % (table['total'],len(table['active']),delta))
     if args.corrupt:
-        corrupt(t,args.corrupt)
-    print("write to '%s' .." % args.outfile)
-    save_table(args.outfile,t)
+        corrupt(table,args.corrupt)
+    print("write to '%s' .." % outfile)
+    save_table(outfile,table)
     print("done.")
 
 

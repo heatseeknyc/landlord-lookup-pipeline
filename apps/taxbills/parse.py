@@ -1,14 +1,16 @@
 import random
 from itertools import islice
+import resource
 
-def consume(recs,limit=None):
+def consume(recs,limit=None,stride=1000000):
     """
     Given an record stream, magically constructs a dict-of-dict struct
     (which we'll call a "table") representing, for each BBL, the latest
     active date and corresponding owner/address fields for that date.
     """
+    total = 0
     active,owner,address = {},{},{}
-    for x in islice(recs,limit):
+    for i,x in enumerate(islice(recs,limit)):
         k = x['bbl']
         curdate = x['activitythrough']
         if k not in active or curdate > active[k]:
@@ -16,11 +18,15 @@ def consume(recs,limit=None):
             owner[k] = None
             address[k] = None
         if curdate == active[k]:
-            if x['key'] == 'owner name':
+            if x['key'] == 'Owner name':
                 owner[k] = x['value']
-            if x['key'] == 'mailing address':
+            if x['key'] == 'Mailing address':
                 address[k] = x['value']
-    return {'active':active,'owner':owner,'address':address}
+        if i % stride == 0 and i > 0:
+            size = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1000
+            print("step %d: keys = %d, size = %s" % (i,len(active),size))
+        total += 1
+    return {'active':active,'owner':owner,'address':address,'total':total}
 
 def genrecs(t,reverse=False):
     """
