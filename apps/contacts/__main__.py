@@ -80,7 +80,6 @@ def process(path):
 def main():
     args = parse_args()
     infile = "%s/contacts-raw.txt" % args.srcdir
-    outfile = "%s/klean.csv" % args.srcdir
     clean,reject,total = process(infile)
     print("that be %d lines total (%d clean, %d rejected)" % (total,len(clean),len(reject)))
     outfile_clean = "%s/contacts-clean.csv" % args.srcdir
