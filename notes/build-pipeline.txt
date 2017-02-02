@@ -6,32 +6,29 @@ have been tended to:
 
    notes/Data-Staging.rst
 
-
-(3) Create public functions.
-
-Not used until later, but we might as well create them now:
-
-  bin/dopg.py -f sql/create-functions.sql 
-  bin/dopg.py -f sql/create-first-last.sql
-
-(4) Create 'flat' schema, and import raw data:
+(2) Create 'flat' schema, and import raw data:
 
   bin/dopg.py -f sql/create-schema-flat.sql
   bin/import-rawdata.sh 
 
-(5) Scrub addresses + build indices:
+(3) Scrub addresses + build indices:
 
-  # These might take few minutes each. 
+  # First, create a few public functions.
+  bin/dopg.py -f sql/create-functions.sql 
+  bin/dopg.py -f sql/create-first-last.sql
+  # These should take under a minute each. 
   bin/dopg.py -f sql/fix-contact-addresses.sql 
-  bin/dopg.py -f sql/fix-registrations-addresses.sql 
+  bin/dopg.py -f sql/fix-registration-addresses.sql 
   bin/dopg.py -f sql/create-indexes-flat.sql 
 
-(6) 'core' schema
+In the next steps, we create the ...
+
+(4) 'core' schema
 
   bin/dopg.py -f sql/create-schema-core.sql 
   bin/dopg.py -f sql/create-views-core.sql 
 
-(7) 'push' schema
+(5) 'push' schema
 
 This phase is slightly different, in that the 'create schema'
 script also populates its tables:
@@ -39,12 +36,12 @@ script also populates its tables:
   bin/dopg.py -f sql/create-schema-push.sql 
   bin/dopg.py -f sql/create-indexes-push.sql
 
-(8) 'meta' schema
+(6) 'meta' schema
 
   bin/dopg.py -f sql/create-schema-meta.sql 
   bin/dopg.py -f sql/create-views-meta.sql 
 
-(9) 'hard' schema
+(7) 'hard' schema
 
 The 'create' statement also populates the tables + grants 
 privilegs to our read user:
@@ -52,9 +49,8 @@ privilegs to our read user:
   bin/dopg.py -f sql/create-schema-hard.sql 
   bin/dopg.py -f sql/create-indexes-hard.sql
 
-BTW it'd be worth nothing the psql output at for the 'create'
-script; it should emit meaningful rowcounts for the tables we're 
-creating, e.g.:
+BTW it'd be worth noticing the psql output for each of the the 'create' script; 
+it should emit meaningful rowcounts for the tables we're creating, e.g.:
 
   DROP SCHEMA
   CREATE SCHEMA
