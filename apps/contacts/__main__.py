@@ -74,7 +74,7 @@ def sift(lines):
 
 def process(path):
     with open(path,"rtU") as f:
-        lines = dedup(strip(f))
+        lines = dedup(scrub(strip(f)))
         return sift(lines)
 
 def main():
