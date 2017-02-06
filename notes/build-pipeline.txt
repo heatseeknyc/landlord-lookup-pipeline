@@ -47,6 +47,7 @@ The 'create' statement also populates the tables + grants
 privilegs to our read user:
 
   bin/dopg.py -f sql/create-schema-hard.sql 
+  bin/dopg.py -f sql/create-tables-hard.sql 
   bin/dopg.py -f sql/create-indexes-hard.sql
 
 BTW it'd be worth noticing the psql output for each of the the 'create' script; 
@@ -60,6 +61,16 @@ it should emit meaningful rowcounts for the tables we're creating, e.g.:
   GRANT
   GRANT
   COMMIT
+
+(8) grant readuser priveleges
+
+Since this step requires superuser access, it needs to be done with a 
+raw shell command (as the 'dopg.py' utility is hard-wired to use the 
+writeuser credentials):
+
+   psql -U postgres -d nyc1 -f sql/grant-privileges-readuser.sql
+
+
 
 
 TODO: provide detail
