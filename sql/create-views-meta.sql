@@ -70,9 +70,9 @@ select
 from      flat.taxbills        as a 
 left join meta.partial_summary as b on b.bbl = a.bbl;
 
--- Equivalent to the above, but with shorter column names (and truncated 
--- values for taxbill fields), for more convenient browsing.  For internal 
--- troubleshooting only.
+-- Equivalent to the above, but restricted to most crucial indicators 
+-- (with with shorter column names) for more convenient browsing.
+-- For troubleshooting only.
 create view meta.property_summary_tidy as
 select 
   bbl, bin, boro_id as boro, 
