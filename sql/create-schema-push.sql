@@ -54,4 +54,7 @@ insert into push.contact_rank (id,contact_type) values
     (9,'Lessee')
 ;
 
+create table push.pluto as
+select * from core.pluto;
+
 commit;
