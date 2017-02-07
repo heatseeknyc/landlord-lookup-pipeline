@@ -13,6 +13,7 @@ create index on flat.registrations(registrationid);
 create index on flat.registrations(buildingid);
 create index on flat.registrations(housenumber,streetname,zip);
 create index on flat.registrations(housenumber,streetname,boroid);
+create index on flat.pluto(bbl);
 create index on flat.shape_building(bbl,bin);
 
 -- presently these are needed for the scrubbing phase only.
