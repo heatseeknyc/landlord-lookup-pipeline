@@ -90,4 +90,15 @@ create table flat.pluto (
     ZoneMap text 
 );
 
+create table flat.shape_building (
+    bbl bigint,
+    bin integer,
+    doitt_id integer,
+    lat_ctr float,
+    lon_ctr float,
+    radius float,
+    parts text,
+    points text
+);
+
 commit;
