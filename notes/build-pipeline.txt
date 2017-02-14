@@ -6,6 +6,10 @@ have been tended to:
 
    notes/Data-Staging.rst
 
+Also, make sure your environment is initialized:
+
+  source bin/init-env.rc
+
 (2) Create 'flat' schema, and import raw data:
 
   bin/dopg.py -f sql/create-schema-flat.sql
