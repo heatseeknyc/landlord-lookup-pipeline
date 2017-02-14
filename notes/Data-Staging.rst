@@ -28,7 +28,7 @@ Which goes like this:
     unzip Registrations20161101.zip
     ln -s Registration20161031.txt registrations.txt
     ln -s RegistrationContact20161031.txt contacts-raw.txt
-    python -m apps.contacts --srcdir=stage
+    python -m extract.contacts --srcdir=stage
 
 So the output files will be:
 
@@ -54,7 +54,7 @@ Which goes like this:
     cd ..
     gunzip stage/rawdata-2016-june.csv.gz
     ln -s stage/rawdata-2016-june.csv state/rawdata.csv
-    python -m apps.taxbills --srcdir=stage
+    python -m extract.taxbills --srcdir=stage
 
 It takes about 4-5 minutes to run, and, given a source directory, references both
 input files and output files from fixed locations relative to that directory. 
@@ -93,4 +93,10 @@ TODO: describe process resulting in
 
     stage/pluto-latest.csv
 
+
+(6) Building footprints
+
+TODO: describe process resulting in
+
+    stage/buildings-latest.csv
 
