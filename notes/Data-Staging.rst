@@ -89,19 +89,7 @@ and outputs to
 
 (5) MAPPluto
 
-First we unpack the 
-
-Which might go like this:
-
-    mkdir stage/pluto
-    unzip nyc_pluto_16v2%20.zip -d /var/tmp
-    mv /var/tmp/BORO_zip_files_csv/\*.csv stage/pluto
-    ls stage/pluto/
-    BK.csv  BX.csv  MN.csv  QN.csv  SI.csv
-    python -m apps.pluto --srcdir=stage
-
-It takes about 40 seconds to run and, like the taxbills script, references the input 
-input files relative to the given source directory, and outputs to a fixed location:
+TODO: describe process resulting in
 
     stage/pluto-latest.csv
 
