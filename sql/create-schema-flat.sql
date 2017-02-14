@@ -87,10 +87,16 @@ create table flat.pluto (
     ZoneDist2 text, 
     ZoneDist3 text, 
     ZoneDist4 text, 
-    ZoneMap text 
+    ZoneMap text,
+    SplitZone text,
+    lat_ctr float,
+    lon_ctr float,
+    radius float,
+    parts text,
+    points text
 );
 
-create table flat.shape_building (
+create table flat.buildings (
     bbl bigint,
     bin integer,
     doitt_id integer,
