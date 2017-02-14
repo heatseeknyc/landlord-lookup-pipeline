@@ -68,7 +68,8 @@ select
     ZoneDist2             as zone_dist2, 
     ZoneDist3             as zone_dist3, 
     ZoneDist4             as zone_dist4, 
-    ZoneMap               as zone_map 
+    ZoneMap               as zone_map,
+    SplitZone             as zone_split
 from flat.pluto;
 
 commit;
