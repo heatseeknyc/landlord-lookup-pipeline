@@ -5,7 +5,7 @@ To export from database 'nyc1':
   pg_dump -n hard -U postgres nyc1 > /var/tmp/pgdump-hard-YYYYMMDD.sql
   gzip -9 /var/tmp/pgdump-hard-YYYYMMDD.sql
 
-To export into another database 'nyc2' (on the same host):
+To import into another database 'nyc2' (on the same host):
 
   sudo su postgres
   gunzip /var/tmp/pgdump-hard-YYYYMMDD.sql.gz
