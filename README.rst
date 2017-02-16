@@ -12,6 +12,7 @@ sources used, have a look at the `Getting Started <notes/Getting-Started.rst>`_ 
 Navigation
 ----------
 The top-level dir (once cloned) is intended as the location from which the actual data loading scripts can be run.
+
 - the *sql* dir contains the bulk of the database setup + internal transformation.  These are usually run with wrapper ``bin/dopg.pl``.
 - the *extract* and *shapeutil* dirs provide supporting Python code (to be run with the ``-m`` flag).
 
