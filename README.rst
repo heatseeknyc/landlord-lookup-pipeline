@@ -26,7 +26,7 @@ Navigation
 ----------
 The top-level dir (once cloned) is intended as the location from which the actual data loading scripts can be run.
 
-- ``stage/`` is the directory where "incoming" files (i.e. downloads from external portals) first hit the ground, are unpacked and (if needed) transformed into a state where they can be loaded into the SQL database. 
+- ``stage/`` is the directory where raw incoming files (i.e. downloads from external portals) first hit the ground, are unpacked and (if needed) transformed into a state where they can be loaded into the SQL database.  We call this process "stating", and it's described in the `Data Stating <notes/Data-Staging.rst>`_ note. 
 - ``sql/`` contains the bulk of the database setup + internal transformation.  These are usually run with wrapper ``bin/dopg.pl``.
 - ``bin/`` contains various shell wrappers (most important being ``bin/import-rawdata.sh``).
 - ``extract/`` and ``shapeutil/``  provide supporting Python code (to be run with the ``-m`` flag).
