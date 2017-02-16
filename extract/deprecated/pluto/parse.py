@@ -1,6 +1,9 @@
 """
 In which we perform some simple extraction / normalization in records
 in the raw PLUTO csv files.  Applies to Pluto 16v2.
+
+(As of Feb 2017, no longer in use, because we aren't using this branch
+of the PLUTO dataset).
 """
 
 import re
@@ -43,16 +46,16 @@ sample = {
     "ZoneDist4": "",
     "ZoneMap": "16a"
 }
-# print(sample)
 
-# creating an specially sorted list of field keys (which will also be
-# the order they're presented in the first-pass output CSV).  The ordering 
-# is very simple: since the BBL is our primary key, it goes out in front;
-# all other fields are in lexical order.
+"""
+Creates a specially sorted list of field keys (which will also be
+the order they're presented in the first-pass output CSV).  The ordering 
+is very simple: since the BBL is our primary key, it goes out in front;
+all other fields are in lexical order.
+"""
 keyset = set(list(sample.keys()))
 keyset.remove('BBL')
 fields = tuple(["BBL"] + sorted(keyset))
-# print(fields)
 
 
 def normalize(r):
@@ -65,11 +68,12 @@ def normalize(r):
     r['Address'] = r['Address'].strip()
     return r
 
-
-# Note that because the BBL field is quite special (and we want to be sure 
-# that it always appears in a certain expected structure), we prefer to do  
-# a regex capture (rather than say a float/int cast, which can fail to detect 
-# degenerate input cases, if not done properly). 
+"""
+Note that because the BBL field is quite special (and we want to be sure 
+that it always appears in a certain expected structure), we prefer to do  
+a regex capture (rather than say a float/int cast, which can fail to detect 
+degenerate input cases, if not done properly). 
+"""
 bblpat = re.compile('^(\d{10})(?:(\.\d{2})*)$')
 def canonbbl(s):
     """
