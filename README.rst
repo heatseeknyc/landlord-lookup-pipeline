@@ -12,7 +12,7 @@ sources used, have a look at the `Getting Started <notes/Getting-Started.rst>`_ 
 Related Repos
 -------------
 The overall architecture of the portal, as such, is extremely simple.  Basically you just have a REST gateway that talks to the database, and a frontend "client" (really just an ``index.html`` page) that listens to the REST gateway.  These are available under the following repos: 
-sw https://github.com/heatseeknyc/landlord-lookup-gateway - REST gateway
+* https://github.com/heatseeknyc/landlord-lookup-gateway - REST gateway
 * https://github.com/heatseeknyc/landlord-lookup-client - static web portal 
 
 
