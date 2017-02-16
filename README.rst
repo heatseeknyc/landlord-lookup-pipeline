@@ -28,9 +28,10 @@ The top-level dir (once cloned) is intended as the location from which the actua
 
 - ``stage/`` is the directory where "incoming" files (i.e. downloads from external portals) first hit the ground, are unpacked and (if needed) transformed into a state where they can be loaded into the SQL database. 
 - ``sql/`` contains the bulk of the database setup + internal transformation.  These are usually run with wrapper ``bin/dopg.pl``.
-- ``bin/`` contain various shell wrappers (most important being ``bin/import-rawdata.sh``).
+- ``bin/`` contains various shell wrappers (most important being ``bin/import-rawdata.sh``).
 - ``extract/`` and ``shapeutil/``  provide supporting Python code (to be run with the ``-m`` flag).
-- ``config/``  and ``notes/`` are self-describing.
+- ``config/`` - postgres-specific configuration. 
+- ``notes/`` - further documentation. 
 
 
 Related Repos
