@@ -9,6 +9,13 @@ The basic idea is that a static image of the database can be built on one machin
 If you'd like to build or replicate the pipeline yourself, or are curious about the data 
 sources used, have a look at the `Getting Started <notes/Getting-Started.rst>`_ guide.
 
+Navigation
+----------
+The top-level dir (once cloned) is intended as the location from which the actual data loading scripts can be run.
+- the *sql* dir contains the bulk of the database setup + internal transformation.  These are usually run with wrapper ``bin/dopg.pl``.
+- the *extract* and *shapeutil* dirs provide supporting Python code (to be run with the ``-m`` flag).
+
+
 Related Repos
 -------------
 The overall architecture of the portal, as such, is extremely simple.  Basically you just have a REST gateway that talks to the database, and a frontend "client" (really just an ``index.html`` page) that listens to the REST gateway.  These are available under the following repos:
