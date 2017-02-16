@@ -57,18 +57,35 @@ select b.bbl, b.bin, a.dhcr_active, b.contact_count, b.nychpd_active
 from      meta.registration_status as b 
 left join meta.dhcr_status         as a on a.bbl = b.bbl and a.bin = b.bin;
 
+
 -- Finally, our big happy view that tells us everything we need to know
 -- about a property given a combination of (BBL,BIN).  Feeds into the "hard"
 -- table of the same name, which is consumed by our REST service.
 create view meta.property_summary as
 select 
-  a.bbl, b.bin, cast(a.bbl/1000000000 as smallint) as boro_id,
-  b.dhcr_active, b.nychpd_active, b.contact_count,
-  a.owner_name      as taxbill_owner_name,  
-  a.mailing_address as taxbill_owner_address,  
-  a.active_date     as taxbill_active_date
-from      flat.taxbills        as a 
-left join meta.partial_summary as b on b.bbl = a.bbl;
+  a.bbl, a.bin, cast(a.bbl/1000000000 as smallint) as boro_id,
+  d.dhcr_active, d.nychpd_active, d.contact_count,
+  c.owner_name      as taxbill_owner_name,
+  c.mailing_address as taxbill_owner_address,  
+  c.active_date     as taxbill_active_date,
+  b.owner_name      as pluto_owner_name,
+  b.num_bldgs       as pluto_building_count,
+  b.units_total     as pluto_units_total,
+  b.lon_ctr as pluto_lon_ctr,
+  b.lat_ctr as pluto_lat_ctr,
+  b.radius  as pluto_radius,
+  b.points  as pluto_points,
+  b.parts   as pluto_parts,
+  a.lon_ctr as building_lon_ctr,
+  a.lat_ctr as building_lat_ctr,
+  a.radius  as building_radius,
+  a.points  as building_points,
+  a.parts   as building_parts
+from flat.buildings      as a
+left join core.pluto     as b on b.bbl = a.bbl
+left join flat.taxbills  as c on c.bbl = a.bbl
+left join meta.partial_summary as d on d.bbl = a.bbl;
+
 
 -- Equivalent to the above, but restricted to most crucial indicators 
 -- (with with shorter column names) for more convenient browsing.
@@ -78,6 +95,18 @@ select
   bbl, bin, boro_id as boro, 
   dhcr_active as dhcr, nychpd_active as nychpd, contact_count as contacts
 from meta.property_summary;
+
+
+-- A deprecated form of the property_summary view
+create view meta.property_summary_older as
+select 
+  a.bbl, b.bin, cast(a.bbl/1000000000 as smallint) as boro_id,
+  b.dhcr_active, b.nychpd_active, b.contact_count,
+  a.owner_name      as taxbill_owner_name,
+  a.mailing_address as taxbill_owner_address,
+  a.active_date     as taxbill_active_date
+from      flat.taxbills        as a 
+left join meta.partial_summary as b on b.bbl = a.bbl;
 
 
 --
