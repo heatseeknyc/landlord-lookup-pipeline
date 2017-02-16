@@ -3,12 +3,21 @@ import shapefile
 
 
 class ShapefileWrapper(object):
+    """
+    Provides some a somewhat simpler interface to shape and record structs
+    as they typically occur in shapefile datasets, out in the wild.
+
+    This class is hardly fully-featured, but was designed with genericity
+    in mind (so there's nothing in this class specific to the datasets we're
+    workking with) -- in keeping with basic "separation of concerns"
+    considerations.
+    """
 
     def __init__(self,reader):
         self.reader = reader
-        self.build()
+        self._build()
 
-    def build(self):
+    def _build(self):
         self.fields = self.reader.fields
         self.shapes = self.reader.shapes()
         self.records = self.reader.records()
@@ -81,12 +90,30 @@ class ShapefileWrapper(object):
         }
 
     def bigrec(self,i,normal=False,projection=None):
+        """Returns a combined (or "big") record structure with 'shape' and 'record'
+        components on a given integer index.
+        
+        :i: integer index.
+        :normal: flag - if set to True, the respective components are subjected
+        to an additional data cleansing) step (which makes the records subsantailly
+        easier to use, but which of course also obscures their original form; and
+        might possibly break when reading degenerate source files, e.g. with bad
+        character encodings).
+
+        :projection: a function, which, if supplied, is applied to the outgoing
+        cartesian coordinates in the 'shape' member record.  The constraints (and 
+        intended use cases) for this function are described in the 'apply_projection'
+        callable in this module.
+        """
         return {
             'shape': self.shape(i,normal,projection),
             'record': self.record(i,normal)
         }
 
     def bigrecs(self,normal=False,projection=None):
+        """Provides an iterator of combined shape/record structs.  If optional
+        :normal or :projection arguments are supplied, then these are passed
+        on to the per-item :bigrec accessor."""
         for i in range(0,len(self)):
             yield self.bigrec(i,normal,projection)
 
@@ -111,7 +138,14 @@ def apply_bbox(f,bbox):
     return [lon1,lat1,lon2,lat2]
 
 def apply_projection(f,shape):
-    """Applies a coordinate projection :f to a normalized :shape dict, in-place."""
+    """
+    Applies a coordinate projection :f to a normalized :shape dict, in-place.
+
+    There are no constraints on the projection function, other than that it take
+    a 2-tuple as its sole argument (corresponding to the fact that it also returns a
+    2-tuple).  But the use case typically envisioned is a transformation from one 
+    coordinate grid to another, e.g. stateplane to standard lat/lon.
+    """
     shape['points'] = list(map(f,shape['points']))
     shape['bbox'] = apply_bbox(f,shape['bbox'])
 
