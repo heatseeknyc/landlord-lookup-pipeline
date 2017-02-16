@@ -9,6 +9,19 @@ The basic idea is that a static image of the database can be built on one machin
 If you'd like to build or replicate the pipeline yourself, or are curious about the data 
 sources used, have a look at the `Getting Started <notes/Getting-Started.rst>`_ guide.
 
+Sources
+-------
+
+The current portal is basically a "join" of the following datasets, all reasonably well-known in the NYC data ecosystem: 
+
+- Quaterly taxbill scrapes provided by John Krauss (http://taxbills.nyc/)
+- HPD Registration Contacts 
+- DHCR rent stablization status flags, obtained via FOIA requests. 
+- MAPPluto (16v2) attributes and shapefiles. 
+- DoITT building footprints
+
+As per these descriptions, most of these datasets change relatively slowly - and in fact the portal is updated is updated only on a sporadic basis (every half-year or so).  If the portal attracts further interest we may pick up the pace a bit. 
+
 Navigation
 ----------
 The top-level dir (once cloned) is intended as the location from which the actual data loading scripts can be run.
