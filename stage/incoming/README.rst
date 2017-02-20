@@ -1,0 +1,1 @@
+This is where external datasets (typically ``.zip`` or compressed ``.csv`` files) come to "land" before any unpacking or other further processing takes place.  As such, when you clone this directory from the repo, it will be empty.
