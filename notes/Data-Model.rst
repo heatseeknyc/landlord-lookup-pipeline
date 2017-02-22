@@ -18,7 +18,7 @@ REST gateway, and represents a cleansed and normalized aggregation of the follow
 - DHCR rent stabilization
 - MAPPluto 16v2
 
-The exact origin of these datasets is described in more detail in the `Data Provenance <Data-Provenance.rst>` note.
+The exact origin of these datasets is described in more detail in the `Data Acquisition <Data-Acquisition.rst>` note.
 
 The "hot" component is the NYC Geoclient API, an external service provided by the City of New York.
 
