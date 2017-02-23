@@ -5,7 +5,10 @@
 # intermediate directory may well change in future versions, and so this script
 # will need to be refactored accordingly.
 #
+
+destdir='stage/unpack/pluto'
 tempdir='stage/unpack/pluto-temp'
-unzip stage/incoming/pluto.zip '*.csv' -d $tempdir 
-mv $tempdir/BORO_zip_files_csv  stage/unpack/pluto
+echo "pluto to $destdir/ .."
+unzip -q stage/incoming/pluto.zip '*.csv' -d $tempdir 
+mv $tempdir/BORO_zip_files_csv $destdir 
 rm -r $tempdir 

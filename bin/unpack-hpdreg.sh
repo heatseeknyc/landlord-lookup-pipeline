@@ -5,7 +5,8 @@
 # intermediate directory may well change in future versions, and so this script
 # will need to be refactored accordingly.
 #
-destdir='stage/unpack/contacts'
+destdir='stage/unpack/hpdreg'
 mkdir $destdir
+echo "registrations to $destdir .."
 unzip -c stage/incoming/registrations.zip 'Registration20*.txt' > $destdir/Registration.txt
 unzip -c stage/incoming/registrations.zip 'RegistrationContact*.txt' > $destdir/RegistrationContact.txt

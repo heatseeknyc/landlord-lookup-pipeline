@@ -1,2 +1,5 @@
 #!/bin/bash -ue
-unzip stage/incoming/buildings.zip -d stage/unpack/buildings
+
+destdir='stage/unpack/buildings'
+echo "buildings to $destdir/ .."
+unzip -q stage/incoming/buildings.zip -d $destdir
