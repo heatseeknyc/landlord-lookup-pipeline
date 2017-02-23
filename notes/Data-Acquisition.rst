@@ -60,6 +60,13 @@ BTW note that the date in the zip file will likely be in the early part of the "
 -----------
 
 TODO: describe fetch for this source. 
+One way or another, you'll want to end up with these files in place::
+
+  stage/incoming/pluto/bk_mappluto_16v2.zip
+  stage/incoming/pluto/bx_mappluto_16v2.zip
+  stage/incoming/pluto/mn_mappluto_16v2.zip
+  stage/incoming/pluto/qn_mappluto_16v2.zip
+  stage/incoming/pluto/si_mappluto_16v2.zip
 
 
 4. Building Footprints 
