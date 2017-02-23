@@ -1,4 +1,6 @@
 import re
+import os
+import glob
 import math
 from copy import deepcopy
 from collections import OrderedDict
@@ -99,6 +101,33 @@ def canonify_shape(s):
     v['points'] = json.dumps(points)
     v['parts'] = json.dumps(s['parts'])
     return v
+
+
+def _pathtuples(dirpath):
+    if not os.path.isdir(dirpath):
+        raise ValueError("not a dir!")
+    pat = "%s/*.*" % dirpath
+    for path in glob.glob(pat):
+        head,tail = os.path.split(path)
+        base,ext = os.path.splitext(tail)
+        yield head,base,ext
+
+def find_basenames(dirpath,matching):
+    """Given a directory path, returns the set of unique basenames of files in that
+    directory which have extensions corresponding to a known matching set."""
+    pathtups = _pathtuples(dirpath)
+    goodbase = (base for head,base,ext in pathtups if ext in matching)
+    return set(goodbase)
+
+shapexts = ('dbf','prj','sbn','sbx','shp','shx') # canonical(?) list of shapefile extensions
+matchset = set(".%s" % _ for _ in shapexts)      # same as the above with '.' prepended
+def find_shapefile_basenames(dirpath):
+    """Like find find_basenames, but hard-coded to match on the set of known
+    shapefile extensions."""
+    return find_basenames(dirpath,matchset)
+
+# a cute alias for the above
+findbase = find_shapefile_basenames
 
 
 # deprecated
