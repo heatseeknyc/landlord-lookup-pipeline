@@ -101,6 +101,7 @@ def canonify_shape(s):
     return v
 
 
+# deprecated
 def __vec2str(vec,dtype):
     if dtype == float:
         middle = ",".join("%lf" % _ for _ in vec)
@@ -109,10 +110,4 @@ def __vec2str(vec,dtype):
         middle = ",".join("%d" % _ for _ in vec)
         return "[%s]" % middle
     raise ValueError("invalid dtype")
-
-def _vec2str(vec):
-    middle = ",".join(str(_) for _ in vec)
-    return "[%s]" % middle
-
-
 
