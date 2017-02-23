@@ -21,12 +21,13 @@ lines containing an unexpected number of pipe symbols (emitting them instead
 to a "rejected" file for forensic analysis).
 """
 import argparse
-from apps.ioutil import save_lines
 from collections import defaultdict
+from extract.ioutil import save_lines
+import extract.defaults
 
 def parse_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--srcdir", type=str, required=True, help="source directory")
+    parser.add_argument("--root", type=str, required=False, help="stage root", default=extract.defaults.root)
     return parser.parse_args()
 
 
@@ -79,11 +80,13 @@ def process(path):
 
 def main():
     args = parse_args()
-    infile = "%s/contacts-raw.txt" % args.srcdir
+    indir = "%s/unpack/hpdreg" % args.root
+    infile = "%s/RegistrationContact.txt" % indir
+    outdir = "%s/xtracted" % args.root
     clean,reject,total = process(infile)
     print("that be %d lines total (%d clean, %d rejected)" % (total,len(clean),len(reject)))
-    outfile_clean = "%s/contacts-clean.csv" % args.srcdir
-    outfile_reject = "%s/contacts-rejected.csv" % args.srcdir
+    outfile_clean = "%s/contacts-clean.csv" % outdir
+    outfile_reject = "%s/contacts-rejected.csv" % outdir
     print("clean lines to '%s' .." % outfile_clean)
     save_lines(outfile_clean,clean)
     print("rejected lines to '%s' .." % outfile_reject)
