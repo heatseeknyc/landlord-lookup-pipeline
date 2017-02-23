@@ -1,12 +1,13 @@
 import sys
 import time
 import argparse
-from apps.ioutil import read_recs, save_recs
-from apps.taxbills.parse import consume, genrecs, corrupt
+from extract.ioutil import read_recs, save_recs
+from extract.taxbills.parse import consume, genrecs, corrupt
+import extract.defaults
 
 def parse_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--srcdir", type=str, required=True, help="source diriectory")
+    parser.add_argument("--root", type=str, required=False, help="staging root", default=extract.defaults.root)
     # The following two flags are for troubleshooting only; not used in production.
     # This one limits the number of lines slurped (to stop before a bad line is detected,
     # or just to do a quicker run on a limited subset).  
@@ -23,23 +24,21 @@ def save_table(path,table):
 
 def main():
     args = parse_args()
-    infile  = "%s/rawdata.csv" % args.srcdir
-    outfile = "%s/taxbills-latest.csv" % args.srcdir
+    indir   = "%s/unpack" % args.root
+    outdir  = "%s/xtracted" % args.root
+    infile  = "%s/rawdata.csv" % indir
+    outfile = "%s/taxbills-latest.csv" % outdir
     print("slurp '%s' .." % infile)
     recs = read_recs(infile)
     t0 = time.time()
     table = consume(recs,args.limit)
     delta = time.time() - t0
-    print("Slurp'd %d recs with %d distinct BBLs in %.3f sec.." % (table['total'],len(table['active']),delta))
+    print("slurp'd %d recs with %d distinct BBLs in %.3f sec.." % (table['total'],len(table['active']),delta))
     if args.corrupt:
         corrupt(table,args.corrupt)
     print("write to '%s' .." % outfile)
     save_table(outfile,table)
     print("done.")
-
-
-def _main():
-    print("ook!")
 
 if __name__ == '__main__':
     main()
