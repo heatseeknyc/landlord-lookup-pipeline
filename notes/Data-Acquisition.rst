@@ -59,7 +59,10 @@ BTW note that the date in the zip file will likely be in the early part of the "
 3. MAPPluto 
 -----------
 
-TODO: describe fetch for this source. 
+Currently, the MAPPluto files live here::
+
+    http://www1.nyc.gov/site/planning/data-maps/open-data/dwn-pluto-mappluto.page
+
 One way or another, you'll want to end up with these files in place::
 
   stage/incoming/pluto/bk_mappluto_16v2.zip
