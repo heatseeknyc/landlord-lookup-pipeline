@@ -63,6 +63,10 @@ Currently, the MAPPluto files live here::
 
     http://www1.nyc.gov/site/planning/data-maps/open-data/dwn-pluto-mappluto.page
 
+Sample direct link::
+
+    http://www1.nyc.gov/assets/planning/download/zip/data-maps/open-data/bk_mappluto_16v2.zip
+
 One way or another, you'll want to end up with these files in place::
 
   stage/incoming/pluto/bk_mappluto_16v2.zip
