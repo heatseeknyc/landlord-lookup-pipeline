@@ -81,7 +81,7 @@ def process(indir,outdir,tags,limit=None):
     allrecs = []
     t0 = time.time()
     for tag in tags:
-        sfw = load_boro(srcdir,tag)
+        sfw = load_boro(indir,tag)
         allrecs += sift(sfw,limit)
     delta = time.time() - t0
     print("yields %d normalized records in %.3f sec" % (len(allrecs),delta))
