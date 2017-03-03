@@ -68,8 +68,8 @@ create table flat.dhcr_tuples (
 -- as they appear in the data dictionary).
 create table flat.pluto (
     BBL bigint,
-    Address text,
     ZipCode integer,
+    Address text,
     AssessLand float, 
     AssessTot float, 
     BldgArea integer,
