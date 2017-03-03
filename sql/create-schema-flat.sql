@@ -63,9 +63,13 @@ create table flat.dhcr_tuples (
 );
 
 -- MAPPluto version 16v2
+-- Note that BBL, and the 5 lower-case fields at the bottom are generated 
+-- by our ETL process; all other fields are as-is (and appear in the order
+-- as they appear in the data dictionary).
 create table flat.pluto (
     BBL bigint,
     Address text,
+    ZipCode integer,
     AssessLand float, 
     AssessTot float, 
     BldgArea integer,

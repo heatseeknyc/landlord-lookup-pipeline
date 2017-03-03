@@ -47,6 +47,7 @@ create view core.pluto as
 select
     BBL                   as bbl, 
     Address               as address, 
+    ZipCode               as zip5, 
     AssessLand            as assess_land, 
     AssessTot             as assess_total, 
     BldgArea              as bldg_area, 

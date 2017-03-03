@@ -13,6 +13,7 @@ boro_tags = ('MN','BX','BK','QN','SI')
 
 rspec = OrderedDict((
     ('BBL','int-float'),
+    ('ZipCode',None),
     ('Address',None),
     ('AssessLand','float'),
     ('AssessTot','float'),
