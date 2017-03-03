@@ -13,7 +13,7 @@ begin
     return cast(boro_id as bigint) * 1000000000 + cast(block as bigint) * 10000 + lot;
 end
 $$ language plpgsql;
- 
+
 -- Creates a short ("colloquial") contact name from first/middle/last components.
 -- Naively assumes that each component has no leading/trailing whitespace. 
 -- (Applies to contacts table only).
