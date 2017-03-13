@@ -1,7 +1,18 @@
 
-Notes about the "data staging" step, by which is meant the process of taking raw data files you've just obtained from their external sources (as described in the 'Data-Provenance.rst' note), and unpacking, renaming, and (lightly) processing them in such a way that they can be fed into the import scripts (i.e. loaded into the postgres instance). 
+Notes about the "data staging" step, by which is meant the process of taking raw data files you've just obtained from their external sources (as described in the 'Data-Acquisition.rst' note), and unpacking, renaming, and (lightly) processing them in such a way that they can be fed into the import scripts (i.e. loaded into the postgres instance). 
 
-Basically the idea is that we want to end up with the following 5 CSV(-like) files:
+
+1. Canonicalization
+===================
+
+In order to keep the subsequent steps as generic as possible (that is, independent of the particular naming styles of the newly acquired datasets, as they appear in the current moment), we first create symbolic links from "physical" names (i.e. the names of files in their freshly downloaded state) to canonical names that can be recognized by our scripts without further customization:: 
+
+  ln -s 'Building Footprints.zip' buildings.zip
+  ln -s nyc_pluto_16v2%20.zip pluto.zip
+  ln -s rawdata-2016-june.csv.gz rawdata.csv.gz
+  ln -s Registrations20161101.zip registrations.zip
+
+Basically the idea is that we want to end up with the following 5 CSV(-like) files::
 
     stage/registrations.txt
     stage/contacts-clean.txt
