@@ -6,12 +6,6 @@ begin;
 -- equality check in BBL isn't necessary in the registrations view, because 
 -- this constraint is already enforced in the table it pulls from).
 
--- create view meta.dhcr_tuples as
--- select * from flat.dhcr_tuples 
--- where 
---  bbl is not null and bbl >= 1000000000 and 
---  bin is not null and bin not in (0,1000000,2000000,3000000,4000000,5000000);
-
 -- XXX move this to core
 create view meta.registrations as
 select * from push.registrations 
@@ -29,8 +23,6 @@ where
 -- 'partial_summary' view a bit simpler (even though they would of course be 
 -- superfluous for these views, considered in isolation). 
 --
--- create view meta.dhcr_status as
--- select bbl,bin,1 as dhcr_active from meta.dhcr_tuples group by bbl,bin;
 
 create view meta.nychpd as
 select a.bbl, a.bin, count(distinct b.id) as contact_count, 1 as active
@@ -40,28 +32,9 @@ group by a.bbl,a.bin;
 
 
 --
--- A crucial joining view on the two above views.
+-- A crucial joining view that presents everything we need for a given 
+-- (BBL,BIN) pair.
 --
--- Equivalent to a full outer join on the above two tables (but with the 
--- BBL/BIN keys coalesced on cases where they match in one  of the views but 
--- not the other).  Basically it tells us everything (of current interest) that 
--- the DHCR + NYCHPD datasets can tell us about a property for a given property 
--- (going by bbl/bin as a composite key, which may not be present in each
--- table separately).
---
--- create view meta.partial_summary as
--- select a.bbl, a.bin, a.dhcr_active, b.contact_count, b.nychpd_active
--- from      meta.dhcr_status         as a 
--- left join meta.registration_status as b on b.bbl = a.bbl and b.bin = a.bin
--- union
--- select b.bbl, b.bin, a.dhcr_active, b.contact_count, b.nychpd_active
--- from      meta.registration_status as b 
--- left join meta.dhcr_status         as a on a.bbl = b.bbl and a.bin = b.bin;
-
-
--- Finally, our big happy view that tells us everything we need to know
--- about a property given a combination of (BBL,BIN).  Feeds into the "hard"
--- table of the same name, which is consumed by our REST service.
 create view meta.property_summary as
 select 
   a.bbl, a.bin, cast(a.bbl/1000000000 as smallint) as boro_id,
@@ -98,18 +71,6 @@ select
   bbl, bin, boro_id as boro, 
   dhcr_active as dhcr, nychpd_active as nychpd, contact_count as contacts
 from meta.property_summary;
-
-
--- A deprecated form of the property_summary view
--- create view meta.property_summary_older as
--- select 
---  a.bbl, b.bin, cast(a.bbl/1000000000 as smallint) as boro_id,
---  b.dhcr_active, b.nychpd_active, b.contact_count,
---  a.owner_name      as taxbill_owner_name,
---  a.mailing_address as taxbill_owner_address,
---   a.active_date     as taxbill_active_date
--- from      flat.taxbills        as a 
--- left join meta.partial_summary as b on b.bbl = a.bbl;
 
 
 --
