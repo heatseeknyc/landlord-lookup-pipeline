@@ -80,7 +80,7 @@ from flat.pluto;
 
 -- Filter degenerate BBL/BIN pairs, and add an "active" column
 create view core.dhcr as 
-select bbl, bin, 1 as active from flat.dhcr_tuples
+select bbl, bin, 1 as active from flat.dhcr_pairs
 where 
   bbl >= 1000000000 and 
   bin not in (0,1000000,2000000,3000000,4000000,5000000);

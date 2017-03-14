@@ -57,7 +57,7 @@ create table flat.taxbills (
     mailing_address text
 );
 
-create table flat.dhcr_tuples (
+create table flat.dhcr_pairs (
     bbl bigint not null,
     bin integer not null 
 );
