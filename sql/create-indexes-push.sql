@@ -14,5 +14,6 @@ create index on push.registrations(house_number,street_name,zip);
 create index on push.registrations(house_number,street_name,boro_id);
 create index on push.contact_rank(contact_type);
 create index on push.pluto(bbl);
+create index on push.buildings(bbl,bin);
 
 commit;

@@ -1,5 +1,28 @@
 begin;
 
+-- A result set that attempts to identify the "most important" polygon for 
+-- a given BBL/BIN pair -- that is, the first non-degenerate tuple (going by doitt_id).
+-- Somewhat imperfect in that there are about 344 BBLs with -only- degenerate BINs,
+-- as of Pluto 16v2, and these lots will be entirely omitted from this result set.
+create view meta.buildings_canonical as
+select bbl,bin,min(doitt_id) as doitt_id,count(*) as total 
+from push.buildings 
+where bin not in (1000000,2000000,3000000,4000000,5000000)
+group by bbl,bin;
+-- Note that we could "rescue" these 344 BBLs via a union on a separate query for 
+-- that result set -- but that would be too much complexity for the time being.
+
+-- Create a view on our initial buildings table restricted to the constraints 
+-- above (and with a 'total' column appended reflecting the number of rowsets
+-- in the original table having the BBL/BIN pair).  As a table, this rowset 
+-- will have (bbl,bin) as a surrogate key to doitt_id.
+create view meta.buildings_ideal as
+select 
+   a.bbl,a.bin, a.doitt_id, a.total,
+   b.lat_ctr, b.lon_ctr, b.radius, b.parts, b.points
+from meta.buildings_canonical as a
+left join push.buildings as b on b.doitt_id = a.doitt_id;
+
 -- These two views are analagous to the originals in the flat/push schema,
 -- but purged of "rogue" BBL and BIN partial keys that can't be reliably 
 -- joined on.  (The filtering is nearly the same in both joins; except the 
@@ -10,8 +33,8 @@ begin;
 create view meta.registrations as
 select * from push.registrations 
 where 
-  bbl is not null and 
-  bin is not null and bin not in (0,1000000,2000000,3000000,4000000,5000000);
+  bbl is not null and bbl >= 1000000000 and bbl < 6000000000 and
+  bin is not null and bin >= 1000000 and bin not in (1000000,2000000,3000000,4000000,5000000);
 
 --
 -- The following two views are simple aggregations that tell us what we need
@@ -56,11 +79,13 @@ select
   a.radius  as building_radius,
   a.points  as building_points,
   a.parts   as building_parts
-from flat.buildings      as a
+from meta.buildings_ideal as a
 left join core.pluto     as b on b.bbl = a.bbl
 left join flat.taxbills  as c on c.bbl = a.bbl
 left join core.dhcr      as d on d.bbl = a.bbl and d.bin = a.bin
 left join meta.nychpd    as e on e.bbl = a.bbl and e.bin = a.bin;
+-- NOTE: we should probably push the doitt_id and total columns from
+-- meta.buildings_ideal, for analysis purposes.
 
 
 -- Equivalent to the above, but restricted to most crucial indicators 

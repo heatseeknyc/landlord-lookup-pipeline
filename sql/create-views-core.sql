@@ -78,12 +78,19 @@ select
     points                as points 
 from flat.pluto;
 
--- Filter degenerate BBL/BIN pairs, and add an "active" column
+-- Omit records with corrupted BBL/BIN pairs (currently 3 rows):
+create view core.buildings as 
+select * from flat.buildings
+where
+  bbl is not null and bbl >= 1000000000 and bbl < 6000000000 and
+  bin is not null and bin >= 1000000;
+
+-- Omit corrupted BBL/BIN pairs, and add an "active" column
 create view core.dhcr as 
 select bbl, bin, 1 as active from flat.dhcr_pairs
 where 
-  bbl >= 1000000000 and 
-  bin not in (0,1000000,2000000,3000000,4000000,5000000);
+  bbl is not null and bbl >= 1000000000 and bbl < 6000000000 and
+  bin is not null and bin >= 1000000 and bin not in (1000000,2000000,3000000,4000000,5000000);
 
 commit;
 

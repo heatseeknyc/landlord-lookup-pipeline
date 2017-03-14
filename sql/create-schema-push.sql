@@ -57,4 +57,7 @@ insert into push.contact_rank (id,contact_type) values
 create table push.pluto as
 select * from core.pluto;
 
+create table push.buildings as
+select * from core.buildings;
+
 commit;
