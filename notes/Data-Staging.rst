@@ -87,15 +87,13 @@ Because the raw file is somewhat big, GitHub creates a special location for it, 
     cd stage
     curl -O https://raw.githubusercontent.com/clhenrick/dhcr-rent-stabilized-data/master/csv/dhcr_all_geocoded.csv
 
-Once available, the file needs to be filtered before loading:
+Once available, the file needs to be filtered before loading::
 
-    cd ..
-    bin/filter-dhcr.sh
+    python -m extract.dhcr 
 
-Which is hard-coded to expect 'stage' as the directory to find the raw input file,
-and outputs to
+Which will extract structurally valid BBL/BIN pairs to::
 
-    stage/dhcr_tuples.csv
+    stage/extracted/dhcr_tuples.csv
 
 
 (5) MAPPluto
