@@ -58,8 +58,8 @@ create table flat.taxbills (
 );
 
 create table flat.dhcr_tuples (
-    bbl bigint,
-    bin integer 
+    bbl bigint not null,
+    bin integer not null 
 );
 
 -- MAPPluto version 16v2
