@@ -1,16 +1,34 @@
 begin;
 
--- A result set that attempts to identify the "most important" polygon for 
+--
+-- First we construct two mutually exclusive rowsets.
+--
+
+-- The first result set that attempts to identify the "most important" polygon for 
 -- a given BBL/BIN pair -- that is, the first non-degenerate tuple (going by doitt_id).
 -- Somewhat imperfect in that there are about 344 BBLs with -only- degenerate BINs,
 -- as of Pluto 16v2, and these lots will be entirely omitted from this result set.
-create view meta.buildings_canonical as
-select bbl,bin,min(doitt_id) as doitt_id,count(*) as total 
+create view meta.property_built as
+select bbl, bin, min(doitt_id) as doitt_id, count(*) as total 
 from push.buildings 
 where bin not in (1000000,2000000,3000000,4000000,5000000)
 group by bbl,bin;
 -- Note that we could "rescue" these 344 BBLs via a union on a separate query for 
 -- that result set -- but that would be too much complexity for the time being.
+
+-- A rowset of properties deemed "vacant" by appearing in the main Pluto attributes 
+-- table, but not in the buildings shapefile set.  Presumably this represents the set
+-- of all vacant lots (and parks without buildings) in the city. 
+create view meta.property_vacant as
+select a.bbl, b.bin, b.doitt_id, 0 as total 
+from push.pluto as a
+left join push.buildings as b on b.bbl = a.bbl 
+where b.doitt_id is null;
+
+create view meta.property_all as
+select * from meta.property_built
+union all
+select * from meta.property_vacant;
 
 -- Create a view on our initial buildings table restricted to the constraints 
 -- above (and with a 'total' column appended reflecting the number of rowsets
@@ -18,10 +36,11 @@ group by bbl,bin;
 -- will have (bbl,bin) as a surrogate key to doitt_id.
 create view meta.buildings_ideal as
 select 
-   a.bbl,a.bin, a.doitt_id, a.total,
+   a.bbl, a.bin, a.doitt_id, a.total,
    b.lat_ctr, b.lon_ctr, b.radius, b.parts, b.points
-from meta.buildings_canonical as a
+from meta.property_built as a
 left join push.buildings as b on b.doitt_id = a.doitt_id;
+
 
 -- These two views are analagous to the originals in the flat/push schema,
 -- but purged of "rogue" BBL and BIN partial keys that can't be reliably 
@@ -60,9 +79,9 @@ group by a.bbl,a.bin;
 --
 create view meta.property_summary as
 select 
-  a.bbl, a.bin, cast(a.bbl/1000000000 as smallint) as boro_id,
-  d.active as dhcr_active, 
-  e.active as nychpd_active, e.contact_count,
+  a.bbl, a.bin, cast(a.bbl/1000000000 as smallint) as boro, a.doitt_id, a.total as polygon_count,
+  e.active as dhcr_active, 
+  f.active as nychpd_active, f.contact_count,
   c.owner_name      as taxbill_owner_name,
   c.mailing_address as taxbill_owner_address,  
   c.active_date     as taxbill_active_date,
@@ -74,26 +93,27 @@ select
   b.radius  as pluto_radius,
   b.points  as pluto_points,
   b.parts   as pluto_parts,
-  a.lon_ctr as building_lon_ctr,
-  a.lat_ctr as building_lat_ctr,
-  a.radius  as building_radius,
-  a.points  as building_points,
-  a.parts   as building_parts
-from meta.buildings_ideal as a
-left join core.pluto     as b on b.bbl = a.bbl
+  d.lon_ctr as building_lon_ctr,
+  d.lat_ctr as building_lat_ctr,
+  d.radius  as building_radius,
+  d.points  as building_points,
+  d.parts   as building_parts
+from meta.property_all   as a
+left join push.pluto     as b on b.bbl = a.bbl
 left join flat.taxbills  as c on c.bbl = a.bbl
-left join core.dhcr      as d on d.bbl = a.bbl and d.bin = a.bin
-left join meta.nychpd    as e on e.bbl = a.bbl and e.bin = a.bin;
--- NOTE: we should probably push the doitt_id and total columns from
--- meta.buildings_ideal, for analysis purposes.
+left join push.buildings as d on d.bbl = a.bbl and d.bin = a.bin 
+left join core.dhcr      as e on e.bbl = a.bbl and e.bin = a.bin
+left join meta.nychpd    as f on f.bbl = a.bbl and f.bin = a.bin;
+-- TODO: add columns block, lot, pluto_active, building_active
 
 
+-- DEPRECATED
 -- Equivalent to the above, but restricted to most crucial indicators 
 -- (with with shorter column names) for more convenient browsing.
 -- For troubleshooting only.
 create view meta.property_summary_tidy as
 select 
-  bbl, bin, boro_id as boro, 
+  bbl, bin, boro, 
   dhcr_active as dhcr, nychpd_active as nychpd, contact_count as contacts
 from meta.property_summary;
 
