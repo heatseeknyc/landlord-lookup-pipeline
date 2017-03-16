@@ -106,7 +106,7 @@ create table flat.pluto (
 create table flat.buildings (
     bbl bigint,
     bin integer,
-    doitt_id integer,
+    doitt_id integer primary key,
     lat_ctr float,
     lon_ctr float,
     radius float,
