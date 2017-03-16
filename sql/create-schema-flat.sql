@@ -67,21 +67,21 @@ create table flat.dhcr_pairs (
 -- by our ETL process; all other fields are as-is (and appear in the order
 -- as they appear in the data dictionary).
 create table flat.pluto (
-    BBL bigint,
+    BBL bigint PRIMARY KEY,
     ZipCode integer,
     Address text,
     AssessLand float, 
     AssessTot float, 
     BldgArea integer,
-    BldgClass text, 
+    BldgClass char(2), 
     CD integer, 
     CondoNo integer,
     HistDist text, 
-    LandUse text, 
+    LandUse char(2), 
     Landmark text, 
     NumBldgs integer,
     NumFloors float, 
-    OwnerType text, 
+    OwnerType char(1), 
     OwnerName text, 
     PLUTOMapID integer,
     UnitsRes integer, 
@@ -92,13 +92,16 @@ create table flat.pluto (
     ZoneDist3 text, 
     ZoneDist4 text, 
     ZoneMap text,
-    SplitZone text,
+    SplitZone char(1),
     lat_ctr float,
     lon_ctr float,
     radius float,
     parts text,
     points text
 );
+-- possible TODOs in this table: 
+--  - LandUse could be cast to smallint
+--  - SplitZone is ok as-is in this table, but could be normalized to boolean in push.pluto 
 
 create table flat.buildings (
     bbl bigint,
