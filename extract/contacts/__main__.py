@@ -22,7 +22,7 @@ to a "rejected" file for forensic analysis).
 """
 import argparse
 from collections import defaultdict
-from extract.ioutil import save_lines
+from extract.util.io import save_lines
 import extract.defaults
 
 def parse_args():

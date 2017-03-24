@@ -1,7 +1,7 @@
 import sys
 import time
 import argparse
-from extract.ioutil import read_recs, save_recs
+from extract.util.io import read_recs, save_recs
 from extract.taxbills.parse import consume, genrecs, corrupt
 import extract.defaults
 

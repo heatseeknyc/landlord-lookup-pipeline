@@ -3,7 +3,7 @@ Filters the raw DHCR tuples file selecting for valid BBL/BIN pairs,
 and saves these as a CSV file.
 """
 import argparse
-from extract.ioutil import read_recs, save_recs
+from extract.util.io import read_recs, save_recs
 import extract.defaults
 
 def parse_args():
