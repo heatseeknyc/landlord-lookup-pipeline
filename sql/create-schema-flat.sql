@@ -117,7 +117,7 @@ create table flat.buildings (
 -- Lien sales data are currently an optional part of the pipeline, and not fully supported
 -- in the ETL process.  But we include the frontline table defintion as a placeholder, for now.
 create table flat.liensales (
-    bbl bigint,
+    bbl bigint CHECK (bbl >= 1000000000 and bbl < 6000000000),
     year integer CHECK (year > 0),
     taxclass integer,
     waterdebt boolean,
