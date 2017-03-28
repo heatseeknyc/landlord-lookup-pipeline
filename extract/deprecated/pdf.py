@@ -4,6 +4,15 @@ from PyPDF2.pdf import ContentStream
 from PyPDF2.generic import TextStringObject
 import ioany
 
+def extract_all(page):
+    content = page["/Contents"].getObject()
+    if not isinstance(content, ContentStream):
+        content = ContentStream(content, page.pdf)
+        for operands, operator in content.operations:
+            blocks = [str(_) for _ in operands]
+            types = [type(_) for _ in operands]
+            yield str(operator),types,blocks
+
 def extract_text_objects(page):
     """Yields a sequence of TextStringObject instances from a given PageObject,
     in whatever order the internal content stream chooses to emit them.
@@ -33,16 +42,27 @@ def extract_text_objects(page):
                     yield "\n"
                     yield _text
             elif operator == b_("TJ"):
-                for x in operands[0]:
-                    if isinstance(x, TextStringObject):
-                        yield x
+                yield blockify(operands[0])
+                # for x in operands[0]:
+                #    if isinstance(x, TextStringObject):
+                #        yield x
                 yield "\n"
+
+def _str(x):
+    return str(x) if isinstance(x,TextStringObject) else ''
+
+def blockify(operand):
+    return "".join([_str(_) for _ in operand])
 
 def extract_text(reader,strip=True):
     if strip:
         yield from (str(_).strip() for _ in extract_text_objects(reader))
     else:
         yield from (str(_) for _ in extract_text_objects(reader))
+
+def get_page(f,i):
+    reader = PdfFileReader(f)
+    return reader.pages[i]
 
 def textify(f):
     reader = PdfFileReader(f)
