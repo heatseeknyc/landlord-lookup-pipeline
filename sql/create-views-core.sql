@@ -54,6 +54,7 @@ select
     BldgClass             as bldg_class,  
     CD                    as comm_dist,
     CondoNo               as condo_number,
+    Council               as council,
     HistDist              as hist_dist, 
     LandUse               as land_use, 
     Landmark              as landmark, 

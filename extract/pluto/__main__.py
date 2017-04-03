@@ -21,6 +21,7 @@ rspec = OrderedDict((
     ('BldgClass',None),
     ('CD',None),
     ('CondoNo',None),
+    ('Council',None),
     ('HistDist',None),
     ('LandUse',None),
     ('Landmark',None),
