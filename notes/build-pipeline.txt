@@ -15,65 +15,19 @@ Also, make sure your environment is initialized:
   bin/dopg.py -f sql/create-schema-flat.sql
   bin/import-rawdata.sh 
 
-(3) Scrub addresses + build indices:
+(3) Run the main script which builds everything else (should take 
+about 5-8 minutes).  It's also worth taking a quick look at, to understand
+the other steps involved in building the pipeline:
 
-  # First, create a few public functions.
-  bin/dopg.py -f sql/create-functions.sql 
-  bin/dopg.py -f sql/create-first-last.sql
-  # These should take under a minute each. 
-  bin/dopg.py -f sql/fix-contact-addresses.sql 
-  bin/dopg.py -f sql/fix-registration-addresses.sql 
-  bin/dopg.py -f sql/create-indexes-flat.sql 
+  bin/build-pipeline.sh
 
-In the next steps, we create the ...
-
-(4) 'core' schema
-
-  bin/dopg.py -f sql/create-schema-core.sql 
-  bin/dopg.py -f sql/create-views-core.sql 
-
-(5) 'push' schema
-
-This phase is slightly different, in that the 'create schema'
-script also populates its tables:
-
-  bin/dopg.py -f sql/create-schema-push.sql 
-  bin/dopg.py -f sql/create-indexes-push.sql
-
-(6) 'meta' schema
-
-  bin/dopg.py -f sql/create-schema-meta.sql 
-  bin/dopg.py -f sql/create-views-meta.sql 
-
-(7) 'hard' schema
-
-The 'create' statement also populates the tables + grants 
-privilegs to our read user:
-
-  bin/dopg.py -f sql/create-schema-hard.sql 
-  bin/dopg.py -f sql/create-tables-hard.sql 
-  bin/dopg.py -f sql/create-indexes-hard.sql
-
-BTW it'd be worth noticing the psql output for each of the the 'create' script; 
-it should emit meaningful rowcounts for the tables we're creating, e.g.:
-
-  DROP SCHEMA
-  CREATE SCHEMA
-  SELECT 157666
-  SELECT 577071
-  SELECT 141341
-  GRANT
-  GRANT
-  COMMIT
-
-(8) grant readuser priveleges
+(4) grant readuser priveleges
 
 Since this step requires superuser access, it needs to be done with a 
 raw shell command (as the 'dopg.py' utility is hard-wired to use the 
 writeuser credentials):
 
-   psql -U postgres -d nyc1 -f sql/grant-privileges-readuser.sql
-
+   psql -U postgres -d DATABASENAME -f sql/grant-privileges-readuser.sql
 
 
 
