@@ -86,6 +86,18 @@ where
   bbl is not null and bbl >= 1000000000 and bbl < 6000000000 and
   bin is not null and bin >= 1000000;
 
+-- Gives us the "physical" building count per BBL, ie the number
+-- of building shapefiles for each lot.
+create view core.building_counts as 
+select bbl,count(*) as bldg_count from core.buildings group by bbl;
+
+-- Because it's extremely convenient to have the "physical" building count  
+-- as an extended attribute of pluto.
+create view core.plutox as
+select a.*,b.bldg_count 
+from core.pluto as a 
+left join core.building_counts as b on b.bbl = a.bbl;
+
 -- Omit corrupted BBL/BIN pairs, and add an "active" column
 create view core.dhcr as 
 select bbl, bin, 1 as active from flat.dhcr_pairs
