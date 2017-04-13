@@ -94,7 +94,7 @@ select bbl,count(*) as bldg_count from core.buildings group by bbl;
 -- Because it's extremely convenient to have the "physical" building count  
 -- as an extended attribute of pluto.
 create view core.plutox as
-select a.*,b.bldg_count 
+select a.*,coalesce(b.bldg_count,0)
 from core.pluto as a 
 left join core.building_counts as b on b.bbl = a.bbl;
 
