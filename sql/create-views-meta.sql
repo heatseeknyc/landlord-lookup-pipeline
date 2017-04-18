@@ -84,7 +84,6 @@ select
   f.active as nychpd_active, f.contact_count,
   c.owner_name      as taxbill_owner_name,
   c.mailing_address as taxbill_owner_address,  
-  c.active_date     as taxbill_active_date,
   b.land_use        as pluto_land_use,
   b.bldg_class      as pluto_bldg_class,
   b.condo_number    as pluto_condo_number,
