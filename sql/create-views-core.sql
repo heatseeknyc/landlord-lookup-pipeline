@@ -2,7 +2,7 @@
 begin;
 
 --
--- Renames columns + introduces BBL column. 
+-- MapPluto 16v2 - taxlots + buildings
 --
 
 create view core.pluto as 
@@ -60,6 +60,12 @@ select a.*,coalesce(b.bldg_count,0)
 from core.pluto as a 
 left join core.building_counts as b on b.bbl = a.bbl;
 
+
+--
+-- NYCHPD registrations + contacts
+--
+
+-- Renames columns + introduces BBL column. 
 create view core.registrations as 
 select 
     registrationid       as id, 

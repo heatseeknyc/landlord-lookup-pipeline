@@ -21,6 +21,14 @@ begin
 end
 $$ language plpgsql;
 
+create or replace function public.bbl2block (bbl bigint) 
+returns bigint AS $$
+begin
+    return cast((bbl % 1000000000)/10000 as integer);
+end
+$$ language plpgsql;
+
+
 -- 
 -- Given a BBL, return the 2-letter Borough Code used in many GIS systems 
 --
