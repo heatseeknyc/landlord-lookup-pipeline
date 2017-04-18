@@ -86,7 +86,7 @@ select
   c.mailing_address as taxbill_owner_address,  
   c.active_date     as taxbill_active_date,
   b.owner_name      as pluto_owner_name,
-  b.num_bldgs       as pluto_building_count,
+  b.bldg_count      as pluto_bldg_count,
   b.units_total     as pluto_units_total,
   b.land_use        as pluto_land_use,
   b.bldg_class      as pluto_bldg_class,
