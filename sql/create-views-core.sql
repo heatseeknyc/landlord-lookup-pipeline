@@ -41,20 +41,25 @@ select
     points                as points 
 from flat.pluto;
 
--- Omit records with corrupted BBL/BIN pairs (currently 3 rows):
+-- Omit a small number of rows with clearly degenerate BBLs or BINs 
+-- (exactly 3 fail these criteria in 16v2).  This sill still leave us 
+-- with a significant number (6000+) of rows with "noisy" BBLs or BINs
+-- (or both), but that's OK for now.
 create view core.buildings as 
 select * from flat.buildings
-where
-  bbl is not null and bbl >= 1000000000 and bbl < 6000000000 and
-  bin is not null and bin >= 1000000;
+where 
+  bbl is not null and 
+  bbl >= 1000000000 and bbl < 6000000000 and
+  bbl >= 1000000 and bin < 6000000;
+
 
 -- Gives us the "physical" building count per BBL, ie the number
--- of building shapefiles for each lot.
+-- of building shapefiles for each lot - as the NumBldgs column is 
+-- known to be sometimes noisy.
 create view core.building_counts as 
 select bbl,count(*) as bldg_count from core.buildings group by bbl;
 
--- Because it's extremely convenient to have the "physical" building count  
--- as an extended attribute of pluto.
+-- An "extension" of our MapPluto set to include the above column.
 create view core.plutox as
 select a.*,coalesce(b.bldg_count,0)
 from core.pluto as a 
@@ -105,12 +110,13 @@ select
     businesszip           as business_zip
 from flat.contacts;
 
--- Omit corrupted BBL/BIN pairs, and add an "active" column
+-- Omit fully corrupted BBLs/BINs, and an "active" column.
+-- (currently a single row, in the 2015 dataset).
 create view core.dhcr as 
 select bbl, bin, 1 as active from flat.dhcr_pairs
 where 
-  bbl is not null and bbl >= 1000000000 and bbl < 6000000000 and
-  bin is not null and bin >= 1000000 and bin not in (1000000,2000000,3000000,4000000,5000000);
+  bbl >= 1000000000 and bbl < 6000000000 and
+  bin >= 1000000 and bin < 6000000; 
 
 commit;
 
