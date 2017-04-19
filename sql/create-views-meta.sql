@@ -1,46 +1,5 @@
 begin;
 
---
--- First we construct two mutually exclusive rowsets.
---
-
--- The first result set that attempts to identify the "most important" polygon for 
--- a given BBL/BIN pair -- that is, the first non-degenerate tuple (going by doitt_id).
--- Somewhat imperfect in that there are about 344 BBLs with -only- degenerate BINs,
--- as of Pluto 16v2, and these lots will be entirely omitted from this result set.
-create view meta.property_built as
-select bbl, bin, min(doitt_id) as doitt_id, count(*) as total 
-from push.buildings 
-group by bbl,bin;
--- Note that we could "rescue" these 344 BBLs via a union on a separate query for 
--- that result set -- but that would be too much complexity for the time being.
-
--- A rowset of properties deemed "vacant" by appearing in the main Pluto attributes 
--- table, but not in the buildings shapefile set.  Presumably this represents the set
--- of all vacant lots (and parks without buildings) in the city. 
-create view meta.property_vacant as
-select a.bbl, b.bin, b.doitt_id, 0 as total 
-from push.pluto as a
-left join push.buildings as b on b.bbl = a.bbl 
-where b.doitt_id is null;
-
-create view meta.property_all as
-select * from meta.property_built
-union all
-select * from meta.property_vacant;
-
--- Create a view on our initial buildings table restricted to the constraints 
--- above (and with a 'total' column appended reflecting the number of rowsets
--- in the original table having the BBL/BIN pair).  As a table, this rowset 
--- will have (bbl,bin) as a surrogate key to doitt_id.
-create view meta.buildings_ideal as
-select 
-   a.bbl, a.bin, a.doitt_id, a.total,
-   b.lat_ctr, b.lon_ctr, b.radius, b.parts, b.points
-from meta.property_built as a
-left join push.buildings as b on b.doitt_id = a.doitt_id;
-
-
 create view meta.buildings_primary as
 select bbl, bin, min(doitt_id) as doitt_id
 from push.buildings 
