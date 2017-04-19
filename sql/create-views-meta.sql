@@ -41,6 +41,12 @@ from meta.property_built as a
 left join push.buildings as b on b.doitt_id = a.doitt_id;
 
 
+create view meta.buildings_primary as
+select bbl, bin, min(doitt_id) as doitt_id
+from push.buildings 
+group by bbl,bin;
+
+
 -- These two views are analagous to the originals in the flat/push schema,
 -- but purged of "rogue" BBL and BIN partial keys that can't be reliably 
 -- joined on.  (The filtering is nearly the same in both joins; except the 
@@ -78,44 +84,36 @@ group by a.bbl,a.bin;
 --
 create view meta.property_summary as
 select 
-  a.bbl, a.bin, cast(a.bbl/1000000000 as smallint) as boro, a.doitt_id, a.total as polygon_count,
-  e.active as dhcr_active, 
-  f.active as nychpd_active, f.contact_count,
-  c.owner_name      as taxbill_owner_name,
-  c.mailing_address as taxbill_owner_address,  
-  b.land_use        as pluto_land_use,
-  b.bldg_class      as pluto_bldg_class,
-  b.condo_number    as pluto_condo_number,
-  b.units_total     as pluto_units_total,
-  b.bldg_count      as pluto_bldg_count,
-  b.lon_ctr as pluto_lon_ctr,
-  b.lat_ctr as pluto_lat_ctr,
-  b.radius  as pluto_radius,
-  b.points  as pluto_points,
-  b.parts   as pluto_parts,
-  d.lon_ctr as building_lon_ctr,
-  d.lat_ctr as building_lat_ctr,
-  d.radius  as building_radius,
-  d.points  as building_points,
-  d.parts   as building_parts
-from meta.property_all   as a
-left join push.pluto     as b on b.bbl = a.bbl
-left join flat.taxbills  as c on c.bbl = a.bbl
-left join push.buildings as d on d.bbl = a.bbl and d.bin = a.bin 
-left join core.dhcr      as e on e.bbl = a.bbl and e.bin = a.bin
-left join meta.nychpd    as f on f.bbl = a.bbl and f.bin = a.bin;
+  a.bbl, public.bbl2boro(a.bbl) as boro, 
+  b.bin, b.doitt_id, 
+  a.land_use        as pluto_land_use,
+  a.bldg_class      as pluto_bldg_class,
+  a.condo_number    as pluto_condo_number,
+  a.units_total     as pluto_units_total,
+  a.bldg_count      as pluto_bldg_count,
+  a.lon_ctr as pluto_lon_ctr,
+  a.lat_ctr as pluto_lat_ctr,
+  a.radius  as pluto_radius,
+  a.points  as pluto_points,
+  a.parts   as pluto_parts,
+  c.lon_ctr as building_lon_ctr,
+  c.lat_ctr as building_lat_ctr,
+  c.radius  as building_radius,
+  c.points  as building_points,
+  c.parts   as building_parts,
+  d.active    as nychpd_active, d.contact_count as nychdp_count,
+  e.active    as dhcr_active,
+  f.unitcount as tazbill_unitcount 
+  -- f.owner_name      as taxbill_owner_name,
+  -- f.mailing_address as taxbill_owner_address
+from      push.pluto             as a 
+left join meta.buildings_primary as b on a.bbl = b.bbl
+left join push.buildings         as c on b.bbl = c.bbl and b.doitt_id = b.doitt_id
+left join meta.nychpd            as d on b.bbl = d.bbl and b.bin = d.bin
+left join core.dhcr              as e on b.bbl = e.bbl and b.bin = e.bin
+left join flat.taxbills          as f on a.bbl = f.bbl;
 -- TODO: add columns block, lot, pluto_active, building_active
 
-
--- DEPRECATED
--- Equivalent to the above, but restricted to most crucial indicators 
--- (with with shorter column names) for more convenient browsing.
--- For troubleshooting only.
-create view meta.property_summary_tidy as
-select 
-  bbl, bin, boro, 
-  dhcr_active as dhcr, nychpd_active as nychpd, contact_count as contacts
-from meta.property_summary;
 
 
 --
