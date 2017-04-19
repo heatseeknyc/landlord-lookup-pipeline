@@ -5,7 +5,8 @@
 --
 
 begin;
-create index on flat.taxbills(bbl);
+create index on flat.pluto(bbl);
+create index on flat.buildings(bbl,bin);
 create index on flat.contacts(registrationcontactid);
 create index on flat.contacts(contacttype);
 create index on flat.contacts(registrationid);
@@ -13,8 +14,7 @@ create index on flat.registrations(registrationid);
 create index on flat.registrations(buildingid);
 create index on flat.registrations(housenumber,streetname,zip);
 create index on flat.registrations(housenumber,streetname,boroid);
-create index on flat.pluto(bbl);
-create index on flat.buildings(bbl,bin);
+create index on flat.taxbills(bbl);
 
 -- presently these are needed for the scrubbing phase only.
 create index on flat.registrations(streetname);
