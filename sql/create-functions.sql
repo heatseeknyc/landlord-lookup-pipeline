@@ -14,6 +14,13 @@ begin
 end
 $$ language plpgsql;
 
+create or replace function public.bbl2boro (bbl bigint) 
+returns bigint AS $$
+begin
+    return cast(bbl/1000000000 as smallint);
+end
+$$ language plpgsql;
+
 create or replace function public.bbl2block (bbl bigint) 
 returns bigint AS $$
 begin
