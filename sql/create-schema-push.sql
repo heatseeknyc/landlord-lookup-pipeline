@@ -14,6 +14,12 @@ begin;
 drop schema if exists push cascade;
 create schema push;
 
+create table push.pluto as
+select * from core.plutox;
+
+create table push.buildings as
+select * from core.buildings;
+
 -- All columns except street_code, block, lot; and crucially, indexed by BBL.
 create table push.registrations as
 select 
@@ -53,11 +59,5 @@ insert into push.contact_rank (id,contact_type) values
     (8,'Agent'),
     (9,'Lessee')
 ;
-
-create table push.pluto as
-select * from core.plutox;
-
-create table push.buildings as
-select * from core.buildings;
 
 commit;
