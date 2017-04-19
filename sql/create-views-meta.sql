@@ -11,7 +11,6 @@ begin;
 create view meta.property_built as
 select bbl, bin, min(doitt_id) as doitt_id, count(*) as total 
 from push.buildings 
-where bin not in (1000000,2000000,3000000,4000000,5000000)
 group by bbl,bin;
 -- Note that we could "rescue" these 344 BBLs via a union on a separate query for 
 -- that result set -- but that would be too much complexity for the time being.
