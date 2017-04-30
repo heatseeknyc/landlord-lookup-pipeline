@@ -74,7 +74,7 @@ create table flat.registrations (
     streetname text,
     streetcode text,
     zip text,
-    block smallint,
+    block integer, 
     lot smallint, 
     bin integer,
     communityboard smallint,
@@ -122,6 +122,13 @@ create table flat.taxbills_deprecated (
     mailing_address text
 );
 
+create table flat.dhcr_lots ( 
+    bbl bigint primary key,
+    count integer not null,
+    tags text
+);
+
+-- deprecated
 create table flat.dhcr_pairs (
     bbl bigint not null,
     bin integer not null 

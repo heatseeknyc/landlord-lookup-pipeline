@@ -7,7 +7,7 @@ begin;
 -- 
 -- Maps the composite key (boro_id,block,lot) to a properly typed (bigint) primary key.
 --
-create or replace function public.make_bbl (boro_id smallint, block smallint, lot smallint) 
+create or replace function public.make_bbl (boro_id smallint, block integer, lot smallint) 
 returns bigint AS $$
 begin
     return cast(boro_id as bigint) * 1000000000 + cast(block as bigint) * 10000 + lot;
