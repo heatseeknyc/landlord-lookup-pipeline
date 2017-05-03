@@ -8,34 +8,18 @@ by the identifier
 in the .prj for the building shapefiles we'll be loading.
 
 """
-from pyproj import Proj
+import pyproj
+
 
 """
-The following construct is taken nearly verbatim (except for the callable name)
-from the StackOverflow post:
+An alternate way of referenicng the NYS projection, per the following StackOverflow post:
 
+  https://github.com/jswhit/pyproj/issues/67
 
-which yields the output shown in the captured interpreter session shown below.
+Note the 'preserve_units' flag, which turns out to be crucial.
+
 """
-_project_nyc = Proj(
-    proj  = 'lcc',
-    datum = 'NAD83',
-    lat_1 = 40.666667,
-    lat_2 = 41.033333,
-    lat_0 = 40.166667,
-    lon_0 = -74.0,
-    x_0 = 984250.0,
-    y_0 = 0.0
-)
-"""
-    x,y = [981106.0],[195544.0]
-    lon,lat = __project_nyc(x,y,inverse=True)
-    print(lon,lat)
-    ([-74.037898165369], [41.927378144152])
-
-Note that in the snippet in the SO post the output tuple had more precision:
-    ([-74.037898165369015], [41.927378144152335])
- """
+_convert = pyproj.Proj(init="EPSG:2263", preserve_units=True)
 
 def _stateplane2lonlat(easting,northing):
     """
@@ -43,7 +27,7 @@ def _stateplane2lonlat(easting,northing):
     stateplane (FIPS 3104) to standard lattitude and longitude.
     """
     x,y = [easting],[northing]
-    lon,lat = _project_nyc(x,y,inverse=True)
+    lon,lat = _convert(x,y,inverse=True)
     return lon[0],lat[0]
 
 def stateplane2lonlat(t):
