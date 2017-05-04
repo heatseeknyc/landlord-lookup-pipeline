@@ -117,13 +117,6 @@ create table flat.taxbills (
     UNIQUE (bbl, year, quarter)
 );
 
-create table flat.taxbills_deprecated (
-    bbl bigint,
-    active_date date,
-    owner_name text,
-    mailing_address text
-);
-
 create table flat.dhcr2015 ( 
     bbl bigint primary key,
     count integer not null,
@@ -131,6 +124,22 @@ create table flat.dhcr2015 (
     has_421a boolean not null,
     has_j51 boolean not null,
     special text
+);
+
+create table flat.liensales (
+    bbl bigint CHECK (bbl >= 1000000000 and bbl < 6000000000),
+    year integer CHECK (year > 0),
+    taxclass integer,
+    waterdebt boolean,
+    UNIQUE (bbl, year)
+);
+
+-- deprecated
+create table flat.taxbills_deprecated (
+    bbl bigint,
+    active_date date,
+    owner_name text,
+    mailing_address text
 );
 
 -- deprecated
@@ -146,13 +155,6 @@ create table flat.dhcr_pairs (
     bin integer not null 
 );
 
-create table flat.liensales (
-    bbl bigint CHECK (bbl >= 1000000000 and bbl < 6000000000),
-    year integer CHECK (year > 0),
-    taxclass integer,
-    waterdebt boolean,
-    UNIQUE (bbl, year)
-);
 
 commit;
 
