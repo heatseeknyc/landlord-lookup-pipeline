@@ -20,6 +20,9 @@ select * from core.plutox;
 create table push.buildings as
 select * from core.buildings;
 
+create table push.buildings_primary as
+select * from core.buildings_primary;
+
 -- All columns except street_code, block, lot; and crucially, indexed by BBL.
 create table push.registrations as
 select 

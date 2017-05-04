@@ -52,6 +52,15 @@ where
   bbl >= 1000000000 and bbl < 6000000000 and
   bbl >= 1000000 and bin < 6000000;
 
+-- Disambiguates those rare case (numbering about 348 rows) of (bbl,bin)
+-- pairs matching more than one building record -- thus allowing us to use
+-- the (bbl,bin) as a primary key.
+create view core.buildings_primary as
+select bbl, bin, min(doitt_id) as doitt_id
+from push.buildings 
+group by bbl,bin;
+
+
 
 -- Gives us the "physical" building count per BBL, ie the number
 -- of building shapefiles for each lot - as the NumBldgs column is 
