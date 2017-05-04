@@ -31,7 +31,7 @@ where
 --
 
 create view meta.nychpd as
-select a.bbl, a.bin, count(distinct b.id) as contact_count, 1 as active
+select a.bbl, a.bin, count(distinct b.id) as total
 from      meta.registrations as a
 left join push.contacts      as b on b.registration_id = a.id
 group by a.bbl,a.bin;
@@ -43,8 +43,7 @@ group by a.bbl,a.bin;
 --
 create view meta.property_summary as
 select 
-  a.bbl, public.bbl2boro(a.bbl) as boro, 
-  b.bin, b.doitt_id, 
+  a.bbl, b.bin, b.doitt_id, 
   a.land_use        as pluto_land_use,
   a.bldg_class      as pluto_bldg_class,
   a.condo_number    as pluto_condo_number,
@@ -60,18 +59,16 @@ select
   c.radius  as building_radius,
   c.points  as building_points,
   c.parts   as building_parts,
-  d.active    as nychpd_active, d.contact_count as nychdp_count,
-  e.active    as dhcr_active,
-  f.unitcount as tazbill_unitcount 
-  -- f.owner_name      as taxbill_owner_name,
-  -- f.mailing_address as taxbill_owner_address
+  d.has_421a  as stable_421a,
+  d.has_j51   as stable_j51,
+  d.unitcount as stable_units,
+  d.special   as stable_flags,
+  coalesce(e.total,0) as nychdp_count
 from      push.pluto             as a 
-left join meta.buildings_primary as b on a.bbl = b.bbl
-left join push.buildings         as c on b.bbl = c.bbl and b.doitt_id = b.doitt_id
-left join meta.nychpd            as d on b.bbl = d.bbl and b.bin = d.bin
-left join core.dhcr              as e on b.bbl = e.bbl and b.bin = e.bin
-left join flat.taxbills          as f on a.bbl = f.bbl;
--- TODO: add columns block, lot, pluto_active, building_active
+left join push.buildings_primary as b on a.bbl = b.bbl
+left join push.buildings         as c on b.bbl = c.bbl and b.doitt_id = c.doitt_id
+left join push.stable            as d on a.bbl = d.bbl
+left join meta.nychpd            as e on b.bbl = e.bbl and b.bin = e.bin;
 
 
 
