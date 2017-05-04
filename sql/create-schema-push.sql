@@ -60,4 +60,7 @@ insert into push.contact_rank (id,contact_type) values
     (9,'Lessee')
 ;
 
+create table push.stable as
+select * from core.stable;
+
 commit;
