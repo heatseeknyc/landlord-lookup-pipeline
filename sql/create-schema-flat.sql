@@ -112,6 +112,8 @@ create table flat.taxbills (
     unitcount smallint null,
     estimated bigint null,
     amount float(2),
+    _421a boolean,
+    _j51 boolean,
     UNIQUE (bbl, year, quarter)
 );
 
@@ -122,6 +124,16 @@ create table flat.taxbills_deprecated (
     mailing_address text
 );
 
+create table flat.dhcr2015 ( 
+    bbl bigint primary key,
+    count integer not null,
+    dwell char(1),
+    has_421a boolean not null,
+    has_j51 boolean not null,
+    special text
+);
+
+-- deprecated
 create table flat.dhcr_lots ( 
     bbl bigint primary key,
     count integer not null,
