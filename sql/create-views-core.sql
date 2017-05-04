@@ -57,7 +57,7 @@ where
 -- the (bbl,bin) as a primary key.
 create view core.buildings_primary as
 select bbl, bin, min(doitt_id) as doitt_id
-from push.buildings 
+from core.buildings 
 group by bbl,bin;
 
 
