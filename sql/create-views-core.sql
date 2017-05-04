@@ -61,7 +61,7 @@ select bbl,count(*) as bldg_count from core.buildings group by bbl;
 
 -- An "extension" of our MapPluto set to include the above column.
 create view core.plutox as
-select a.*,coalesce(b.bldg_count,0)
+select a.*,coalesce(b.bldg_count,0) as bldg_count
 from core.pluto as a 
 left join core.building_counts as b on b.bbl = a.bbl;
 
@@ -109,14 +109,6 @@ select
     businessstate         as business_state,
     businesszip           as business_zip
 from flat.contacts;
-
--- Omit fully corrupted BBLs/BINs, and an "active" column.
--- (currently a single row, in the 2015 dataset).
-create view core.dhcr as 
-select bbl, bin, 1 as active from flat.dhcr_pairs
-where 
-  bbl >= 1000000000 and bbl < 6000000000 and
-  bin >= 1000000 and bin < 6000000; 
 
 commit;
 
