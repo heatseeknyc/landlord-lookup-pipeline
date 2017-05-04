@@ -63,7 +63,7 @@ select
   d.has_j51   as stable_j51,
   d.unitcount as stable_units,
   d.special   as stable_flags,
-  coalesce(e.total,0) as nychdp_count
+  coalesce(e.total,0) as nychpd_count
 from      push.pluto             as a 
 left join push.buildings_primary as b on a.bbl = b.bbl
 left join push.buildings         as c on b.bbl = c.bbl and b.doitt_id = c.doitt_id
