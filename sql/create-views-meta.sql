@@ -7,8 +7,8 @@ begin;
 -- this constraint is already enforced in the table it pulls from).
 
 -- XXX move this to core
-create view meta.registrations as
-select * from push.registrations 
+create view meta.nychpd_registration as
+select * from push.nychpd_registration 
 where 
   bbl is not null and bbl >= 1000000000 and bbl < 6000000000 and
   bin is not null and bin >= 1000000 and bin not in (1000000,2000000,3000000,4000000,5000000);
@@ -24,10 +24,10 @@ where
 -- superfluous for these views, considered in isolation). 
 --
 
-create view meta.nychpd as
+create view meta.nychpd_count as
 select a.bbl, a.bin, count(distinct b.id) as total
-from      meta.registrations as a
-left join push.contacts      as b on b.registration_id = a.id
+from      meta.nychpd_registration as a
+left join push.nychpd_contact      as b on b.registration_id = a.id
 group by a.bbl,a.bin;
 
 
@@ -62,7 +62,7 @@ from      push.pluto_taxlot           as a
 left join push.pluto_building_primary as b on a.bbl = b.bbl
 left join push.pluto_building         as c on b.bbl = c.bbl and b.doitt_id = c.doitt_id
 left join push.stable                 as d on a.bbl = d.bbl
-left join meta.nychpd                 as e on b.bbl = e.bbl and b.bin = e.bin;
+left join meta.nychpd_count           as e on b.bbl = e.bbl and b.bin = e.bin;
 
 
 

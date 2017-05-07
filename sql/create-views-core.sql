@@ -78,7 +78,7 @@ left join core.pluto_building_count as b on b.bbl = a.bbl;
 --
 
 -- Renames columns + introduces BBL column. 
-create view core.registrations as 
+create view core.nychpd_registration as 
 select 
     registrationid       as id, 
     public.make_bbl(boroid,block,lot) as bbl,
@@ -96,9 +96,9 @@ select
     communityboard       as cb_id,
     lastregistrationdate as last_date,
     registrationenddate  as end_date
-from flat.registrations;
+from flat.nychpd_registration;
 
-create view core.contacts as 
+create view core.nychpd_contact as 
 select
     registrationcontactid as id, 
     registrationid        as registration_id,
@@ -115,7 +115,7 @@ select
     businesscity          as business_city, 
     businessstate         as business_state,
     businesszip           as business_zip
-from flat.contacts;
+from flat.nychpd_contact;
 
 -- A restriction of the most recent taxbills rowset to just those tax lots 
 -- having some kind of stability marking. 

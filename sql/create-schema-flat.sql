@@ -73,7 +73,7 @@ create table flat.pluto_refdata_landuse (
     label text
 );
 
-create table flat.registrations (
+create table flat.nychpd_registration (
     registrationid integer,
     buildingid integer,
     boroid smallint,
@@ -95,7 +95,7 @@ create table flat.registrations (
 -- Note that  the 'Type' column in the contacts file, has been 
 -- renamed to 'ContactType' to avoid collision on the reserved 
 -- SQL word. 
-create table flat.contacts (
+create table flat.nychpd_contact (
     registrationcontactid integer,
     registrationid integer,
     contacttype text,

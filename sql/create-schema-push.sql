@@ -24,14 +24,14 @@ create table push.pluto_building_primary as
 select * from core.pluto_building_primary;
 
 -- All columns except street_code, block, lot; and crucially, indexed by BBL.
-create table push.registrations as
+create table push.nychpd_registration as
 select 
   id, bbl, building_id, boro_id, house_number, house_number_low, house_number_high,
   street_name, zip, bin, cb_id, last_date, end_date
-from core.registrations;
+from core.nychpd_registration;
 
-create table push.contacts as
-select * from core.contacts;
+create table push.nychpd_contact as
+select * from core.nychpd_contacts;
 
 --
 -- A reference table specifying pre-defined sorting order for contact_type fields. 
@@ -46,12 +46,12 @@ select * from core.contacts;
 -- at the very bottom.
 --
 
-create table push.contact_rank ( 
+create table push.nychpd_contact_rank ( 
     id integer,
     contact_type text
 );
 
-insert into push.contact_rank (id,contact_type) values 
+insert into push.nychpd_contact_rank (id,contact_type) values 
     (1,'CorporateOwner'),
     (2,'IndividualOwner'),
     (3,'JointOwner'),
