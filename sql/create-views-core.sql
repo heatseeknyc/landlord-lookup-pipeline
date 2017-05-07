@@ -5,7 +5,7 @@ begin;
 -- MapPluto 16v2 - taxlots + buildings
 --
 
-create view core.pluto as 
+create view core.pluto_taxlot as 
 select
     BBL                   as bbl, 
     Address               as address, 
@@ -45,8 +45,8 @@ from flat.pluto;
 -- (exactly 3 fail these criteria in 16v2).  This sill still leave us 
 -- with a significant number (6000+) of rows with "noisy" BBLs or BINs
 -- (or both), but that's OK for now.
-create view core.buildings as 
-select * from flat.buildings
+create view core.pluto_building as 
+select * from flat.pluto_building
 where 
   bbl is not null and 
   bbl >= 1000000000 and bbl < 6000000000 and
@@ -55,24 +55,22 @@ where
 -- Disambiguates those rare case (numbering about 348 rows) of (bbl,bin)
 -- pairs matching more than one building record -- thus allowing us to use
 -- the (bbl,bin) as a primary key.
-create view core.buildings_primary as
+create view core.pluto_building_primary as
 select bbl, bin, min(doitt_id) as doitt_id
 from core.buildings 
 group by bbl,bin;
 
-
-
 -- Gives us the "physical" building count per BBL, ie the number
 -- of building shapefiles for each lot - as the NumBldgs column is 
 -- known to be sometimes noisy.
-create view core.building_counts as 
+create view core.pluto_building_count as 
 select bbl,count(*) as bldg_count from core.buildings group by bbl;
 
 -- An "extension" of our MapPluto set to include the above column.
-create view core.plutox as
+create view core.pluto_taxlot_remix as
 select a.*,coalesce(b.bldg_count,0) as bldg_count
-from core.pluto as a 
-left join core.building_counts as b on b.bbl = a.bbl;
+from core.pluto_taxlot as a 
+left join core.pluto_building_count as b on b.bbl = a.bbl;
 
 
 --
