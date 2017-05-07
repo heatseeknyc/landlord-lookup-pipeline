@@ -63,6 +63,16 @@ create table flat.pluto_building (
     points text
 );
 
+create table flat.pluto_refdata_bldgclass (
+    tag char(2) not null primary key,
+    label text
+);
+
+create table flat.pluto_refdata_landuse (
+    tag char(2) not null primary key,
+    label text
+);
+
 create table flat.registrations (
     registrationid integer,
     buildingid integer,
