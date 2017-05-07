@@ -1,11 +1,5 @@
 begin;
 
-create view meta.buildings_primary as
-select bbl, bin, min(doitt_id) as doitt_id
-from push.buildings 
-group by bbl,bin;
-
-
 -- These two views are analagous to the originals in the flat/push schema,
 -- but purged of "rogue" BBL and BIN partial keys that can't be reliably 
 -- joined on.  (The filtering is nearly the same in both joins; except the 
