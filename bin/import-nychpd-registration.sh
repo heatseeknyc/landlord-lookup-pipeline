@@ -5,6 +5,6 @@ indir="$stage/xtracted/nychpd"
 PIPEARGS='(DELIMITER \"|\", FORMAT CSV, HEADER TRUE)'
 
 echo '[import] inserting data ...'
-python bin/dopg.py -c '"\copy flat.nychpd_contact FROM '$indir/contacts-clean.csv' '$PIPEARGS';"' 
+python bin/dopg.py -c '"\copy flat.nychpd_registration FROM '$indir/registrations.txt' '$PIPEARGS';"' 
 echo '[import] done.'
 
