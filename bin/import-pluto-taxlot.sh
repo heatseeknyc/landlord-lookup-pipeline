@@ -11,6 +11,6 @@ indir="$stage/xtracted/pluto"
 COMMAARGS='(DELIMITER \",\", FORMAT CSV, HEADER TRUE)'
 
 echo '[import] inserting data ...'
-python bin/dopg.py -c '"\copy flat.pluto FROM '$indir/mappluto.csv' '$COMMAARGS';"'
+python bin/dopg.py -c '"\copy flat.pluto_taxlot FROM '$indir/taxlot.csv' '$COMMAARGS';"'
 echo '[import] done.'
 
