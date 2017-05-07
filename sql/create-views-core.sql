@@ -57,16 +57,16 @@ where
 -- the (bbl,bin) as a primary key.
 create view core.pluto_building_primary as
 select bbl, bin, min(doitt_id) as doitt_id
-from core.buildings 
+from core.pluto_building
 group by bbl,bin;
 
 -- Gives us the "physical" building count per BBL, ie the number
 -- of building shapefiles for each lot - as the NumBldgs column is 
 -- known to be sometimes noisy.
 create view core.pluto_building_count as 
-select bbl,count(*) as bldg_count from core.buildings group by bbl;
+select bbl,count(*) as bldg_count from core.pluto_building group by bbl;
 
--- An "extension" of our MapPluto set to include the above column.
+-- An extension of our MapPluto set to include the above column.
 create view core.pluto_taxlot_remix as
 select a.*,coalesce(b.bldg_count,0) as bldg_count
 from core.pluto_taxlot as a 

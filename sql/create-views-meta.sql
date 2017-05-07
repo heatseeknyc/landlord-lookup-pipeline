@@ -82,8 +82,8 @@ select
   public.make_contact_addr(
     business_house_number,business_street_name,business_apartment,business_city,business_state,business_zip
   ) as business_address 
-from push.contacts               as a
-left join push.contact_rank as b on b.contact_type = a.contact_type;
+from push.nychpd_contact           as a
+left join push.nychpd_contact_rank as b on b.contact_type = a.contact_type;
 
 --
 -- And this view provides all contacts for a given (BBL,BIN) using shortened 
@@ -103,7 +103,7 @@ select
   a.id as registration_id, bin, bbl, building_id, last_date, end_date,
   b.contact_id, b.contact_type, b.contact_rank, b.description, 
   b.corpname, b.contact_name, b.business_address
-from meta.registrations        as a
+from meta.nychpd_registration  as a
 left join meta.contacts_simple as b on b.registration_id = a.id;
 
 commit;
