@@ -6,7 +6,7 @@
 #
 
 stage='./stage'
-indir="$stage/xtracted"
+indir="$stage/xtracted/pluto"
 
 COMMAARGS='(DELIMITER \",\", FORMAT CSV, HEADER TRUE)'
 
