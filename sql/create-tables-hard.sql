@@ -12,6 +12,9 @@ select * from meta.property_summary;
 create table hard.contact_info as
 select * from meta.contact_info;
 
+create table hard.pluto_building as
+select * from push.pluto_building; 
+
 --
 -- Deprecated for the time being.
 --
