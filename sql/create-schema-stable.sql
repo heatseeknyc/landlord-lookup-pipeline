@@ -32,5 +32,14 @@ create table flat.liensales (
     UNIQUE (bbl, year)
 );
 
-commit;
+create table flat.stable_joined (
+    bbl bigint not null CHECK (bbl >= 1000000000 and bbl < 6000000000),
+    year smallint not null, 
+    unitcount integer,
+    estimate boolean not null,
+    in_dhcr boolean not null,
+    abatements text,
+    UNIQUE (bbl, year)
+);
 
+commit;
