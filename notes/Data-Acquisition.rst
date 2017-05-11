@@ -48,6 +48,8 @@ As of June 2016 these should be available under versioned names, e.g.::
 These are currently presented as a ``zip`` archive containing two datasets (for registrations and contacts; along with an XML file we don't need).  At present writing, they live under this URL::
 
   http://www1.nyc.gov/site/hpd/about/registration-open-data.page
+  http://www1.nyc.gov/site/hpd/about/Building-open-data.page
+  https://data.ny.gov/Housing-Development/Buildings-Subject-to-HPD-Jurisdiction/kj4p-ruqc/
 
 Note that you should pull the dataset most closely matching the date of the taxbills scrape.  The exact path may change by the time you run this, but one way or another you want to grab that file, and unpack it in the staging directory::
 
