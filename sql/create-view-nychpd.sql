@@ -62,5 +62,36 @@ select
     businesszip           as business_zip
 from flat.nychpd_contact;
 
+create view core.nychpd_legal as 
+select
+    litigationid                      as id,
+    buildingid                        as building_id,
+    public.make_bbl(boroid,block,lot) as bbl,
+    housenumber                       as house_number,
+    streetname                        as street_name,
+    zip                               as zip5,
+    casetype                          as case_type,
+    caseopendate                      as case_open_date, 
+    case 
+        when casestatus = 'CLOSED' then 'Closed'
+        when casestatus in ('PENDING','APPLICATION PENDING') then 'Pending'
+        when casestatus ~ '^GRANTED.*' then 'Granted'
+        when casestatus ~ '^DENIED.*' then 'Denied'
+        when casestatus ~ '^WithDrawn/Abandoned*' then 'Withdrawn'
+        when casestatus ~ '^Exempt.*' then 'Exempt'
+        when casestatus ~ '^Rejected.*' then 'Rejected'
+        when casestatus ~ '^Rescinded.*' then 'Rescinded'
+    end as case_status,
+    case
+        when casestatus ~ '.*\s\d+/\d+/\d+' then 
+            date(array_to_string(regexp_matches(casestatus,'^.*\s(\d+/\d+/\d+).*'),''))
+        else null
+    end as case_status_date,
+    case 
+      when casejudgement = 'YES' then True 
+      when casejudgement = 'NO' then False 
+    end as case_judgement
+from flat.nychpd_legal;
+
 commit;
 
