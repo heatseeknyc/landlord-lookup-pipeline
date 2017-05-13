@@ -30,7 +30,6 @@ select
     registrationid       as id, 
     public.make_bbl(boroid,block,lot) as bbl,
     buildingid           as building_id,
-    boroid               as boro_id,
     housenumber          as house_number,
     lowhousenumber       as house_number_low,
     highhousenumber      as house_number_high,
