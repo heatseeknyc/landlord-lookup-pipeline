@@ -1,6 +1,9 @@
 
 begin;
 
+create table push.nychpd_building as
+select *  from core.nychpd_building;
+
 create table push.nychpd_registration as
 select *  from core.nychpd_registration;
 
