@@ -1,12 +1,8 @@
 
 begin;
 
--- All columns except street_code, block, lot; and crucially, indexed by BBL.
 create table push.nychpd_registration as
-select 
-  id, bbl, building_id, boro_id, house_number, house_number_low, house_number_high,
-  street_name, zip, bin, cb_id, last_date, end_date
-from core.nychpd_registration;
+select *  from core.nychpd_registration;
 
 create table push.nychpd_contact as
 select * from core.nychpd_contact;
