@@ -81,12 +81,12 @@ def process(path):
 def main():
     args = parse_args()
     indir = "%s/unpack/nychpd" % args.root
-    infile = "%s/RegistrationContact.txt" % indir
+    infile = "%s/contact.txt" % indir
     outdir = "%s/xtracted/nychpd" % args.root
     clean,reject,total = process(infile)
     print("that be %d lines total (%d clean, %d rejected)" % (total,len(clean),len(reject)))
-    outfile_clean = "%s/contacts-clean.csv" % outdir
-    outfile_reject = "%s/contacts-rejected.csv" % outdir
+    outfile_clean = "%s/contact-clean.csv" % outdir
+    outfile_reject = "%s/contact-rejected.csv" % outdir
     print("clean lines to '%s' .." % outfile_clean)
     save_lines(outfile_clean,clean)
     print("rejected lines to '%s' .." % outfile_reject)
