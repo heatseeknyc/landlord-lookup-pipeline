@@ -2,13 +2,16 @@
 begin;
 
 create table push.nychpd_building as
-select *  from core.nychpd_building;
+select * from core.nychpd_building;
 
 create table push.nychpd_registration as
-select *  from core.nychpd_registration;
+select * from core.nychpd_registration;
 
 create table push.nychpd_contact as
 select * from core.nychpd_contact;
+
+create table push.nychpd_legal as
+select * from core.nychpd_legal;
 
 --
 -- A reference table specifying pre-defined sorting order for contact_type fields. 
