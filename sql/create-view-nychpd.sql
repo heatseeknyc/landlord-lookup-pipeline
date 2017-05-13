@@ -1,24 +1,6 @@
 
 begin;
 
-create view core.nychpd_registration as 
-select 
-    registrationid       as id, 
-    public.make_bbl(boroid,block,lot) as bbl,
-    buildingid           as building_id,
-    boroid               as boro_id,
-    housenumber          as house_number,
-    lowhousenumber       as house_number_low,
-    highhousenumber      as house_number_high,
-    streetname           as street_name, 
-    streetcode           as street_code, 
-    zip                  as zip5,
-    bin                  as bin,
-    communityboard       as cb_id,
-    lastregistrationdate as last_date,
-    registrationenddate  as end_date
-from flat.nychpd_registration;
-
 create view core.nychpd_building as 
 select 
     buildingid           as id,
@@ -40,8 +22,26 @@ select
     registrationid       as registration_id,
     lifecycle            as lifecycle,
     recordstatusid       as status_id,
-    recordstatus       as status
+    recordstatus         as status
 from flat.nychpd_building;
+
+create view core.nychpd_registration as 
+select 
+    registrationid       as id, 
+    public.make_bbl(boroid,block,lot) as bbl,
+    buildingid           as building_id,
+    boroid               as boro_id,
+    housenumber          as house_number,
+    lowhousenumber       as house_number_low,
+    highhousenumber      as house_number_high,
+    streetname           as street_name, 
+    streetcode           as street_code, 
+    zip                  as zip5,
+    bin                  as bin,
+    communityboard       as cb_id,
+    lastregistrationdate as last_date,
+    registrationenddate  as end_date
+from flat.nychpd_registration;
 
 create view core.nychpd_contact as 
 select
