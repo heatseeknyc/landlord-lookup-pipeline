@@ -10,7 +10,7 @@ begin
     return 
       bbl is not null and 
       bbl > 1000000000 and bbl < 6000000000 and 
-      bbl not in (2000000000,3000000000,4000000000);
+      bbl not in (2000000000,3000000000,4000000000,5000000000);
 end
 $$ language plpgsql;
 
@@ -20,7 +20,7 @@ begin
     return 
       bin is not null and 
       bin > 1000000 and bin < 6000000 and 
-      bin not in (2000000,3000000,4000000);
+      bin not in (2000000,3000000,4000000,5000000);
 end
 $$ language plpgsql;
 
