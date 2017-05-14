@@ -38,7 +38,7 @@ select
 from flat.pluto_taxlot;
 
 -- Omit a small number of rows with clearly degenerate BBLs or BINs 
--- (exactly 3 fail these criteria in 16v2).  This sill still leave us 
+-- (exactly 3 fail these criteria in 16v2).  This will still leave us 
 -- with a significant number (6000+) of rows with "noisy" BBLs or BINs
 -- (or both), but that's OK for now.
 create view core.pluto_building as 
