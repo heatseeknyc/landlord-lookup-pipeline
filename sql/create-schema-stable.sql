@@ -42,4 +42,17 @@ create table flat.stable_joined (
     UNIQUE (bbl, year)
 );
 
+create table flat.stable_nycha (
+    development text,
+    managed_by text,
+    house text,
+    street text,
+    zipcode integer,
+    block integer,
+    lot smallint,
+    bin text,
+    boroname text,
+    boroid smallint
+);
+
 commit;
