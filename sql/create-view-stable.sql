@@ -20,5 +20,16 @@ select
 from flat.dhcr2015 as a
 full outer join core.taxbill_stable_2016Q4 as b on a.bbl = b.bbl; 
 
+create view core.stable_nycha as
+select 
+  public.make_bbl(boroid,block,lot) as bbl,
+  development, managed_by, house, street, 
+  zipcode as zip5,
+  case 
+    when bin = 'Pending' then null
+    else bin::integer 
+  end as bin
+from flat.stable_nycha;
+
 commit;
 
