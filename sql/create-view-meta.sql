@@ -1,17 +1,5 @@
 begin;
 
--- These two views are analagous to the originals in the flat/push schema,
--- but purged of "rogue" BBL and BIN partial keys that can't be reliably 
--- joined on.  (The filtering is nearly the same in both joins; except the 
--- equality check in BBL isn't necessary in the registrations view, because 
--- this constraint is already enforced in the table it pulls from).
-
--- XXX move this to core
-create view meta.nychpd_registration as
-select * from push.nychpd_registration 
-where 
-  bbl is not null and bbl >= 1000000000 and bbl < 6000000000 and
-  bin is not null and bin >= 1000000 and bin not in (1000000,2000000,3000000,4000000,5000000);
 
 --
 -- The following two views are simple aggregations that tell us what we need
@@ -26,7 +14,7 @@ where
 
 create view meta.nychpd_count as
 select a.bbl, a.bin, count(distinct b.id) as total
-from      meta.nychpd_registration as a
+from      push.nychpd_registration as a
 left join push.nychpd_contact      as b on b.registration_id = a.id
 group by a.bbl,a.bin;
 
@@ -103,7 +91,7 @@ select
   a.id as registration_id, bin, bbl, building_id, last_date, end_date,
   b.contact_id, b.contact_type, b.contact_rank, b.description, 
   b.corpname, b.contact_name, b.business_address
-from meta.nychpd_registration  as a
+from push.nychpd_registration  as a
 left join meta.contacts_simple as b on b.registration_id = a.id;
 
 commit;
