@@ -1,23 +1,11 @@
 begin;
 
 
---
--- The following two views are simple aggregations that tell us what we need
--- to know about a given property from the DHCR and HPD data sets respectively,
--- given a composite key (BBL,BIN), and feed into the 'partial_summary' view
--- defined below.
---
--- The "_active" flags are slotted in to make the query syntax in the 
--- 'partial_summary' view a bit simpler (even though they would of course be 
--- superfluous for these views, considered in isolation). 
---
-
 create view meta.nychpd_count as
 select a.bbl, a.bin, count(distinct b.id) as total
 from      push.nychpd_registration as a
 left join push.nychpd_contact      as b on b.registration_id = a.id
 group by a.bbl,a.bin;
-
 
 --
 -- A crucial joining view that presents everything we need for a given 
