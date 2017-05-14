@@ -1,17 +1,25 @@
 
 begin;
 
+-- 
+-- Omit rows with invalid BBLs + BINs.  In general, these create 
+-- havoc for our joins and checksums (and in theory, we will never
+-- be able to match on these keys, anyway).
+--
 create table push.nychpd_building as
-select * from core.nychpd_building;
+select * from core.nychpd_building
+where public.is_valid_bbl(bbl) and public.is_valid_bin(bin);
 
 create table push.nychpd_registration as
-select * from core.nychpd_registration;
+select * from core.nychpd_registration
+where public.is_valid_bbl(bbl) and public.is_valid_bin(bin);
 
 create table push.nychpd_contact as
 select * from core.nychpd_contact;
 
 create table push.nychpd_legal as
-select * from core.nychpd_legal;
+select * from core.nychpd_legal
+where public.is_valid_bbl(bbl);
 
 --
 -- A reference table specifying pre-defined sorting order for contact_type fields. 
