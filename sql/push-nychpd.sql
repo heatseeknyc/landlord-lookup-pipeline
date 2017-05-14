@@ -4,21 +4,28 @@ begin;
 -- 
 -- Omit rows with invalid BBLs + BINs.  In general, these create 
 -- havoc for our joins and checksums (and in theory, we will never
--- be able to match on these keys, anyway).
+-- be able to match on these keys, anyway).  
+--
+-- We also omit columns which are also (in principle) dependent on our
+-- de-facto primary keys, and which (in principle) can be retrieved by
+-- joining on other tables.
 --
 create table push.nychpd_building as
-select * from core.nychpd_building
+select id, bbl, bin, program, dob_class_id, legal_stories, legal_class_a, legal_class_b, lifecycle, status_id
+from core.nychpd_building
 where public.is_valid_bbl(bbl) and public.is_valid_bin(bin);
 
 create table push.nychpd_registration as
-select * from core.nychpd_registration
+select id, bbl, building_id, bin, last_date, end_date 
+from core.nychpd_registration
 where public.is_valid_bbl(bbl) and public.is_valid_bin(bin);
 
 create table push.nychpd_contact as
 select * from core.nychpd_contact;
 
 create table push.nychpd_legal as
-select * from core.nychpd_legal
+select id, building_id, bbl, case_type, case_open_date, case_status, case_status_date, case_judgement 
+from core.nychpd_legal
 where public.is_valid_bbl(bbl);
 
 --
