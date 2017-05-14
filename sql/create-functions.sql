@@ -4,6 +4,26 @@
 
 begin;
 
+create or replace function public.is_valid_bbl (bbl bigint) 
+returns boolean AS $$
+begin
+    return 
+      bbl is not null and 
+      bbl > 1000000000 and bbl < 6000000000 and 
+      bbl not in (2000000000,3000000000,4000000000);
+end
+$$ language plpgsql;
+
+create or replace function public.is_valid_bin (bin integer) 
+returns boolean AS $$
+begin
+    return 
+      bin is not null and 
+      bin > 1000000 and bin < 6000000 and 
+      bin not in (2000000,3000000,4000000);
+end
+$$ language plpgsql;
+
 -- 
 -- Maps the composite key (boro_id,block,lot) to a properly typed (bigint) primary key.
 --
