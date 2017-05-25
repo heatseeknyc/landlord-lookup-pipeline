@@ -1,0 +1,65 @@
+#
+# A list of dicts representing a map between local data source names 
+# and URLs to fetch them from at the NYC Open Data Portal.
+#
+
+- 
+ name:  building
+ label: Buildings-Subject-to-HPD-Jurisdiction
+ slug:  'kj4p-ruqc'
+
+-
+ name:  registration
+ label: Multiple-Dwelling-Registrations
+ slug:  'tesw-yqqr'
+
+-
+ name:  contact
+ label: Registration-Contacts
+ slug:  'feu5-w2e2'
+
+-
+ name:  violation
+ label: Housing-Maintenance-Code-Violations
+ slug:  'wvxf-dwi5'
+
+-
+ name:  complaint
+ label: Housing-Maintenance-Code-Complaints
+ slug:  'uwyv-629c'
+
+-
+ name:  legal
+ label: Housing-Litigations
+ slug:  '59kj-x8nc'
+
+-
+ name:  affordable
+ label: HPD-Rent-Affordability-Element
+ slug:  'azxq-2skx'
+ active: false
+
+-
+ name:  incentive
+ label: HPD-Tax-Incentive-Element
+ slug:  'hpqs-rwfp'
+ active: false
+
+-
+ name  : developer
+ label : HPD-Developer-Selection-Element
+ slug  : 'fged-sxa8'
+ active: false
+
+- 
+ name:  project-building-element
+ label: HPD-Project-Building-Element
+ slug:  'dhri-72kk'
+ active: false
+
+-
+ name: project-element
+ label: HPD-Project-Element
+ slug: 'wig2-3fvs'
+ active: false
+
