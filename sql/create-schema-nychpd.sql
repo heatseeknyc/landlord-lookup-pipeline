@@ -28,40 +28,40 @@ create table flat.nychpd_building (
 );
 
 create table flat.nychpd_registration (
-    registrationid integer,
-    buildingid integer,
-    boroid smallint,
-    boro text,
-    housenumber text,
-    lowhousenumber text,
-    highhousenumber text,
-    streetname text,
-    streetcode text,
-    zip text,
-    block integer, 
-    lot smallint, 
-    bin integer,
-    communityboard smallint,
-    lastregistrationdate date,
-    registrationenddate date
+    RegistrationID integer,
+    BuildingID integer,
+    BoroID smallint,
+    Boro text,
+    HouseNumber text,
+    LowHouseNumber text,
+    HighHouseNumber text,
+    StreetName text,
+    StreetCode text,
+    Zip text,
+    Block integer, 
+    Lot smallint, 
+    BIN integer,
+    CommunityBoard smallint,
+    LastRegistrationDate date,
+    RegistrationEndDate date
 );
 
 create table flat.nychpd_contact (
-    registrationcontactid integer,
-    registrationid integer,
-    contacttype text,
-    contactdescription text,
-    corporationname text,
-    title text,
-    firstname text,
-    middleinitial text,
-    lastname text,
-    businesshousenumber text,
-    businessstreetname text,
-    businessapartment text,
-    businesscity text,
-    businessstate text,
-    businesszip text
+    RegistrationContactID integer,
+    RegistrationID integer,
+    ContactType text,
+    ContactDescription text,
+    CorporationName text,
+    Title text,
+    FirstName text,
+    MiddleInitial text,
+    LastName text,
+    BusinessHouseNumber text,
+    BusinessStreetName text,
+    BusinessApartment text,
+    BusinessCity text,
+    BusinessState text,
+    BusinessZip text
 );
 
 create table flat.nychpd_legal (
