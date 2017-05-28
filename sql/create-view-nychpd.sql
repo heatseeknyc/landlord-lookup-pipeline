@@ -96,5 +96,52 @@ select
     end as case_judgement
 from flat.nychpd_legal;
 
+drop view if exists core.nychpd_complaint cascade; 
+create view core.nychpd_complaint as 
+select
+    ComplaintID                          as id,
+    BuildingID                           as building_id, 
+    public.make_bbl(BoroughID,Block,Lot) as bbl,
+    Apartment                            as apt, 
+    ReceivedDate                         as received_id, 
+    StatusID                             as status_id, 
+    StatusDate                           as status_date 
+from flat.nychpd_complaint;
+
+/*
+create table flat.nychpd_violation (
+    ViolationID integer primary key,
+    BuildingID integer not null,
+    RegistrationID integer not null,
+    BoroID smallint not null,
+    Boro text not null,
+    HouseNumber text,
+    LowHouseNumber text,
+    HighHouseNumber text,
+    StreetName text,
+    StreetCode text,
+    Zip integer,
+    Apartment text,
+    Story text,
+    Block integer not null,
+    Lot smallint not null,
+    Class char(1) not null,
+    InspectionDate date,
+    ApprovedDate date,
+    OriginalCertifyByDate date,
+    OriginalCorrectByDate date,
+    NewCertifyByDate date,
+    NewCorrectByDate date,
+    CertifiedDate date,
+    OrderNumber text,
+    NOVID integer,
+    NOVDescription text,
+    NOVIssuedDate date,
+    CurrentStatusID smallint not null,
+    CurrentStatus text,
+    CurrentStatusDate date
+);
+*/
+
 commit;
 
