@@ -1,6 +1,7 @@
 
 begin;
 
+drop view if exists core.nychpd_building cascade; 
 create view core.nychpd_building as 
 select 
     buildingid           as id,
@@ -25,6 +26,7 @@ select
     recordstatus         as status
 from flat.nychpd_building;
 
+drop view if exists core.nychpd_registration cascade; 
 create view core.nychpd_registration as 
 select 
     registrationid       as id, 
@@ -42,6 +44,7 @@ select
     registrationenddate  as end_date
 from flat.nychpd_registration;
 
+drop view if exists core.nychpd_contact cascade; 
 create view core.nychpd_contact as 
 select
     registrationcontactid as id, 
@@ -61,6 +64,7 @@ select
     businesszip           as business_zip
 from flat.nychpd_contact;
 
+drop view if exists core.nychpd_legal cascade; 
 create view core.nychpd_legal as 
 select
     litigationid                      as id,
