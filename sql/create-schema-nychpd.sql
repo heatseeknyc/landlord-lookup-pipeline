@@ -80,5 +80,24 @@ create table flat.nychpd_legal (
     CaseJudgement text
 );
 
+create table flat.nychpd_complaint (
+    ComplaintID integer primary key,
+    BuildingID integer not null,
+    BoroughID smallint not null,
+    Borough text not null,
+    HouseNumber text,
+    StreetName text,
+    Zip integer,
+    Block integer not null,
+    Lot smallint not null,
+    Apartment text,
+    CommunityBoard smallint,
+    ReceivedDate date not null,
+    StatusID smallint not null,
+    Status text not null,
+    StatusDate date not null
+);
+
+
 commit;
 
