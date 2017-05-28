@@ -108,40 +108,30 @@ select
     StatusDate                           as status_date 
 from flat.nychpd_complaint;
 
-/*
-create table flat.nychpd_violation (
-    ViolationID integer primary key,
-    BuildingID integer not null,
-    RegistrationID integer not null,
-    BoroID smallint not null,
-    Boro text not null,
-    HouseNumber text,
-    LowHouseNumber text,
-    HighHouseNumber text,
-    StreetName text,
-    StreetCode text,
-    Zip integer,
-    Apartment text,
-    Story text,
-    Block integer not null,
-    Lot smallint not null,
-    Class char(1) not null,
-    InspectionDate date,
-    ApprovedDate date,
-    OriginalCertifyByDate date,
-    OriginalCorrectByDate date,
-    NewCertifyByDate date,
-    NewCorrectByDate date,
-    CertifiedDate date,
-    OrderNumber text,
-    NOVID integer,
-    NOVDescription text,
-    NOVIssuedDate date,
-    CurrentStatusID smallint not null,
-    CurrentStatus text,
-    CurrentStatusDate date
-);
-*/
+drop view if exists core.nychpd_violation cascade; 
+create view core.nychpd_violation as 
+select
+    ViolationID                       as id, 
+    BuildingID                        as building_id, 
+    RegistrationID                    as registration_id, 
+    public.make_bbl(BoroID,Block,Lot) as bbl,
+    Apartment                         as apt, 
+    Story                             as story, 
+    Class                             as class, 
+    InspectionDate                    as inspection_date, 
+    ApprovedDate                      as approved_date, 
+    OriginalCertifyByDate             as original_certify_by_date, 
+    OriginalCorrectByDate             as original_correct_by_date, 
+    NewCertifyByDate                  as new_certify_by_date,
+    NewCorrectByDate                  as new_correct_by_date,
+    CertifiedDate                     as certified_date,
+    OrderNumber                       as order_number, 
+    NOVID                             as nov_id, 
+    NOVDescription                    as nov_description,
+    NOVIssuedDate                     as nov_issue_date, 
+    CurrentStatusID                   as status_id,  
+    CurrentStatus                     as status_text,
+    CurrentStatusDate                 as status_date
+from flat.nychpd_violation;
 
 commit;
-
