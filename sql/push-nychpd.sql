@@ -28,6 +28,20 @@ select id, building_id, bbl, case_type, case_open_date, case_status, case_status
 from core.nychpd_legal
 where public.is_valid_bbl(bbl);
 
+create table push.nychpd_complaint as
+select * from core.nychpd_complaint;
+
+-- Not yet sure if we need all these date fields.
+create table push.nychpd_violation as
+select 
+  id, building_id, registration_id, bbl, apt, story, class,
+  -- inspection_date, approved_date, original_certify_by_date, original_correct_by_date, 
+  -- new_certify_by_date, new_correct_by_date, certified_date,  
+  order_number, nov_id,  nov_description, nov_issue_date,
+  status_id, status_text, status_date
+from core.nychpd_violation
+where nov_id is not null; 
+
 --
 -- A reference table specifying pre-defined sorting order for contact_type fields. 
 --
