@@ -14,4 +14,14 @@ create index on push.nychpd_contact_rank(contact_type);
 create index on push.nychpd_legal(id);
 create index on push.nychpd_legal(bbl);
 create index on push.nychpd_legal(building_id);
+
+create index on push.nychpd_complaint(id);
+create index on push.nychpd_complaint(building_id);
+create index on push.nychpd_complaint(bbl);
+
+create index on push.nychpd_violation(id);
+create index on push.nychpd_violation(building_id);
+create index on push.nychpd_violation(registration_id);
+create index on push.nychpd_violation(bbl);
+
 commit;
