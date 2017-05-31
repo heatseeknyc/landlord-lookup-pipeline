@@ -51,7 +51,7 @@ where
 -- Disambiguates those rare case (numbering about 348 rows) of (bbl,bin)
 -- pairs matching more than one building record -- thus allowing us to use
 -- the (bbl,bin) as a primary key.
-create view core.pluto_building_primary as
+create view core.pluto_building_canonical as
 select bbl, bin, min(doitt_id) as doitt_id
 from core.pluto_building
 group by bbl,bin;

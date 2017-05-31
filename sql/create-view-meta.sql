@@ -35,7 +35,7 @@ select
   d.special   as stable_flags,
   coalesce(e.total,0) as nychpd_count
 from      push.pluto_taxlot           as a 
-left join push.pluto_building_primary as b on a.bbl = b.bbl
+left join push.pluto_building_canonical as b on a.bbl = b.bbl
 left join push.pluto_building         as c on b.bbl = c.bbl and b.doitt_id = c.doitt_id
 left join push.stable                 as d on a.bbl = d.bbl
 left join meta.nychpd_count           as e on b.bbl = e.bbl and b.bin = e.bin;
