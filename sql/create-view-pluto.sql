@@ -50,7 +50,9 @@ where
 
 -- Disambiguates those rare case (numbering about 348 rows) of (bbl,bin)
 -- pairs matching more than one building record -- thus allowing us to use
--- the (bbl,bin) as a primary key.
+-- the (bbl,bin) as a primary key.  Of course this dismbiguation is arbitary,
+-- in that we just pick the BIN which matches the first DoITT ID, but 
+-- that's OK for now.
 create view core.pluto_building_canonical as
 select bbl, bin, min(doitt_id) as doitt_id
 from core.pluto_building
@@ -63,6 +65,8 @@ create view core.pluto_building_count as
 select bbl,count(*) as bldg_count from core.pluto_building group by bbl;
 
 -- An extension of our MapPluto set to include the above column.
+-- If there's no BBL in the building set (which happens frequently,
+-- for vacant lots) then we assign a building count of zero.
 create view core.pluto_taxlot_remix as
 select a.*,coalesce(b.bldg_count,0) as bldg_count
 from core.pluto_taxlot as a 
