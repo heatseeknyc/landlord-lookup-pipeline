@@ -8,8 +8,11 @@ left join push.nychpd_contact      as b on b.registration_id = a.id
 group by a.bbl,a.bin;
 
 --
--- A crucial joining view that presents everything we need for a given 
--- (BBL,BIN) pair.
+-- A crucial joining view that can be used to tell us everything we need
+-- to know about either a building (given a BBL,BIN pair) -or- a taxlot
+-- (if given just the BBL).  In the later case, you'll want to use a
+-- "LIMIT 1" in the select, because of course (for multi-building lots)
+-- all of the attributes will be redundant.
 --
 create view meta.property_summary as
 select 
