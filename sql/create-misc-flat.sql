@@ -1,7 +1,7 @@
 
 begin;
 
-create table flat.taxbills (
+create table flat.misc_taxbill (
     bbl bigint CHECK (bbl >= 1000000000 and bbl < 6000000000),
     year smallint CHECK (year > 0),
     quarter smallint CHECK (quarter >= 1 and quarter <= 4),
@@ -15,7 +15,7 @@ create table flat.taxbills (
     UNIQUE (bbl, year, quarter)
 );
 
-create table flat.dhcr2015 ( 
+create table flat.misc_dhcr2015 ( 
     bbl bigint primary key,
     count integer not null,
     dwell char(1),
@@ -24,7 +24,7 @@ create table flat.dhcr2015 (
     special text
 );
 
-create table flat.liensales (
+create table flat.misc_liensale (
     bbl bigint CHECK (bbl >= 1000000000 and bbl < 6000000000),
     year integer CHECK (year > 0),
     taxclass integer,
@@ -32,7 +32,7 @@ create table flat.liensales (
     UNIQUE (bbl, year)
 );
 
-create table flat.stable_joined (
+create table flat.misc_joined (
     bbl bigint not null CHECK (bbl >= 1000000000 and bbl < 6000000000),
     year smallint not null, 
     unitcount integer,
@@ -42,7 +42,7 @@ create table flat.stable_joined (
     UNIQUE (bbl, year)
 );
 
-create table flat.stable_nycha (
+create table flat.misc_nycha (
     development text,
     managed_by text,
     house text,
