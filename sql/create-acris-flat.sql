@@ -1,12 +1,12 @@
 
 begin;
 
+drop table if exists flat.acris_control cascade; 
 drop table if exists flat.acris_master cascade; 
-drop table if exists flat.acris_legals cascade; 
-drop table if exists flat.acris_parties cascade; 
-drop table if exists flat.acris_master_codes cascade; 
+drop table if exists flat.acris_legal cascade; 
+drop table if exists flat.acris_party cascade; 
 
-create table flat.acris_master_codes (
+create table flat.acris_control (
     rectype char(1) not null,
     doctype text primary key, 
     description text not null,
@@ -33,7 +33,7 @@ create table flat.acris_master (
     date_valid_thru date not null
 );
 
-create table flat.acris_legals (
+create table flat.acris_legal (
     docid char(16) not null,
     rectype char(1) not null,
     boro smallint not null,
@@ -50,7 +50,7 @@ create table flat.acris_legals (
     date_valid_thru date not null
 );
 
-create table flat.acris_parties (
+create table flat.acris_party (
     docid char(16) not null,
     rectype char(1) not null,
     party_type smallint not null,
@@ -66,5 +66,4 @@ create table flat.acris_parties (
 
 commit;
 
-begin;
 
