@@ -1,0 +1,24 @@
+#
+# acris stuff 
+#
+
+- 
+ name:  master 
+ label: 'ACRIS-Real-Property-Master'
+ slug:  'bnx9-e6tj'
+
+- 
+ name:  party 
+ label: 'ACRIS-Real-Property-Parties'
+ slug:  '636b-3b5g'
+
+- 
+ name:  legal 
+ label: 'ACRIS-Real-Property-Legals'
+ legal: '8h5j-fqxa'
+
+- 
+ name:  control 
+ label: 'ACRIS-Document-Control-Codes'
+ slug:  '7isb-wh4c'
+
