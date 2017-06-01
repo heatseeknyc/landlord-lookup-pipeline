@@ -33,10 +33,10 @@ from flat.misc_nycha;
 
 -- Redirects to the 'flat' datasets.
 create view core.misc_joined as
-create * from flat.misc_joined;
+select * from flat.misc_joined;
 
 create view core.misc_liensale as
-create * from flat.misc_liensale;
+select * from flat.misc_liensale;
 
 commit;
 
