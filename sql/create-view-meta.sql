@@ -1,5 +1,10 @@
 begin;
 
+drop view if exists meta.nychpd_count cascade;
+drop view if exists meta.propert_summary cascade;
+drop view if exists meta.contact_simple cascade;
+drop view if exists meta.contact_info cascade;
+drop view if exists meta.residential cascade;
 
 create view meta.nychpd_count as
 select a.bbl, a.bin, count(distinct b.id) as total
@@ -53,7 +58,7 @@ left join meta.nychpd_count           as e on b.bbl = e.bbl and b.bin = e.bin;
 -- A simplified view of push.contacts with some column names, other columns 
 -- catenated for brevity / tidier reporting (and minus contact_title), and the
 -- ordering rank for contact_type slotted in.
-create view meta.contacts_simple as 
+create view meta.contact_simple as 
 select 
   a.id as contact_id, registration_id, a.contact_type, b.id as contact_rank, 
   contact_description as description, corporation_name as corpname, 
@@ -83,7 +88,18 @@ select
   b.contact_id, b.contact_type, b.contact_rank, b.description, 
   b.corpname, b.contact_name, b.business_address
 from push.nychpd_registration  as a
-left join meta.contacts_simple as b on b.registration_id = a.id;
+left join meta.contact_simple as b on b.registration_id = a.id;
+
+create view meta.residential as
+select
+  coalesce(a.bbl,b.bbl) as bbl,
+  a.units_res      as pluto_units_res,
+  a.bldg_count as pluto_building_count,
+  b.building_count as nychpd_building_count,
+  a.bbl is not null as in_pluto,
+  b.bbl is not null as in_nychpd
+from push.pluto_taxlot as a
+full outer join push.nychpd_building_count as b on b.bbl = a.bbl;
 
 commit;
 
