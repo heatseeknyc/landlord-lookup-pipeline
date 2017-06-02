@@ -15,6 +15,11 @@ select id, bbl, bin, program, dob_class_id, legal_stories, legal_class_a, legal_
 from core.nychpd_building
 where public.is_valid_bbl(bbl) and public.is_valid_bin(bin);
 
+-- Provies a relation mostly useful for telling us whether a given taxlot
+-- is under HPD jurisdiction.  As a side benefit, we get the building count.
+create table push.nychpd_building_count as
+select bbl,count(*) from push.nychpd_building group by bbl;
+
 create table push.nychpd_registration as
 select id, bbl, building_id, bin, last_date, end_date 
 from core.nychpd_registration

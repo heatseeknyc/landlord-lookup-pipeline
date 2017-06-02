@@ -7,12 +7,12 @@ create index on push.acris_master(docid,doctype);
 -- create index on push.acris_master(crfn);
 -- create index on push.acris_master(docid,crfn);
 
-create index on push.acris_legals(docid);
-create index on push.acris_legals(bbl);
-create index on push.acris_legals(docid,bbl);
+create index on push.acris_legal(docid);
+create index on push.acris_legal(bbl);
+create index on push.acris_legal(docid,bbl);
 
-create index on push.acris_parties(docid);
-create index on push.acris_parties(docid,party_type);
+create index on push.acris_party(docid);
+create index on push.acris_party(docid,party_type);
 
 commit;
 
