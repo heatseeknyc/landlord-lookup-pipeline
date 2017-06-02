@@ -3,6 +3,7 @@ begin;
 create index on push.nychpd_building(id);
 create index on push.nychpd_building(bbl);
 create index on push.nychpd_building(bin);
+create index on push.nychpd_building_count(bbl);
 
 create index on push.nychpd_registration(id);
 create index on push.nychpd_registration(bbl);
