@@ -49,9 +49,6 @@ select
   postal, date_valid_thru 
 from flat.acris_party;
 
-create view core.acris_master_tidy as 
-select docid,doctag,doctype,amount,percentage,date_filed,date_modified from core.acris_master;
-
 -- This MV is costly time-wise (90 sec or so) but tiny space-wise (currently 749 rows)
 -- and should make the de-duping select in the next view go much faster.
 create materialized view core.acris_master_docid_count as 
@@ -63,6 +60,11 @@ select a.*
 from      core.acris_master             as a
 left join core.acris_master_docid_count as b on a.docid = b.docid
 where b.docid is null;
+
+-- A tidier view of the master table, restricted to essential columns 
+create view core.acris_master_tidy as 
+select docid,doctag,doctype,amount,percentage,date_filed,date_modified from core.acris_master_clean;
+
 
 commit;
 
