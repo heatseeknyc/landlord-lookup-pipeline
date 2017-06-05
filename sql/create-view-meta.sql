@@ -12,6 +12,21 @@ from      push.nychpd_registration as a
 left join push.nychpd_contact      as b on b.registration_id = a.id
 group by a.bbl,a.bin;
 
+create view meta.residential as
+select
+  coalesce(a.bbl,b.bbl) as bbl,
+  a.units_res       as units_res,
+  a.condo_number    as condo_number,
+  a.bldg_count      as pluto_building_count,
+  b.building_count  as nychpd_building_count,
+  a.bbl is not null as in_pluto,
+  b.bbl is not null as in_nychpd,
+  -- The magical predicate which tells us whether this property is residential 
+  a.units_res > 0 or a.condo_number > 0 or b.bbl is not null
+       as status 
+from push.pluto_taxlot as a
+full outer join push.nychpd_building_count as b on b.bbl = a.bbl;
+
 --
 -- A crucial joining view that can be used to tell us everything we need
 -- to know about either a building (given a BBL,BIN pair) -or- a taxlot
@@ -91,21 +106,6 @@ select
   b.corpname, b.contact_name, b.business_address
 from push.nychpd_registration  as a
 left join meta.contact_simple as b on b.registration_id = a.id;
-
-create view meta.residential as
-select
-  coalesce(a.bbl,b.bbl) as bbl,
-  a.units_res       as units_res,
-  a.condo_number    as condo_number,
-  a.bldg_count      as pluto_building_count,
-  b.building_count  as nychpd_building_count,
-  a.bbl is not null as in_pluto,
-  b.bbl is not null as in_nychpd,
-  -- The magical predicate which tells us whether this property is residential 
-  a.units_res > 0 or a.condo_number > 0 or b.bbl is not null
-       as status 
-from push.pluto_taxlot as a
-full outer join push.nychpd_building_count as b on b.bbl = a.bbl;
 
 commit;
 
