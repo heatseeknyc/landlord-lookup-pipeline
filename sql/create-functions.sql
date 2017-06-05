@@ -75,6 +75,25 @@ begin
 end;
 $$ language plpgsql;
 
+-- 
+-- Given a BBL, returns the Borough name.
+--
+create or replace function public.bbl2boroname (bbl bigint) 
+returns text AS $$
+declare
+    boro_name text := NULL;
+    boro_id smallint := 0;
+begin
+    boro_id := cast(bbl / 1000000000 as smallint);
+    if boro_id = 1 then boro_name = 'Manhattan'; end if;
+    if boro_id = 2 then boro_name = 'Bronx'; end if;
+    if boro_id = 3 then boro_name = 'Brooklyn'; end if;
+    if boro_id = 4 then boro_name = 'Queens'; end if;
+    if boro_id = 5 then boro_name = 'Staten Island'; end if;
+    return boro_name;
+end;
+$$ language plpgsql;
+
 -- Creates a short ("colloquial") contact name from first/middle/last components.
 -- Naively assumes that each component has no leading/trailing whitespace. 
 -- (Applies to contacts table only).
