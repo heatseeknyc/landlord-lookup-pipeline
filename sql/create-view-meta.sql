@@ -57,16 +57,20 @@ select
   c.radius  as building_radius,
   c.points  as building_points,
   c.parts   as building_parts,
+  d.bbl is not null as stable_status,
   d.has_421a  as stable_421a,
   d.has_j51   as stable_j51,
   d.unitcount as stable_units,
   d.special   as stable_flags,
-  coalesce(e.total,0) as nychpd_count
+  d.in_dhcr   as stable_dhcr,
+  coalesce(e.total,0) as nychpd_count,
+  g.status    as residential
 from      push.pluto_taxlot           as a 
 left join push.pluto_building_canonical as b on a.bbl = b.bbl
 left join push.pluto_building         as c on b.bbl = c.bbl and b.doitt_id = c.doitt_id
 left join push.misc_stable            as d on a.bbl = d.bbl
-left join meta.nychpd_count           as e on b.bbl = e.bbl and b.bin = e.bin;
+left join meta.nychpd_count           as e on b.bbl = e.bbl and b.bin = e.bin
+left join meta.residential            as g on a.bbl = g.bbl;
 
 
 
