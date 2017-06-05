@@ -12,6 +12,10 @@ from      push.nychpd_registration as a
 left join push.nychpd_contact      as b on b.registration_id = a.id
 group by a.bbl,a.bin;
 
+-- A magical view which (portends to) tell us whether a given property 
+-- is residential or not (via the derived 'status' flag).  There's still
+-- some room for improvement with this determination, but it's probably
+-- good enough for now.
 create view meta.residential as
 select
   coalesce(a.bbl,b.bbl) as bbl,
@@ -21,7 +25,6 @@ select
   b.building_count  as nychpd_building_count,
   a.bbl is not null as in_pluto,
   b.bbl is not null as in_nychpd,
-  -- The magical predicate which tells us whether this property is residential 
   a.units_res > 0 or a.condo_number > 0 or b.bbl is not null
        as status 
 from push.pluto_taxlot as a
