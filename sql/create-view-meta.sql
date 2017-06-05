@@ -27,6 +27,8 @@ select
   a.condo_number    as pluto_condo_number,
   a.units_total     as pluto_units_total,
   a.bldg_count      as pluto_bldg_count,
+  a.address         as pluto_address,
+  public.bbl2boroname(a.bbl) as pluto_borough,
   a.lon_ctr as pluto_lon_ctr,
   a.lat_ctr as pluto_lat_ctr,
   a.radius  as pluto_radius,
@@ -98,7 +100,10 @@ select
   a.bldg_count      as pluto_building_count,
   b.building_count  as nychpd_building_count,
   a.bbl is not null as in_pluto,
-  b.bbl is not null as in_nychpd
+  b.bbl is not null as in_nychpd,
+  -- The magical predicate which tells us whether this property is residential 
+  a.units_res > 0 or a.condo_number > 0 or b.bbl is not null
+       as status 
 from push.pluto_taxlot as a
 full outer join push.nychpd_building_count as b on b.bbl = a.bbl;
 
