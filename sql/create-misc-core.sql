@@ -7,8 +7,8 @@ select bbl,unitcount,has_421a,has_j51
 from flat.misc_taxbill
 where year = 2016 and quarter = 4 and (has_421a or has_j51 or unitcount is not null);
 
--- A unified view of taxlots having stability markings across both data sources.
--- Current rowcount = 45261.
+-- A unified view of taxlots having confirmed stability markings across 
+-- both data sources.  Current rowcount = 45261.
 create view core.misc_stable as
 select 
   coalesce(a.bbl,b.bbl) as bbl, 
