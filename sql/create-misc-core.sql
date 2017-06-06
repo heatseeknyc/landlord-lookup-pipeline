@@ -35,6 +35,9 @@ from flat.misc_nycha;
 create view core.misc_joined as
 select * from flat.misc_joined;
 
+create view core.misc_joined_maxyer as
+select bbl,max(year) from flat.misc_joined;
+
 create view core.misc_liensale as
 select * from flat.misc_liensale;
 
