@@ -2,6 +2,7 @@ begin;
 
 -- A restriction of the most recent taxbills rowset to just those tax lots 
 -- having some kind of stability marking. 
+drop view if exists core.misc_taxbill_2016Q4 cascade; 
 create view core.misc_taxbill_2016Q4 as  
 select bbl,unitcount,has_421a,has_j51
 from flat.misc_taxbill
@@ -9,6 +10,7 @@ where year = 2016 and quarter = 4 and (has_421a or has_j51 or unitcount is not n
 
 -- A unified view of taxlots having confirmed stability markings across 
 -- both data sources.  Current rowcount = 45261.
+drop view if exists core.misc_stable_confirmed cascade; 
 create view core.misc_stable_confirmed as
 select 
   coalesce(a.bbl,b.bbl) as bbl, 
@@ -20,6 +22,7 @@ select
 from flat.misc_dhcr2015 as a
 full outer join core.misc_taxbill_2016Q4 as b on a.bbl = b.bbl; 
 
+drop view if exists core.misc_nycha cascade;
 create view core.misc_nycha as
 select 
   public.make_bbl(boroid,block,lot) as bbl,
@@ -32,12 +35,15 @@ select
 from flat.misc_nycha;
 
 -- Redirects to the 'flat' datasets.
+drop view if exists core.misc_joined cascade;
 create view core.misc_joined as
 select * from flat.misc_joined;
 
-create view core.misc_joined_maxyer as
-select bbl,max(year) from flat.misc_joined;
+drop view if exists core.misc_joined_maxyear cascade;
+create view core.misc_joined_maxyear as
+select bbl,max(year) as year from flat.misc_joined group by bbl;
 
+drop view if exists core.misc_liensale cascade;
 create view core.misc_liensale as
 select * from flat.misc_liensale;
 
