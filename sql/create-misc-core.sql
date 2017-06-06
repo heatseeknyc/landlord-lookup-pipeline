@@ -9,7 +9,7 @@ where year = 2016 and quarter = 4 and (has_421a or has_j51 or unitcount is not n
 
 -- A unified view of taxlots having confirmed stability markings across 
 -- both data sources.  Current rowcount = 45261.
-create view core.misc_stable as
+create view core.misc_stable_confirmed as
 select 
   coalesce(a.bbl,b.bbl) as bbl, 
   a.has_421a or b.has_421a as has_421a,
