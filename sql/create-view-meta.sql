@@ -30,6 +30,22 @@ select
 from push.pluto_taxlot as a
 full outer join push.nychpd_building_count as b on b.bbl = a.bbl;
 
+create view meta.misc_stable_likely as
+select bbl from push.pluto_taxlot where a.units_res >= 6 and a.year_built <= 1974;
+
+-- A comprehensive view on rent tabilization status by taxlot.  
+-- BTW note that one or both of the 'confirmed' or 'likely' flags will always
+-- be true for a row to be a part of this set.
+create view meta.misc_stable as
+select
+  coalesce(a.bbl,b.bbl) as bbl,
+  a.has_421a, a.has_j51, a.unitcount, a.special, a.in_dhcr, a.in_taxbill
+  a.bbl is not null as confirmed,
+  b.bbl is not null as likely 
+from            push.misc_stable_confirmed as a
+full outer join meta.misc_stable_likely    as b on a.bbl = b.bbl; 
+
+
 --
 -- A crucial joining view that can be used to tell us everything we need
 -- to know about either a building (given a BBL,BIN pair) -or- a taxlot
@@ -57,18 +73,19 @@ select
   c.radius                   as building_radius,
   c.points                   as building_points,
   c.parts                    as building_parts,
-  d.bbl is not null          as stable_status,
   d.has_421a                 as stable_421a,
   d.has_j51                  as stable_j51,
   d.unitcount                as stable_units,
   d.special                  as stable_flags,
   d.in_dhcr                  as stable_dhcr,
+  d.confirmed                as stable_confirmed,
+  d.likely                   as stable_likely,
   coalesce(e.total,0)        as nychpd_count,
   g.status                   as residential
 from      push.pluto_taxlot           as a 
 left join push.pluto_building_canonical as b on a.bbl = b.bbl
 left join push.pluto_building         as c on b.bbl = c.bbl and b.doitt_id = c.doitt_id
-left join push.misc_stable            as d on a.bbl = d.bbl
+left join misc.misc_stable            as d on a.bbl = d.bbl
 left join meta.nychpd_count           as e on b.bbl = e.bbl and b.bin = e.bin
 left join meta.residential            as g on a.bbl = g.bbl;
 
