@@ -31,7 +31,7 @@ from push.pluto_taxlot as a
 full outer join push.nychpd_building_count as b on b.bbl = a.bbl;
 
 create view meta.misc_stable_likely as
-select bbl from push.pluto_taxlot where a.units_res >= 6 and a.year_built <= 1974;
+select bbl from push.pluto_taxlot where units_res >= 6 and year_built <= 1974;
 
 -- A comprehensive view on rent tabilization status by taxlot.  
 -- BTW note that one or both of the 'confirmed' or 'likely' flags will always
@@ -39,7 +39,7 @@ select bbl from push.pluto_taxlot where a.units_res >= 6 and a.year_built <= 197
 create view meta.misc_stable as
 select
   coalesce(a.bbl,b.bbl) as bbl,
-  a.has_421a, a.has_j51, a.unitcount, a.special, a.in_dhcr, a.in_taxbill
+  a.has_421a, a.has_j51, a.unitcount, a.special, a.in_dhcr, a.in_taxbill,
   a.bbl is not null as confirmed,
   b.bbl is not null as likely 
 from            push.misc_stable_confirmed as a
@@ -85,7 +85,7 @@ select
 from      push.pluto_taxlot           as a 
 left join push.pluto_building_canonical as b on a.bbl = b.bbl
 left join push.pluto_building         as c on b.bbl = c.bbl and b.doitt_id = c.doitt_id
-left join misc.misc_stable            as d on a.bbl = d.bbl
+left join meta.misc_stable            as d on a.bbl = d.bbl
 left join meta.nychpd_count           as e on b.bbl = e.bbl and b.bin = e.bin
 left join meta.residential            as g on a.bbl = g.bbl;
 
