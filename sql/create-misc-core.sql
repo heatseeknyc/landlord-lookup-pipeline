@@ -16,7 +16,7 @@ select
   a.has_j51 or b.has_j51 as has_j51,
   b.unitcount, a.special,
   a.bbl is not null as in_dhcr,
-  b.bbl is not null as in_taxbills
+  b.bbl is not null as in_taxbill
 from flat.misc_dhcr2015 as a
 full outer join core.misc_taxbill_2016Q4 as b on a.bbl = b.bbl; 
 
