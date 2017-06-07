@@ -41,7 +41,8 @@ select * from flat.misc_joined;
 
 drop view if exists core.misc_joined_maxyear cascade;
 create view core.misc_joined_maxyear as
-select bbl,max(year) as year from flat.misc_joined group by bbl;
+select bbl,max(year) as year from flat.misc_joined
+where unitcount > 0 group by bbl;
 
 drop view if exists core.misc_liensale cascade;
 create view core.misc_liensale as
