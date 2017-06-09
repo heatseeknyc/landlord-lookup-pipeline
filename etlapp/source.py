@@ -33,6 +33,7 @@ def getval(prefix,name,attr):
     return d.get(attr)
 
 
+# In the future we may wish to allow the values in the query dict to be callables or regexes.
 def matches(d,query):
     """
     Determines whether the given dict "matches" the given query.  At present this
