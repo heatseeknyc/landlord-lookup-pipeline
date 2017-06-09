@@ -1,8 +1,8 @@
 
 begin;
 
-drop view if exists core.nychpd_building cascade; 
-create view core.nychpd_building as 
+drop view if exists core.hpd_building cascade; 
+create view core.hpd_building as 
 select 
     buildingid           as id,
     public.make_bbl(boroid,block,lot) as bbl,
@@ -24,10 +24,10 @@ select
     lifecycle            as lifecycle,
     recordstatusid       as status_id,
     recordstatus         as status
-from flat.nychpd_building;
+from flat.hpd_building;
 
-drop view if exists core.nychpd_registration cascade; 
-create view core.nychpd_registration as 
+drop view if exists core.hpd_registration cascade; 
+create view core.hpd_registration as 
 select 
     registrationid       as id, 
     public.make_bbl(boroid,block,lot) as bbl,
@@ -42,10 +42,10 @@ select
     communityboard       as cb_id,
     lastregistrationdate as last_date,
     registrationenddate  as end_date
-from flat.nychpd_registration;
+from flat.hpd_registration;
 
-drop view if exists core.nychpd_contact cascade; 
-create view core.nychpd_contact as 
+drop view if exists core.hpd_contact cascade; 
+create view core.hpd_contact as 
 select
     registrationcontactid as id, 
     registrationid        as registration_id,
@@ -62,10 +62,10 @@ select
     businesscity          as business_city, 
     businessstate         as business_state,
     businesszip           as business_zip
-from flat.nychpd_contact;
+from flat.hpd_contact;
 
-drop view if exists core.nychpd_legal cascade; 
-create view core.nychpd_legal as 
+drop view if exists core.hpd_legal cascade; 
+create view core.hpd_legal as 
 select
     litigationid                      as id,
     buildingid                        as building_id,
@@ -94,10 +94,10 @@ select
       when casejudgement = 'YES' then True 
       when casejudgement = 'NO' then False 
     end as case_judgement
-from flat.nychpd_legal;
+from flat.hpd_legal;
 
-drop view if exists core.nychpd_complaint cascade; 
-create view core.nychpd_complaint as 
+drop view if exists core.hpd_complaint cascade; 
+create view core.hpd_complaint as 
 select
     ComplaintID                          as id,
     BuildingID                           as building_id, 
@@ -106,10 +106,10 @@ select
     ReceivedDate                         as received_id, 
     StatusID                             as status_id, 
     StatusDate                           as status_date 
-from flat.nychpd_complaint;
+from flat.hpd_complaint;
 
-drop view if exists core.nychpd_violation cascade; 
-create view core.nychpd_violation as 
+drop view if exists core.hpd_violation cascade; 
+create view core.hpd_violation as 
 select
     ViolationID                       as id, 
     BuildingID                        as building_id, 
@@ -132,6 +132,6 @@ select
     CurrentStatusID                   as status_id,  
     CurrentStatus                     as status_text,
     CurrentStatusDate                 as status_date
-from flat.nychpd_violation;
+from flat.hpd_violation;
 
 commit;

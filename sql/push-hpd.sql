@@ -10,41 +10,41 @@ begin;
 -- de-facto primary keys, and which (in principle) can be retrieved by
 -- joining on other tables.
 --
-create table push.nychpd_building as
+create table push.hpd_building as
 select id, bbl, bin, program, dob_class_id, legal_stories, legal_class_a, legal_class_b, lifecycle, status_id
-from core.nychpd_building
+from core.hpd_building
 where public.is_valid_bbl(bbl) and public.is_valid_bin(bin);
 
 -- Provies a relation mostly useful for telling us whether a given taxlot
 -- is under HPD jurisdiction.  As a side benefit, we get the building count.
-create table push.nychpd_building_count as
-select bbl,count(*) as building_count from push.nychpd_building group by bbl;
+create table push.hpd_building_count as
+select bbl,count(*) as building_count from push.hpd_building group by bbl;
 
-create table push.nychpd_registration as
+create table push.hpd_registration as
 select id, bbl, building_id, bin, last_date, end_date 
-from core.nychpd_registration
+from core.hpd_registration
 where public.is_valid_bbl(bbl) and public.is_valid_bin(bin);
 
-create table push.nychpd_contact as
-select * from core.nychpd_contact;
+create table push.hpd_contact as
+select * from core.hpd_contact;
 
-create table push.nychpd_legal as
+create table push.hpd_legal as
 select id, building_id, bbl, case_type, case_open_date, case_status, case_status_date, case_judgement 
-from core.nychpd_legal
+from core.hpd_legal
 where public.is_valid_bbl(bbl);
 
-create table push.nychpd_complaint as
-select * from core.nychpd_complaint;
+create table push.hpd_complaint as
+select * from core.hpd_complaint;
 
 -- Not yet sure if we need all these date fields.
-create table push.nychpd_violation as
+create table push.hpd_violation as
 select 
   id, building_id, registration_id, bbl, apt, story, class,
   -- inspection_date, approved_date, original_certify_by_date, original_correct_by_date, 
   -- new_certify_by_date, new_correct_by_date, certified_date,  
   order_number, nov_id,  nov_description, nov_issue_date,
   status_id, status_text, status_date
-from core.nychpd_violation
+from core.hpd_violation
 where nov_id is not null; 
 
 --
@@ -60,12 +60,12 @@ where nov_id is not null;
 -- at the very bottom.
 --
 
-create table push.nychpd_contact_rank ( 
+create table push.hpd_contact_rank ( 
     id integer,
     contact_type text
 );
 
-insert into push.nychpd_contact_rank (id,contact_type) values 
+insert into push.hpd_contact_rank (id,contact_type) values 
     (1,'CorporateOwner'),
     (2,'IndividualOwner'),
     (3,'JointOwner'),

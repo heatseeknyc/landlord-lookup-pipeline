@@ -1,15 +1,15 @@
 begin;
 
-drop view if exists meta.nychpd_count cascade;
+drop view if exists meta.hpd_count cascade;
 drop view if exists meta.property_summary cascade;
 drop view if exists meta.contact_simple cascade;
 drop view if exists meta.contact_info cascade;
 drop view if exists meta.residential cascade;
 
-create view meta.nychpd_count as
+create view meta.hpd_count as
 select a.bbl, a.bin, count(distinct b.id) as total
-from      push.nychpd_registration as a
-left join push.nychpd_contact      as b on b.registration_id = a.id
+from      push.hpd_registration as a
+left join push.hpd_contact      as b on b.registration_id = a.id
 group by a.bbl,a.bin;
 
 -- A magical view which (portends to) tell us whether a given property 
@@ -22,13 +22,13 @@ select
   a.units_res       as units_res,
   a.condo_number    as condo_number,
   a.bldg_count      as pluto_building_count,
-  b.building_count  as nychpd_building_count,
+  b.building_count  as hpd_building_count,
   a.bbl is not null as in_pluto,
-  b.bbl is not null as in_nychpd,
+  b.bbl is not null as in_hpd,
   a.units_res > 0 or a.condo_number > 0 or b.bbl is not null
        as status 
 from push.pluto_taxlot as a
-full outer join push.nychpd_building_count as b on b.bbl = a.bbl;
+full outer join push.hpd_building_count as b on b.bbl = a.bbl;
 
 create view meta.misc_stable_likely as
 select bbl from push.pluto_taxlot where units_res >= 6 and year_built <= 1974;
@@ -80,13 +80,13 @@ select
   d.in_dhcr                  as stable_dhcr,
   d.confirmed                as stable_confirmed,
   d.likely                   as stable_likely,
-  coalesce(e.total,0)        as nychpd_count,
+  coalesce(e.total,0)        as hpd_count,
   g.status                   as residential
 from      push.pluto_taxlot           as a 
 left join push.pluto_building_canonical as b on a.bbl = b.bbl
 left join push.pluto_building         as c on b.bbl = c.bbl and b.doitt_id = c.doitt_id
 left join meta.misc_stable            as d on a.bbl = d.bbl
-left join meta.nychpd_count           as e on b.bbl = e.bbl and b.bin = e.bin
+left join meta.hpd_count           as e on b.bbl = e.bbl and b.bin = e.bin
 left join meta.residential            as g on a.bbl = g.bbl;
 
 
@@ -107,8 +107,8 @@ select
   public.make_contact_addr(
     business_house_number,business_street_name,business_apartment,business_city,business_state,business_zip
   ) as business_address 
-from push.nychpd_contact           as a
-left join push.nychpd_contact_rank as b on b.contact_type = a.contact_type;
+from push.hpd_contact           as a
+left join push.hpd_contact_rank as b on b.contact_type = a.contact_type;
 
 --
 -- And this view provides all contacts for a given (BBL,BIN) using shortened 
@@ -128,7 +128,7 @@ select
   a.id as registration_id, bin, bbl, building_id, last_date, end_date,
   b.contact_id, b.contact_type, b.contact_rank, b.description, 
   b.corpname, b.contact_name, b.business_address
-from push.nychpd_registration  as a
+from push.hpd_registration  as a
 left join meta.contact_simple as b on b.registration_id = a.id;
 
 commit;

@@ -1,7 +1,7 @@
 
 begin;
 
-create table flat.nychpd_building (
+create table flat.hpd_building (
     BuildingID integer not null,
     BoroID smallint not null,
     Boro text,
@@ -27,7 +27,7 @@ create table flat.nychpd_building (
     RecordStatus text 
 );
 
-create table flat.nychpd_registration (
+create table flat.hpd_registration (
     RegistrationID integer,
     BuildingID integer,
     BoroID smallint,
@@ -46,7 +46,7 @@ create table flat.nychpd_registration (
     RegistrationEndDate date
 );
 
-create table flat.nychpd_contact (
+create table flat.hpd_contact (
     RegistrationContactID integer,
     RegistrationID integer,
     ContactType text,
@@ -64,7 +64,7 @@ create table flat.nychpd_contact (
     BusinessZip text
 );
 
-create table flat.nychpd_legal (
+create table flat.hpd_legal (
     LitigationID integer primary key,
     BuildingID integer not null,
     BoroID smallint not null,
@@ -80,7 +80,7 @@ create table flat.nychpd_legal (
     CaseJudgement text
 );
 
-create table flat.nychpd_complaint (
+create table flat.hpd_complaint (
     ComplaintID integer primary key,
     BuildingID integer not null,
     BoroughID smallint not null,
@@ -98,7 +98,7 @@ create table flat.nychpd_complaint (
     StatusDate date not null
 );
 
-create table flat.nychpd_violation (
+create table flat.hpd_violation (
     ViolationID integer primary key,
     BuildingID integer not null,
     RegistrationID integer not null,
