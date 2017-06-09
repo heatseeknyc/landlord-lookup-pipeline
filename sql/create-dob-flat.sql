@@ -17,7 +17,8 @@ Owner's House Street Name,Owner’s House City,Owner’s House State,Owner’s H
 
 -- Some columns have comments describing caveats observed in the most recent version (June 2017) 
 -- of the raw CSV we've looked at.  Corrections for these are attempted in the corresponding view
--- in the 'core' schema.
+-- in the 'core' schema.  Unless stated otherwise, the implied 'broken' or outlier cases for each 
+-- column are very low in frequency.
 create table flat.dob_permit (
     borough text not null,
     bin integer not null,
@@ -28,7 +29,7 @@ create table flat.dob_permit (
     job_type char(2),
     self_cert char(1), -- appears as either 'Y' or NULL
     block integer,
-    lot text, -- sometimes appears as a garbled mixture of digits and spaces 
+    lot text, -- usually 0-padded, 5-digit string but sometimes appears as a garbled mixture of digits and spaces 
     cb text, -- sometimes appears as a short string of spaces, or as NULL 
     zipcode text, -- usually integer or null, but sometimes 5 blank spaces
     bldg_type text, -- usually 1 or 2, sometimes spaces or null
