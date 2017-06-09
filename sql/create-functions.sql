@@ -94,6 +94,21 @@ begin
 end;
 $$ language plpgsql;
 
+create or replace function public.boroname2boroid (boro_name text) 
+returns smallint AS $$
+declare
+    boro_id smallint = NULL;
+begin
+    boro_name = lower(boro_name);
+    if boro_name = 'manhattan' then boro_id = 1; end if;
+    if boro_name = 'bronx' then boro_id = 2; end if;
+    if boro_name = 'brooklyn' then boro_id = 3; end if;
+    if boro_name = 'queens' then boro_id = 4; end if;
+    if boro_name = 'staten island' then boro_id = 5; end if;
+    return boro_id;
+end;
+$$ language plpgsql;
+
 -- Creates a short ("colloquial") contact name from first/middle/last components.
 -- Naively assumes that each component has no leading/trailing whitespace. 
 -- (Applies to contacts table only).
