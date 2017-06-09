@@ -50,5 +50,5 @@ def select(prefix,query):
     """Given a source prefix, returns the names which match the given query
     (according to the match function in this module)."""
     config = getcfg(prefix)
-    return sorted(k for k,v in config.items() if matches(v,query))
+    return list(k for k,v in config.items() if matches(v,query))
 
