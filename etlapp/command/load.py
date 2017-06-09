@@ -10,9 +10,21 @@ import etlapp
 def perform(posargs=None,options=None):
     log.debug("posargs=%s, options=%s" % (posargs,options))
     if len(posargs) == 1:
-        return load_source_named(posargs[0])
+        return load_any(posargs[0])
     else:
         raise ValueError("invalid usage")
+
+def load_any(srcarg):
+    if '.' in srcarg:
+        return load_source_named(srcarg)
+    else:
+        return load_all(srcarg)
+
+def load_all(prefix):
+    log.info("prefix = '%s'" % prefix)
+    names = etlapp.source.select(prefix,{'active':True})
+    log.info("names = %s" % names)
+    return True
 
 def load_source_named(srcpath):
     prefix,name = splitpath(srcpath)
