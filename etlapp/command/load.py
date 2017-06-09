@@ -10,11 +10,11 @@ import etlapp
 def perform(posargs=None,options=None):
     log.debug("posargs=%s, options=%s" % (posargs,options))
     if len(posargs) == 1:
-        return loadsource(posargs[0])
+        return load_source_named(posargs[0])
     else:
         raise ValueError("invalid usage")
 
-def loadsource(srcpath):
+def load_source_named(srcpath):
     prefix,name = splitpath(srcpath)
     if not etlapp.source.getval(prefix,name,'active'):
         raise ValueError("source inactive by configuration")
