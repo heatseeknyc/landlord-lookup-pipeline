@@ -32,3 +32,22 @@ def getval(prefix,name,attr):
     log.debug("config[%s] = %s" % (name,d))
     return d.get(attr)
 
+
+def matches(d,query):
+    """
+    Determines whether the given dict "matches" the given query.  At present this
+    is taken to mean "have the same keys, and values match via the 'is' operator."
+    """
+    for k,v in query.items():
+        if k not in d:
+            return False
+        if d[k] is not query[k]:
+            return False
+    return True
+
+def select(prefix,query):
+    """Given a source prefix, returns the names which match the given query
+    (according to the match function in this module)."""
+    config = getcfg(prefix)
+    return sorted(k for k,v in config.items() if matches(v,query))
+
