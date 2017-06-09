@@ -11,35 +11,34 @@ import etlapp
 def perform(posargs=None,options=None):
     log.debug("posargs=%s, options=%s" % (posargs,options))
     if len(posargs) == 1:
-        load_any(posargs[0])
+        return load_any(posargs[0])
     else:
         raise ValueError("invalid usage")
 
-def load_any(srcarg):
+def load_any(srcarg,strict=True):
     if '.' in srcarg:
-        status,delta = load_source_named(srcarg)
+        prefix,name = splitpath(srcpath)
+        status,delta = load_multi(prefix,[name],strict)
         return status
     else:
-        return load_all(srcarg)
+        prefix = srcarg
+        names = etlapp.source.select(prefix,{'active':True})
+        return load_multi(prefix,names,strict)
 
-def load_all(prefix,strict=True):
-    log.info("prefix = '%s'" % prefix)
-    names = etlapp.source.select(prefix,{'active':True})
-    log.info("names = %s" % names)
+def load_multi(prefix,names,strict=True):
+    """Load multiple named sourcs under a given prefix."""
+    log.debug("names = %s" % names)
     for name in names:
-        status,delta = _load_source_named(prefix,name)
+        log.info("source %s.%s .." % (prefix,name))
+        status,delta = load_source_named(prefix,name)
         _status = 'OK' if status else 'FAIL'
         log.info("source %s.%s - status = %s in %.3f sec" % (prefix,name,_status,delta))
         if strict and not status:
             return False
     return True
 
-def load_source_named(srcpath):
-    prefix,name = splitpath(srcpath)
-    return _load_source_named(prefix,name)
-
 @timedsingle
-def _load_source_named(prefix,name):
+def load_source_named(prefix,name):
     if not etlapp.source.getval(prefix,name,'active'):
         raise ValueError("source inactive by configuration")
     table = tablename('flat',prefix,name)
