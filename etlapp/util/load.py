@@ -9,7 +9,8 @@ def delim_term(c):
     return '\\"'+c+'\\"'
 
 def make_csv_args(c):
-    return "(DELIMITER %s, FORMAT CSV, HEADER TRUE)" % delim_term(c)
+    delimstr = '' if c == ',' else "DELIMETER %s, " % delim_term(c)
+    return '('+delimstr+'FORMAT CSV, HEADER TRUE)' 
 
 def make_copy_command(table,infile,char=','):
     csvargs = make_csv_args(char)
