@@ -7,8 +7,13 @@
  label: Taxbill-SOA-By-Quarter 
 
 - 
- name:  joined 
+ name:  joined-nocrosstab
+ label: Taxbills-Joined-NoCrossTab
+
+- 
+ name:  joined
  label: Taxbills-Joined 
+ active: false
 
 -
  name:  liensale 
