@@ -15,6 +15,12 @@ create view core.misc_joined_maxyear as
 select bbl,max(year) as year from core.misc_joined
 where unitcount > 0 group by bbl;
 
+drop view if exists core.misc_joined_lastyear cascade;
+create view core.misc_joined_lastyear as
+select a.bbl, a.year, b.unitcount, b.estimate, b.abatements
+from      core.misc_joined_maxyear as a
+left join core.misc_joined         as b on a.bbl = b.bbl and a.year = b.year;
+
 -- A unified view of taxlots having confirmed stability markings across 
 -- both data sources.  Current rowcount = 45261.
 drop view if exists core.misc_stable_confirmed cascade; 
