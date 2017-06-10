@@ -1,5 +1,15 @@
 begin;
 
+drop view if exists core.misc_joined cascade;
+create view core.misc_joined as
+select
+  ucbbl as bbl,
+  date_part('year',year) as year,
+  unitcount, 
+  case when estimate = 'Y' then true else false end as estimate,
+  abatements
+from flat.misc_joined_nocrosstab;
+
 -- A restriction of the most recent taxbills rowset to just those tax lots 
 -- having some kind of stability marking. 
 drop view if exists core.misc_taxbill_2016Q4 cascade; 
@@ -34,16 +44,6 @@ select
   end as bin
 from flat.misc_nycha;
 
--- Redirects to the 'flat' datasets.
-drop view if exists core.misc_joined cascade;
-create view core.misc_joined as
-select
-  ucbbl as bbl,
-  date_part('year',year) as year,
-  unitcount, 
-  case when estimate = 'Y' then true else false end as estimate,
-  abatements
-from flat.misc_joined_nocrosstab;
 
 drop view if exists core.misc_joined_maxyear cascade;
 create view core.misc_joined_maxyear as
