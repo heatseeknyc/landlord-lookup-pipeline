@@ -10,14 +10,6 @@ select
   abatements
 from flat.misc_joined_nocrosstab;
 
--- A restriction of the most recent taxbills rowset to just those tax lots 
--- having some kind of stability marking. 
-drop view if exists core.misc_taxbill_2016Q4 cascade; 
-create view core.misc_taxbill_2016Q4 as  
-select bbl,unitcount,has_421a,has_j51
-from flat.misc_taxbill
-where year = 2016 and quarter = 4 and (has_421a or has_j51 or unitcount is not null);
-
 -- A unified view of taxlots having confirmed stability markings across 
 -- both data sources.  Current rowcount = 45261.
 drop view if exists core.misc_stable_confirmed cascade; 
@@ -32,6 +24,14 @@ select
 from flat.misc_dhcr2015 as a
 full outer join core.misc_taxbill_2016Q4 as b on a.bbl = b.bbl; 
 
+-- A restriction of the most recent taxbills rowset to just those tax lots 
+-- having some kind of stability marking. 
+drop view if exists core.misc_taxbill_2016Q4 cascade; 
+create view core.misc_taxbill_2016Q4 as  
+select bbl,unitcount,has_421a,has_j51
+from flat.misc_taxbill
+where year = 2016 and quarter = 4 and (has_421a or has_j51 or unitcount is not null);
+
 drop view if exists core.misc_nycha cascade;
 create view core.misc_nycha as
 select 
@@ -43,7 +43,6 @@ select
     else bin::integer 
   end as bin
 from flat.misc_nycha;
-
 
 drop view if exists core.misc_joined_maxyear cascade;
 create view core.misc_joined_maxyear as
