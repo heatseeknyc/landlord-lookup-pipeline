@@ -10,6 +10,11 @@ select
   abatements
 from flat.misc_joined_nocrosstab;
 
+drop view if exists core.misc_joined_maxyear cascade;
+create view core.misc_joined_maxyear as
+select bbl,max(year) as year from flat.misc_joined
+where unitcount > 0 group by bbl;
+
 -- A unified view of taxlots having confirmed stability markings across 
 -- both data sources.  Current rowcount = 45261.
 drop view if exists core.misc_stable_confirmed cascade; 
@@ -43,11 +48,6 @@ select
     else bin::integer 
   end as bin
 from flat.misc_nycha;
-
-drop view if exists core.misc_joined_maxyear cascade;
-create view core.misc_joined_maxyear as
-select bbl,max(year) as year from flat.misc_joined
-where unitcount > 0 group by bbl;
 
 drop view if exists core.misc_liensale cascade;
 create view core.misc_liensale as
