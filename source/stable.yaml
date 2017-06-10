@@ -1,0 +1,16 @@
+#
+# Datasets specific to rent stabilization 
+#
+
+- 
+ name:  taxbill 
+ label: Taxbill-SOA-By-Quarter 
+
+- 
+ name:  joined-nocrosstab
+ label: Taxbills-Joined-NoCrossTab
+
+-
+ name:  dhcr2015 
+ label: 'DHCR-Stabilization-List-2015' 
+

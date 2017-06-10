@@ -2,29 +2,11 @@
 # misc datasets 
 #
 
-- 
- name:  taxbill 
- label: Taxbill-SOA-By-Quarter 
-
-- 
- name:  joined-nocrosstab
- label: Taxbills-Joined-NoCrossTab
-
-- 
- name:  joined
- label: Taxbills-Joined 
- active: false
-
 -
  name:  liensale 
  label: DOF-Liensales-By-Year
 
 -
- name:  dhcr2015 
- label: 'DHCR-Stabilization-List-2015' 
-
--
  name:  nycha 
  label: 'NYCHA-Projects-Partial-List'
-
 
