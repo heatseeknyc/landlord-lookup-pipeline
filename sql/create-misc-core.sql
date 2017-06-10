@@ -12,7 +12,7 @@ from flat.misc_joined_nocrosstab;
 
 drop view if exists core.misc_joined_maxyear cascade;
 create view core.misc_joined_maxyear as
-select bbl,max(year) as year from flat.misc_joined
+select bbl,max(year) as year from core.misc_joined
 where unitcount > 0 group by bbl;
 
 -- A unified view of taxlots having confirmed stability markings across 
