@@ -37,7 +37,13 @@ from flat.misc_nycha;
 -- Redirects to the 'flat' datasets.
 drop view if exists core.misc_joined cascade;
 create view core.misc_joined as
-select * from flat.misc_joined;
+select
+  ucbbl as bbl,
+  date_part('year',year) as year,
+  unitcount, 
+  case when estimate = 'Y' then true else false end as estimate,
+  abatements
+from flat.misc_joined_nocrosstab;
 
 drop view if exists core.misc_joined_maxyear cascade;
 create view core.misc_joined_maxyear as
