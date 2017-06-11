@@ -30,21 +30,29 @@ select
 from push.pluto_taxlot as a
 full outer join push.hpd_building_count as b on b.bbl = a.bbl;
 
-create view meta.misc_stable_likely as
+create view meta.stable_likely as
 select bbl from push.pluto_taxlot where units_res >= 6 and year_built <= 1974;
 
 -- A comprehensive view on rent tabilization status by taxlot.  
 -- BTW note that one or both of the 'confirmed' or 'likely' flags will always
 -- be true for a row to be a part of this set.
-create view meta.misc_stable as
+create view meta.stabilized as
 select
   coalesce(a.bbl,b.bbl) as bbl,
-  a.has_421a, a.has_j51, a.unitcount, a.special, a.in_dhcr, a.in_taxbill,
-  a.bbl is not null as confirmed,
+  a.in_taxbill as taxbill_present,
+  a.year       as taxbill_lastyear, 
+  a.unitcount  as taxbill_unitcount, 
+  a.abatements as taxbill_abatements,
+  a.in_dhcr    as dhcr_present,
+  a.bldg_count as dhcr_bldg_count,
+  a.has_421a   as dhcr_421a, 
+  a.has_j51    as dhcr_j51,
+  a.special    as dhcr_special,
+  a.bbl is not null and a.year = 2015 as confirmed,
+  a.bbl is not null and a.year < 2015 as disputed, 
   b.bbl is not null as likely 
-from            push.misc_stable_confirmed as a
-full outer join meta.misc_stable_likely    as b on a.bbl = b.bbl; 
-
+from            push.stable_confirmed as a
+full outer join meta.stable_likely    as b on a.bbl = b.bbl; 
 
 --
 -- A crucial joining view that can be used to tell us everything we need
@@ -73,23 +81,22 @@ select
   c.radius                   as building_radius,
   c.points                   as building_points,
   c.parts                    as building_parts,
-  d.has_421a                 as stable_421a,
-  d.has_j51                  as stable_j51,
-  d.unitcount                as stable_units,
-  d.special                  as stable_flags,
-  d.in_dhcr                  as stable_dhcr,
+  d.dhcr_421a                as stable_421a,
+  d.dhcr_j51                 as stable_j51,
+  d.taxbill_unitcount        as stable_units,
+  d.dhcr_special             as stable_flags,
+  d.dhcr_present             as stable_dhcr,
   d.confirmed                as stable_confirmed,
+  d.disputed                 as stable_disputed,
   d.likely                   as stable_likely,
   coalesce(e.total,0)        as hpd_count,
   g.status                   as residential
 from      push.pluto_taxlot           as a 
 left join push.pluto_building_canonical as b on a.bbl = b.bbl
 left join push.pluto_building         as c on b.bbl = c.bbl and b.doitt_id = c.doitt_id
-left join meta.misc_stable            as d on a.bbl = d.bbl
-left join meta.hpd_count           as e on b.bbl = e.bbl and b.bin = e.bin
+left join meta.stabilized             as d on a.bbl = d.bbl
+left join meta.hpd_count              as e on b.bbl = e.bbl and b.bin = e.bin
 left join meta.residential            as g on a.bbl = g.bbl;
-
-
 
 --
 -- The next two view feed into the "contact_info" view in this schema
