@@ -17,6 +17,9 @@ where public.is_valid_bbl(bbl) and public.is_valid_bin(bin);
 create index on push.hpd_building(id);
 create index on push.hpd_building(bbl);
 create index on push.hpd_building(bin);
+drop view if exists push.hpd_building_count cascade;
+create view push.hpd_building_count as 
+select bbl,count(*) as total from push.hpd_building group by bbl;
 
 create table push.hpd_registration as
 select id, bbl, building_id, bin, last_date, end_date 
@@ -32,6 +35,13 @@ create index on push.hpd_contact(id);
 create index on push.hpd_contact(contact_type);
 create index on push.hpd_contact(registration_id);
 
+drop view if exists push.hpd_contact_count cascade;
+create view push.hpd_contact_count as
+select a.bbl, count(*) as total
+from      push.hpd_registration as a
+left join push.hpd_contact      as b on a.id = b.registration_id
+group by a.bbl;
+
 create table push.hpd_legal as
 select id, building_id, bbl, case_type, case_open_date, case_status, case_status_date, case_judgement 
 from core.hpd_legal
@@ -39,12 +49,18 @@ where public.is_valid_bbl(bbl);
 create index on push.hpd_legal(id);
 create index on push.hpd_legal(bbl);
 create index on push.hpd_legal(building_id);
+drop view if exists push.hpd_legal_count cascade;
+create view push.hpd_legal_count as 
+select bbl,count(*) as total from push.hpd_legal group by bbl;
 
 create table push.hpd_complaint as
 select * from core.hpd_complaint;
 create index on push.hpd_complaint(id);
 create index on push.hpd_complaint(building_id);
 create index on push.hpd_complaint(bbl);
+drop view if exists push.hpd_complaint_count cascade;
+create view push.hpd_complaint_count as 
+select bbl,count(*) as total from push.hpd_complaint group by bbl;
 
 -- Not yet sure if we need all these date fields.
 create table push.hpd_violation as
@@ -60,6 +76,24 @@ create index on push.hpd_violation(id);
 create index on push.hpd_violation(building_id);
 create index on push.hpd_violation(registration_id);
 create index on push.hpd_violation(bbl);
+drop view if exists push.hpd_violation_count cascade;
+create view push.hpd_violation_count as 
+select bbl,count(*) as total from push.hpd_violation group by bbl;
+
+create table hpd_taxlot_summary as
+select
+  coalesce(a.bbl,b.bbl,c.bbl,d.bbl,e.bbl) as bbl,
+  a.total as building,
+  b.total as contact,
+  c.total as complaint,
+  d.total as violation,
+  e.total as legal
+from            push.hpd_building_count  as a
+full outer join push.hpd_contact_count   as b on a.bbl = b.bbl
+full outer join push.hpd_complaint_count as c on a.bbl = c.bbl
+full outer join push.hpd_violation_count as d on a.bbl = d.bbl
+full outer join push.hpd_legal_count     as e on a.bbl = e.bbl;
+create index on hpd_taxlot_summary(bbl);
 
 --
 -- A reference table specifying pre-defined sorting order for contact_type fields. 
@@ -91,11 +125,6 @@ insert into push.hpd_contact_rank (id,contact_type) values
 ;
 create index on push.hpd_contact_rank(contact_type);
 
--- Provies a relation mostly useful for telling us whether a given taxlot
--- is under HPD jurisdiction.  As a side benefit, we get the building count.
-create table push.hpd_building_count as
-select bbl,count(*) as building_count from push.hpd_building group by bbl;
-create index on push.hpd_building_count(bbl);
 
 commit;
 
