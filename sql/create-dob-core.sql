@@ -68,7 +68,9 @@ create view core.dob_violation as
 select
     isn_dob_bis_viol,
     case 
-        when boro ~ '^[12345]$' and block ~ '^\d{1,5}$' and lot ~ '^\d{1,5}$' then 
+        -- the weirdness on the regex from lot numbers comes from the fact that
+        -- while always 5-digit (padded) strings, sometimes they're out of range 
+        when boro ~ '^[12345]$' and block ~ '^\d{1,5}$' and lot ~ '^(0\d{4}|\d{1,4})$' then 
             public.make_bbl(boro::smallint, block::integer, lot::smallint) 
         else NULL
     end as bbl,

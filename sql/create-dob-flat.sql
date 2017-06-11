@@ -83,7 +83,7 @@ create table flat.dob_violation (
     boro char(1), -- sometimes a single character "`" which apparently means not known
     bin integer,
     block text, -- usually 5 digits (padded), but somtimes has punctuation or other garbage
-    lot text, -- usually 5 digitts (padded), sometimes has embedded spaces
+    lot text, -- usually 5 digitts (padded), but sometimes fewer, and/or has embedded spaces
     issue_date text, -- usually YYYYMMDD sometimes contains embedded spaces,
     violation_type_code text,
     violation_number text,
