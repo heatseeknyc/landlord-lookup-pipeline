@@ -76,5 +76,28 @@ create table flat.dob_permit (
     dob_run_date date
 );
 
+-- ISN_DOB_BIS_VIOL,BORO,BIN,BLOCK,LOT,ISSUE_DATE,VIOLATION_TYPE_CODE,VIOLATION_NUMBER,HOUSE_NUMBER,STREET,DISPOSITION_DATE,DISPOSITION_COMMENTS,DEVICE_NUMBER,DESCRIPTION,ECB_NUMBER,NUMBER,VIOLATION_CATEGORY,VIOLATION_TYPE 
+-- 493111,1,1014517,00790,00009,19970916,LL6291,171810,147R,WEST   14 STREET,,,00913773,,,V091697LL6291171810,V-DOB VIOLATION - ACTIVE,LL6291-LOCAL LAW 62/91 - BOILERS
+create table flat.dob_violation (
+    isn_dob_bis_viol integer,
+    boro char(1), -- sometimes a single character "`" which apparently means not known
+    bin integer,
+    block text, -- somtimes has punctuation or other garbage
+    lot text, -- sometimes has embedded spaces
+    issue_date text, -- sometimes contains embedded spaces,
+    violation_type_code text,
+    violation_number text,
+    house_number text,
+    street text,
+    disposition_date char(8), -- sometime invalid, e.g. '19940231'
+    disposition_comments text,
+    device_number text, 
+    description text,
+    ecb_number text,
+    number text,
+    violation_category text,
+    violation_type text
+);
+
 commit;
 
