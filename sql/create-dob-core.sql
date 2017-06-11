@@ -9,7 +9,8 @@ drop view if exists core.dob_permit cascade;
 create view core.dob_permit as  
 select
     case 
-        when lot ~ '^\d{1,4}$' then public.make_bbl(public.boroname2boroid(borough), block, lot::smallint) 
+        -- accounts for weirdness in lot numbes -- sometimes 0-padded, sometimes not, sometimes invalid
+        when lot ~ '^(0\d{4}|\d{1,4})$' then public.make_bbl(public.boroname2boroid(borough), block, lot::smallint)
         else NULL
     end as bbl,
     bin,
