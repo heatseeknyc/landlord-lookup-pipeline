@@ -30,12 +30,39 @@ select
 from push.pluto_taxlot as a
 full outer join push.hpd_building_count as b on b.bbl = a.bbl;
 
+drop view if exists meta.stable_likely cascade;
 create view meta.stable_likely as
 select bbl from push.pluto_taxlot where units_res >= 6 and year_built <= 1974;
 
--- A comprehensive view on rent tabilization status by taxlot.  
--- BTW note that one or both of the 'confirmed' or 'likely' flags will always
--- be true for a row to be a part of this set.
+--
+-- A comprehensive view on rent sabilization status by taxlot.  
+--
+-- Provides the crucial 'status' flag, which is defined as follows: 
+-- 
+--    'confirmed' if at least one of the properties  on the lot is on the DHCR list, 
+--     the taxlot has non-zero unitcounts (in the taxbill scrapes) through 2015.
+--
+--    'disputed' if the lot has no buildings on the DHCR list, and its last year 
+--     of appearance is before 2015.  (Implicating being it likely was stabilized
+--     in the past, but may no longer have stabilized units).
+--
+--     'likely' if neither of the above criteria are met, but the property meets 
+--     generic criteria for stabilization (pre-1974, 6 or more units),
+--
+-- A couple of notes as to the above:
+--
+--     - Due to the logic of how this table is constructed, every row will have
+--       on of the above 3 values (i.e. there will be no rows with NULL status).
+--
+--     - So it shows up as NULL in a left join, that means the lot was most likely
+--       never stabilized.
+--
+--     -- Some of the above flags have different definitions in other rowsets.
+--        For example, presence in the 'stable_likely' view (which the select for
+--        this view pulls from) simply means that the tax lot meets pre-1974 criteria; 
+--        whereas in this view it means that it meets those criteria, -and- is not 
+--        otherwise 'confirmed' or 'disputed'.
+--
 create view meta.stabilized as
 select
   coalesce(a.bbl,b.bbl) as bbl,
@@ -48,9 +75,11 @@ select
   a.has_421a   as dhcr_421a, 
   a.has_j51    as dhcr_j51,
   a.special    as dhcr_special,
-  a.bbl is not null and a.year = 2015 as confirmed,
-  a.bbl is not null and a.year < 2015 as disputed, 
-  b.bbl is not null as likely 
+  case
+    when a.in_dhcr or a.year = 2015 then 'confirmed' 
+    when a.year < 2015 then 'disputed'
+    when b.bbl is not null then 'likely'
+  end as status
 from            push.stable_confirmed as a
 full outer join meta.stable_likely    as b on a.bbl = b.bbl; 
 
@@ -81,6 +110,8 @@ select
   c.radius                   as building_radius,
   c.points                   as building_points,
   c.parts                    as building_parts,
+  d.status                   as stable_status,
+  /*
   d.dhcr_421a                as stable_421a,
   d.dhcr_j51                 as stable_j51,
   d.taxbill_unitcount        as stable_units,
@@ -89,6 +120,7 @@ select
   d.confirmed                as stable_confirmed,
   d.disputed                 as stable_disputed,
   d.likely                   as stable_likely,
+  */
   coalesce(e.total,0)        as hpd_count,
   g.status                   as residential
 from      push.pluto_taxlot           as a 
