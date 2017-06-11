@@ -4,6 +4,8 @@
 
 begin;
 
+/*
 create index on push.stable_confirmed(bbl);
+*/
 
 commit;
