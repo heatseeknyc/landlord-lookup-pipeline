@@ -15,11 +15,6 @@ select id, bbl, bin, program, dob_class_id, legal_stories, legal_class_a, legal_
 from core.hpd_building
 where public.is_valid_bbl(bbl) and public.is_valid_bin(bin);
 
--- Provies a relation mostly useful for telling us whether a given taxlot
--- is under HPD jurisdiction.  As a side benefit, we get the building count.
-create table push.hpd_building_count as
-select bbl,count(*) as building_count from push.hpd_building group by bbl;
-
 create table push.hpd_registration as
 select id, bbl, building_id, bin, last_date, end_date 
 from core.hpd_registration
@@ -76,6 +71,11 @@ insert into push.hpd_contact_rank (id,contact_type) values
     (8,'Agent'),
     (9,'Lessee')
 ;
+
+-- Provies a relation mostly useful for telling us whether a given taxlot
+-- is under HPD jurisdiction.  As a side benefit, we get the building count.
+create table push.hpd_building_count as
+select bbl,count(*) as building_count from push.hpd_building group by bbl;
 
 commit;
 
