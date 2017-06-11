@@ -87,7 +87,7 @@ create view push.hpd_violation_count as
 select bbl,count(*) as total from push.hpd_violation group by bbl;
 
 drop table if exists push.hpd_taxlot_summary cascade;
-create table hpd_taxlot_summary as
+create table push.hpd_taxlot_summary as
 select
   coalesce(a.bbl,b.bbl,c.bbl,d.bbl,e.bbl) as bbl,
   a.total as building,
@@ -100,7 +100,7 @@ full outer join push.hpd_contact_count   as b on a.bbl = b.bbl
 full outer join push.hpd_complaint_count as c on a.bbl = c.bbl
 full outer join push.hpd_violation_count as d on a.bbl = d.bbl
 full outer join push.hpd_legal_count     as e on a.bbl = e.bbl;
-create index on hpd_taxlot_summary(bbl);
+create index on push.hpd_taxlot_summary(bbl);
 
 --
 -- A reference table specifying pre-defined sorting order for contact_type fields. 
