@@ -1,11 +1,7 @@
 begin;
 
-drop view if exists meta.hpd_count cascade;
-drop view if exists meta.property_summary cascade;
-drop view if exists meta.contact_simple cascade;
-drop view if exists meta.contact_info cascade;
-drop view if exists meta.residential cascade;
 
+drop view if exists meta.hpd_count cascade;
 create view meta.hpd_count as
 select a.bbl, a.bin, count(distinct b.id) as total
 from      push.hpd_registration as a
@@ -16,6 +12,7 @@ group by a.bbl,a.bin;
 -- is residential or not (via the derived 'status' flag).  There's still
 -- some room for improvement with this determination, but it's probably
 -- good enough for now.
+drop view if exists meta.residential cascade;
 create view meta.residential as
 select
   coalesce(a.bbl,b.bbl) as bbl,
@@ -90,6 +87,7 @@ full outer join meta.stable_likely    as b on a.bbl = b.bbl;
 -- "LIMIT 1" in the select, because of course (for multi-building lots)
 -- all of the attributes will be redundant.
 --
+drop view if exists meta.property_summary cascade;
 create view meta.property_summary as
 select 
   a.bbl, b.bin, b.doitt_id, 
@@ -138,6 +136,7 @@ left join meta.residential            as g on a.bbl = g.bbl;
 -- A simplified view of push.contacts with some column names, other columns 
 -- catenated for brevity / tidier reporting (and minus contact_title), and the
 -- ordering rank for contact_type slotted in.
+drop view if exists meta.contact_simple cascade;
 create view meta.contact_simple as 
 select 
   a.id as contact_id, registration_id, a.contact_type, b.id as contact_rank, 
@@ -162,6 +161,7 @@ left join push.hpd_contact_rank as b on b.contact_type = a.contact_type;
 -- they were orphaned in the original data (i.e. had no registration IDs in 
 -- the files as they came to us from the NYCHPD).
 -- 
+drop view if exists meta.contact_info cascade;
 create view meta.contact_info as
 select 
   a.id as registration_id, bin, bbl, building_id, last_date, end_date,
