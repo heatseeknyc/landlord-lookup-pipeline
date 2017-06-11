@@ -1,6 +1,5 @@
 begin;
 
-
 drop view if exists meta.hpd_count cascade;
 create view meta.hpd_count as
 select a.bbl, a.bin, count(distinct b.id) as total
@@ -127,11 +126,6 @@ left join push.pluto_building         as c on b.bbl = c.bbl and b.doitt_id = c.d
 left join meta.stabilized             as d on a.bbl = d.bbl
 left join meta.hpd_count              as e on b.bbl = e.bbl and b.bin = e.bin
 left join meta.residential            as g on a.bbl = g.bbl;
-
---
--- The next two view feed into the "contact_info" view in this schema
--- (and into the "hard" table of the same name).
---
 
 -- A simplified view of push.contacts with some column names, other columns 
 -- catenated for brevity / tidier reporting (and minus contact_title), and the
