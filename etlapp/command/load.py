@@ -17,9 +17,9 @@ def perform(posargs=None,options=None):
 
 def load_any(srcarg,strict=True):
     if '.' in srcarg:
+        srcpath = srcarg
         prefix,name = splitpath(srcpath)
-        status,delta = load_multi(prefix,[name],strict)
-        return status
+        return load_multi(prefix,[name],strict)
     else:
         prefix = srcarg
         names = etlapp.source.select(prefix,{'active':True})

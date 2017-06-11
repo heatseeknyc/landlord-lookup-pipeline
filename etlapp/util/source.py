@@ -43,6 +43,7 @@ def loadcfg_source(path):
     return recs2dict(recs)
 
 def tablename(schema,prefix,name):
+    name = name.replace('-','_').replace('.','_')
     return "%s.%s_%s" % (schema,prefix,name)
 
 def source2prefix(srcpath):
