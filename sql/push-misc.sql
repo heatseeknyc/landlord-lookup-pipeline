@@ -1,12 +1,6 @@
 
 begin;
 
-create table push.misc_stable_confirmed as
-select * from core.misc_stable_confirmed;
-
-create table push.misc_joined as
-select * from flat.misc_joined;
-
 create table push.misc_liensale as
 select * from core.misc_liensale;
 
