@@ -121,16 +121,9 @@ create table push.hpd_contact_rank (
     contact_type text
 );
 insert into push.hpd_contact_rank (id,contact_type) values 
-    (1,'CorporateOwner'),
-    (2,'IndividualOwner'),
-    (3,'JointOwner'),
-    (4,'HeadOfficer'),
-    (5,'Officer'),
-    (6,'Shareholder'),
-    (7,'SiteManager'),
-    (8,'Agent'),
-    (9,'Lessee')
-;
+    (1,'CorporateOwner'), (2,'IndividualOwner'), (3,'JointOwner'),
+    (4,'HeadOfficer'), (5,'Officer'), (6,'Shareholder'),
+    (7,'SiteManager'), (8,'Agent'), (9,'Lessee');
 create index on push.hpd_contact_rank(contact_type);
 
 commit;
