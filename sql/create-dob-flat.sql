@@ -84,7 +84,7 @@ create table flat.dob_violation (
     bin integer,
     block text, -- somtimes has punctuation or other garbage
     lot text, -- sometimes has embedded spaces
-    issue_date text, -- sometimes contains embedded spaces,
+    issue_date text, -- usually YYYYMMDD sometimes contains embedded spaces,
     violation_type_code text,
     violation_number text,
     house_number text,
