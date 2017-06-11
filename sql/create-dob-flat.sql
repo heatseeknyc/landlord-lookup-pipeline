@@ -99,5 +99,27 @@ create table flat.dob_violation (
     violation_type text
 );
 
+-- Complaint Number,Status,Date Entered,House Number,ZIP Code,House Street,BIN,Community Board,Special District,Complaint Category,Unit,Disposition Date,Disposition Code,Inspection Date,DOBRunDate
+-- 4483428,CLOSED,06/08/2011,10          ,,MUHLEBACH COURT                 ,4298330,414,   ,05,QNS.,04/25/2013,L3,04/25/2013,04/26/2013 12:00:00 AM
+-- 1347475,CLOSED,04/23/2013,157         ,,BROOME STREET                   ,1004077,103,   ,23,SCFLD,04/25/2013,A8,04/25/2013,04/26/2013 12:00:00 AM
+create table flat.dob_complaint (
+    complaint_number integer,
+    status text,
+    entry_date date,
+    house_number text,
+    zipcode text,
+    house_street text,
+    bin integer,
+    cb text, -- sometimes 3 blank spaces
+    sd text,
+    category text,
+    unit text,
+    disposition_date text, -- uusually MM/DD/YYYY but sometimes not
+    disposition_code text,
+    inspection_date char(10), -- sometimes broken, e.g. '10/06/0000'
+    dob_run_date timestamp 
+);
+
+
 commit;
 
