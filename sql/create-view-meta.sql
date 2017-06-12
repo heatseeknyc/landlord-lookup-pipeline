@@ -135,12 +135,16 @@ select
   coalesce(e.complaint,0)    as hpd_complaint_count,
   coalesce(e.violation,0)    as hpd_violation_count,
   coalesce(e.legal,0)        as hpd_legal_count,
+  coalesce(f.permit,0)       as dob_permit_count,
+  coalesce(f.complaint,0)    as dob_complaint_count,
+  coalesce(f.violation,0)    as dob_violation_count,
   g.status                   as residential
 from      push.pluto_taxlot           as a 
 left join push.pluto_building_canonical as b on a.bbl = b.bbl
 left join push.pluto_building         as c on b.bbl = c.bbl and b.doitt_id = c.doitt_id
 left join meta.stabilized             as d on a.bbl = d.bbl
 left join push.hpd_taxlot_summary     as e on b.bbl = e.bbl 
+left join meta.dob_taxlot_summary     as f on a.bbl = f.bbl 
 left join meta.residential            as g on a.bbl = g.bbl;
 
 -- A simplified view of push.contacts with some column names, other columns 
