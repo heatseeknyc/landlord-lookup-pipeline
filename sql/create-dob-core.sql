@@ -82,7 +82,8 @@ select
     house_number,
     street,
     case when 
-        disposition_date ~ '^(19|20)\d{6}$' and disposition_date !~ '023\d$' then disposition_date::date else NULL 
+        disposition_date ~ '^(19|20)\d{6}$' and 
+        disposition_date !~ '023\d$' then disposition_date::date else NULL 
     end as disposition_date, 
     disposition_comments,
     device_number, 
