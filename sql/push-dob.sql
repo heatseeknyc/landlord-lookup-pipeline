@@ -28,4 +28,17 @@ drop view if exists push.dob_complaint_count cascade;
 create view push.dob_complaint_count as  
 select bin,count(*) as total from push.dob_complaint group by bin;
 
+drop table if exists push.dob_building_summary cascade;
+create table push.dob_building_summary as
+select
+  coalesce(a.bin,b.bin,c.bin) as bin,
+  a.total as permit, 
+  b.total as violation,
+  c.total as complaint
+from            push.dob_permit_count    as a
+full outer join push.dob_violation_count as b on a.bin = b.bin
+full outer join push.dob_complaint_count as c on a.bin = c.bin;
+create index on push.dob_building_summary(bin);
+
+
 commit;
