@@ -15,7 +15,7 @@
 - 
  name:  legal 
  label: 'ACRIS-Real-Property-Legals'
- legal: '8h5j-fqxa'
+ slug:  '8h5j-fqxa'
 
 - 
  name:  control 
