@@ -68,10 +68,10 @@ drop view if exists core.dob_violation cascade;
 create view core.dob_violation as 
 select
     isn_dob_bis_viol,
-    case 
+    case when 
         -- the weirdness on the regex from lot numbers comes from the fact that
         -- while always 5-digit (padded) strings, sometimes they're out of range 
-        when boro ~ '^[12345]$' and block ~ '^\d{1,5}$' and lot ~ '^(0\d{4}|\d{1,4})$' then 
+        boro ~ '^[12345]$' and block ~ '^\d{1,5}$' and lot ~ '^(0\d{4}|\d{1,4})$' then 
             public.make_bbl(boro::smallint, block::integer, lot::smallint) 
         else NULL
     end as bbl,
@@ -81,8 +81,8 @@ select
     violation_number,
     house_number,
     street,
-    case 
-        when disposition_date ~ '^(19|20)\d{6}$' and disposition_date !~ '023\d$' then disposition_date::date else NULL 
+    case when 
+        disposition_date ~ '^(19|20)\d{6}$' and disposition_date !~ '023\d$' then disposition_date::date else NULL 
     end as disposition_date, 
     disposition_comments,
     device_number, 
@@ -109,8 +109,8 @@ select
     unit,
     case when disposition_date ~ '^\d{2}/\d{2}/\d{4}$' then disposition_date::date else null end as disposition_date,
     disposition_code,
-    case 
-       when inspection_date ~ '^\d{2}/\d{2}/(19|20)\d{2}$' then inspection_date::date else null 
+    case when 
+        inspection_date ~ '^\d{2}/\d{2}/(19|20)\d{2}$' then inspection_date::date else null 
     end as inspection_date,
     dob_run_date::date as dob_run_date
 from flat.dob_complaint;
