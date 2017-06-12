@@ -1,5 +1,25 @@
 begin;
 
+-- A view of DOB complaints, unified across DOB and Pluto.
+-- Some important notes:
+--
+--    - DOB has a much smaller number of BINs than Pluto (some 320k v. 1.1M, as of June 2017).
+--      this is because the DOB set only records buildings with permit/complaint activity.
+--
+--    - That said a significant number of rows (23499) appear in DOB but not in Pluto. 
+--      These are most likely newer buildings that Pluto doesn't know about yet!
+--
+drop view if exists meta.dob_building_summary cascade;
+create view meta.dob_building_summary as 
+select
+    a.bbl, coalesce(a.bin,b.bin) as bin,
+    b.permit, b.violation, b.complaint,
+    a.bin is not null as in_pluto,
+    b.bin is not null as in_dob
+from            push.pluto_building       as a
+full outer join push.dob_building_summary as b on a.bin = b.bin;
+
+
 -- A magical view which (portends to) tell us whether a given property 
 -- is residential or not (via the derived 'status' flag).  There's still
 -- some room for improvement with this determination, but it's probably
