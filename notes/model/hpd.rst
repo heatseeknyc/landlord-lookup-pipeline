@@ -54,21 +54,64 @@ A couple of notes as to what we have here:
 HPD v. DOB building identifiers
 -------------------------------
 
-Recall that BIN is present only in ``hpd_building`` and ``hpd_registration``.
-And at least it's always non-null in each:
+
+
+
+Recall that BIN is present only in ``hpd_building`` and ``hpd_registration``.  
+And that ``hpd_registration`` is a ledger of registration events (not buildings), 
+so we won't expect its identifiers to be unique.  That said, we'd like to investigate 
+whether we can be sure of some basic assumpetions about each table.  
+
+At least both identifiers are always non-null in each table: 
 
     select count(*) from push.hpd_registration where bin is null; 0
+    select count(*) from push.hpd_registration where building_id is null; 0
     select count(*) from push.hpd_building where bin is null; 0
+    select count(*) from push.hpd_building where id is null; 0
 
-We would expect it to be at least an alternte key in ``hpd_building``, but unforunately this is far from the case:
+But let's see what's going on with ``hpd_building``, where we would expect ``id`` and ``bin`` 
+to be alternate keys.  Unfortunately this doesn't appear to be the case.  Let's look at ``hpd_building`` first: 
 
+    select count(*) from push.hpd_building;            298251
+    select count(distinct id) from push.hpd_building;  298251
+    select count(distinct bin) from push.hpd_building; 294574
     select count(*),sum(total) from (
-        select bin,count(*) as total from push.hpd_building group by bin having count(*) > 1 order by count(*)
+        select bin,count(distinct id) as total from push.hpd_building group by bin having count(distinct id) > 1 
     ) as x; (2778,6445)
+
+Or 2778 BINs occuring multiply across 6445 rows.  And over in ``hpd_registration`` it's the same story: 
+
+    select count(distinct building_id) from push.hpd_registration; 161746
+    select count(distinct bin) from push.hpd_registration;         159335
+    select count(*),sum(total) from (
+        select bin,count(distinct building_id) as total from push.hpd_registration group by bin having count(distinct building_id) > 1
+    ) as x; (1125,3536)
+
+That is, 1125 BINs occuring multiply across 6445 rows.  Here's a brief survey of the worst offenders in each table:
+
+    select bin,count(distinct id) from push.hpd_building group by bin order by count(distinct id) desc limit 5;
+       bin   | count 
+    ---------+-------
+     4171984 |    28
+     4147370 |    24
+     4902977 |    22
+     4147320 |    13
+     4432142 |    13
+
+    select bin,count(distinct building_id) from push.hpd_registration group by bin order by count(distinct building_id) desc limit 10;
+       bin   | count 
+    ---------+-------
+     4445478 |   102
+     4454129 |    29
+     4171984 |    28
+     4147370 |    24
+     4448352 |    19
+
+
+
 
 The analogous query applied to ``id`` returns 0 rows -- so at least it's unique in that table.
 
-Recall that ``hpd_registration`` is a ledger of registration events (not buildings), so we won't expect its identifiers to be unique. 
 It'd be at least comforting if BIN and HPD id were 1-to-1 in this table; and indeed we can confirm that this is the case, 
 as the following query has empty row count:
 
@@ -76,5 +119,23 @@ as the following query has empty row count:
 
 This leaves open the question of to what extent the identifiers overlap across the two tables.
 
-(to be continued)
+    select count(*) from temp.bin_hpd_to_dob;                           299265
+    select count(*) from temp.bin_hpd_to_dob where bin_bld is not null; 291796
+    select count(*) from temp.bin_hpd_to_dob where bin_reg is not null; 158210
+    select count(*) from temp.bin_hpd_to_dob where bin_reg = bin_bld;   150741 
+    select count(*) from temp.bin_hpd_to_dob where bin_bld != bin_reg;       0
+
+    select count(*) from temp.bin_dob_to_hpd;                           299233
+    select count(*) from temp.bin_dob_to_hpd where hpd_bld is not null; 291796
+    select count(*) from temp.bin_dob_to_hpd where hpd_reg is not null; 158210
+    select count(*) from temp.bin_dob_to_hpd where hpd_bld = hpd_reg;   150741
+    select count(*) from temp.bin_dob_to_hpd where hpd_bld != hpd_reg;      32
+
+Of special interest are the outlier sets:
+
+    select count(*) from temp.bin_dob_to_hpd where hpd_bld is null;       7437
+    select count(*) from temp.bin_hpd_to_dob where bin_bld is null;       7469
+
+Upshot being there are some 7400+ BINs -uniquely- identifiable in ``hpd_registrations`` that aren't present in ``hpd_building``.
+
 
