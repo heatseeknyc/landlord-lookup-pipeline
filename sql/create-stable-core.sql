@@ -21,6 +21,17 @@ select a.bbl, a.year, b.unitcount, b.estimate, b.abatements
 from      core.stable_joined_maxyear as a
 left join core.stable_joined         as b on a.bbl = b.bbl and a.year = b.year;
 
+drop view if exists core.stable_confirmed cascade;
+create view core.stable_confirmed as
+select 
+  coalesce(a.bbl,b.bbl) as bbl, 
+  b.year, b.unitcount, b.abatements,
+  a.count as bldg_count, a.has_421a, a.has_j51, a.special,
+  a.bbl is not null as in_dhcr,
+  b.bbl is not null as in_taxbill
+from       flat.stable_dhcr2015 as a
+full outer join core.stable_joined_lastyear as b on a.bbl = b.bbl; 
+
 -- A restriction of the most recent taxbills rowset to just those tax lots 
 -- having some kind of stability marking. 
 drop view if exists core.stable_taxbill_2016Q4 cascade; 
@@ -31,8 +42,8 @@ where year = 2016 and quarter = 4 and (has_421a or has_j51 or unitcount is not n
 
 -- A unified view of taxlots having confirmed stability markings across 
 -- both data sources.  Current rowcount = 45261.
-drop view if exists core.stable_stable_confirmed cascade; 
-create view core.stable_stable_confirmed as
+drop view if exists core.stable_stable_deprecated cascade;
+create view core.stable_stable_deprecated as
 select 
   coalesce(a.bbl,b.bbl) as bbl, 
   a.has_421a or b.has_421a as has_421a,
