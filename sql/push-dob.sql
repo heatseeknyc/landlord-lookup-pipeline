@@ -40,5 +40,4 @@ full outer join push.dob_violation_count as b on a.bin = b.bin
 full outer join push.dob_complaint_count as c on a.bin = c.bin;
 create index on push.dob_building_summary(bin);
 
-
 commit;
