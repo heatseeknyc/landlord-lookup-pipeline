@@ -24,5 +24,8 @@ select bin,count(*) as total from push.dob_violation group by bin;
 create table push.dob_complaint as
 select * from core.dob_complaint where public.is_valid_bin(bin);
 create index on push.dob_complaint(bin);
+drop view if exists push.dob_complaint_count cascade;
+create view push.dob_complaint_count as  
+select bin,count(*) as total from push.dob_complaint group by bin;
 
 commit;
