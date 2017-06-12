@@ -1,11 +1,13 @@
 begin;
 
+/* 
 drop view if exists meta.hpd_count cascade;
 create view meta.hpd_count as
 select a.bbl, a.bin, count(distinct b.id) as total
 from      push.hpd_registration as a
 left join push.hpd_contact      as b on b.registration_id = a.id
 group by a.bbl,a.bin;
+*/
 
 -- A magical view which (portends to) tell us whether a given property 
 -- is residential or not (via the derived 'status' flag).  There's still
@@ -18,13 +20,13 @@ select
   a.units_res       as units_res,
   a.condo_number    as condo_number,
   a.bldg_count      as pluto_building_count,
-  b.building_count  as hpd_building_count,
+  b.building        as hpd_building_count,
   a.bbl is not null as in_pluto,
   b.bbl is not null as in_hpd,
   a.units_res > 0 or a.condo_number > 0 or b.bbl is not null
        as status 
 from push.pluto_taxlot as a
-full outer join push.hpd_building_count as b on b.bbl = a.bbl;
+full outer join push.hpd_taxlot_summary as b on b.bbl = a.bbl;
 
 drop view if exists meta.stable_likely cascade;
 create view meta.stable_likely as
@@ -118,13 +120,16 @@ select
   d.disputed                 as stable_disputed,
   d.likely                   as stable_likely,
   */
-  coalesce(e.total,0)        as hpd_count,
+  coalesce(e.contact,0)      as hpd_contact_count,
+  coalesce(e.complaint,0)    as hpd_complaint_count,
+  coalesce(e.violation,0)    as hpd_violation_count,
+  coalesce(e.legal,0)        as hpd_legal_count,
   g.status                   as residential
 from      push.pluto_taxlot           as a 
 left join push.pluto_building_canonical as b on a.bbl = b.bbl
 left join push.pluto_building         as c on b.bbl = c.bbl and b.doitt_id = c.doitt_id
 left join meta.stabilized             as d on a.bbl = d.bbl
-left join meta.hpd_count              as e on b.bbl = e.bbl and b.bin = e.bin
+left join push.hpd_taxlot_summary     as e on b.bbl = e.bbl 
 left join meta.residential            as g on a.bbl = g.bbl;
 
 -- A simplified view of push.contacts with some column names, other columns 
