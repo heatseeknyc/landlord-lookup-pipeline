@@ -117,6 +117,7 @@ select
   a.bldg_class               as pluto_bldg_class,
   a.condo_number             as pluto_condo_number,
   a.units_total              as pluto_units_total,
+  a.units_res                as pluto_units_res,
   a.bldg_count               as pluto_bldg_count,
   a.address                  as pluto_address,
   public.bbl2boroname(a.bbl) as pluto_borough,
