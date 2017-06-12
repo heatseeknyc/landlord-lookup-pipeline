@@ -182,7 +182,7 @@ select
   a.id as registration_id, bin, bbl, building_id, last_date, end_date,
   b.contact_id, b.contact_type, b.contact_rank, b.description, 
   b.corpname, b.contact_name, b.business_address
-from push.hpd_registration  as a
+from push.hpd_registration    as a
 left join meta.contact_simple as b on b.registration_id = a.id;
 
 commit;
