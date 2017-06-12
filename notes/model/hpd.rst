@@ -3,9 +3,14 @@ Notes about the *hpd* data model.
 Let's start from the tables in the 'push' schema, which are still aligned 
 very closely with the flat files they were loaded from (upto BBL/BIN normalization): 
 
-    select count(*) from push.hpd_building; 298251
-    select count(*) from push.hpd_registration; 161747
-    select count(*) from push.hpd_contact; 648875
+    table_name         count    keys (primary; secondary) 
+   ------------------
+    hpd_building       298251   hpd_building_id; BBL, BIN                   | entity information for buildings
+    hpd_registration   161747   registration_id; BBL, BIN, hpd_building_id  | registration group <=> building -or- taxlot
+    hpd_contact        648875   registration_id, contact_id                 | contacts per registration group
+    hpd_complaint;    1014313   complaint_id; BBL, hpd_building_id
+    hpd_violation;    2104236   violation_id; BBL, hpd_building_id, registrtion_id, nov_id
+    hpd_legal;          69474   litigation_id; BBL, hpd_building_id
 
 And this derived analytical view, which we'll explain later:
 
@@ -33,6 +38,11 @@ Notes:
 
 hpd_registration
 ----------------
+
+First note that registration_id is -not- a primary key:
+
+     select count(*) from push.hpd_registration; 161747
+     select count(distinct id) from push.hpd_registration; 153751
 
 In the 'push' schema we've dropped the address fields, restrict only to 
 fields that convey essential relationship information: 
@@ -138,4 +148,25 @@ Of special interest are the outlier sets:
 
 Upshot being there are some 7400+ BINs -uniquely- identifiable in ``hpd_registrations`` that aren't present in ``hpd_building``.
 
+
+
+
+violation + complaint
+---------------------
+
+    hpd_complaint  | 1014313 | complaint_id; BBL, hpd_building_id
+    hpd_violation  | 2104236 | violation_id; BBL, hpd_building_id,
+
+    select count(*) from push.hpd_complaint where id is null; 0
+    select count(*) from push.hpd_violation where id is null; 0
+    select count(distinct id) from push.hpd_violation;  2104236
+    select count(distinct id) from push.hpd_complaint;  1014313
+
+
+hpd_legal
+---------
+
+    hpd_legal;          69474   BBL, hpd_building_id, 
+
+    select count(distinct id) from push.hpd_legal; 69474
 
