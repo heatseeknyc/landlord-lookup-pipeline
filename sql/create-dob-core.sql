@@ -77,8 +77,7 @@ select
     end as bbl,
     bin,
     case when 
-        issue_date ~ '^(19|20)\d{6}$' and 
-        issue_date !~ '0931$' and issue_date !~ '023\d$' then issue_date::date else NULL 
+        public.is_valid_yyyymmdd(issue_date) then issue_date::date else NULL 
     end as issue_date, 
     violation_type_code,
     violation_number,
@@ -87,8 +86,7 @@ select
     -- filters out some of the numerically invalid date expressions we've seen.
     -- not bulletproof by any means, but workable for now.
     case when 
-        disposition_date ~ '^(19|20)\d{6}$' and 
-        disposition_date !~ '0931$' and disposition_date !~ '023\d$' then disposition_date::date else NULL 
+        public.is_valid_yyyymmdd(disposition_date) then disposition_date::date else NULL 
     end as disposition_date, 
     disposition_comments,
     device_number, 
