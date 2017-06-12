@@ -1,14 +1,5 @@
 begin;
 
-/* 
-drop view if exists meta.hpd_count cascade;
-create view meta.hpd_count as
-select a.bbl, a.bin, count(distinct b.id) as total
-from      push.hpd_registration as a
-left join push.hpd_contact      as b on b.registration_id = a.id
-group by a.bbl,a.bin;
-*/
-
 -- A magical view which (portends to) tell us whether a given property 
 -- is residential or not (via the derived 'status' flag).  There's still
 -- some room for improvement with this determination, but it's probably
