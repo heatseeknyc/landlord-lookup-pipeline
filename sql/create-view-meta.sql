@@ -9,6 +9,8 @@ begin;
 --    - That said a significant number of rows (23499) appear in DOB but not in Pluto. 
 --      These are most likely newer buildings that Pluto doesn't know about yet!
 --
+--    - Nonetheless (by definition) it will include every BBL in the Pluto building set.
+--
 drop view if exists meta.dob_building_summary cascade;
 create view meta.dob_building_summary as 
 select
@@ -19,6 +21,14 @@ select
 from            push.pluto_building       as a
 full outer join push.dob_building_summary as b on a.bin = b.bin;
 
+drop view if exists meta.dob_taxlot_summary cascade;
+create view meta.dob_taxlot_summary as 
+select 
+    bbl,
+    sum(permit) as permit,
+    sum(violation) as violation,
+    sum(complaint) as complaint
+from meta.dob_building_summary where in_pluto group by bbl;
 
 -- A magical view which (portends to) tell us whether a given property 
 -- is residential or not (via the derived 'status' flag).  There's still
