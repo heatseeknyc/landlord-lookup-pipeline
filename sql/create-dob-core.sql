@@ -76,7 +76,9 @@ select
         else NULL
     end as bbl,
     bin,
-    case when issue_date ~ '^\d{8}$' then issue_date::date else NULL end as issue_date, 
+    case when 
+        issue_date ~ '^\d{8}$' then issue_date::date else NULL 
+    end as issue_date, 
     violation_type_code,
     violation_number,
     house_number,
