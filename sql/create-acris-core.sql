@@ -50,7 +50,7 @@ from flat.acris_party;
 -- and should make the de-duping select in the next view go much faster.
 drop materialized view if exists core.acris_master_docid_count cascade; 
 create materialized view core.acris_master_docid_count as 
-select docid,count(*) as kount from core.acris_master group by docid having count(*) > 1;
+select docid,count(*) as total from core.acris_master group by docid having count(*) > 1;
 create index on core.acris_master_docid_count(docid);
 
 drop view if exists core.acris_master_clean cascade; 
