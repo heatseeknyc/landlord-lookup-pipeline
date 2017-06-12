@@ -1,11 +1,15 @@
+--
+-- These intermediate views culminate in an analytical table useful to sorting out 
+-- conflicts between DOB + HPD building identifiers across the various primary tables.  
+--
+-- We create a table at the end because (being an outer join on the 5 primary tables)
+-- it would be way too slow when invoked as a view; so we'll blow some space + create 
+-- a hard table.  But we'll at least drop the intermediate views in the end.
+--
 
 begin;
 
--- These intermediate views culminate in an analytical table useful to sorting out 
--- conflicts between DOB + HPD building identifiers across the various primary tables.  
--- Unfortunately it seems too slow when invoked as a view, so we'll blow some space + 
--- create a hard table.  We will at least drop the intermediate views in the end.
--- Size = 305360 rows for May 2017.
+
 drop materialized view if exists push.hpd_xref_bin_1 cascade;
 create materialized view push.hpd_xref_bin_1 as 
 select 
@@ -54,7 +58,7 @@ full outer join push.hpd_xref_bin_3 as b on a.hpd_id = b.hpd_id;
 create index on push.hpd_xref_bin(hpd_id); 
 
 -- Now let's drop those intermediate views, to reclaim space.
--- (Note that the drop on view '2' will cascade to view '3').
+-- Note that the drop on view '2' will cascade to view '3'.
 drop materialized view push.hpd_xref_bin_2 cascade;
 drop materialized view push.hpd_xref_bin_1 cascade;
 
