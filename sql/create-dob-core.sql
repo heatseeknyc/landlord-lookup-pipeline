@@ -81,6 +81,8 @@ select
     violation_number,
     house_number,
     street,
+    -- filters out some of the numerically invalid date expressions we've seen.
+    -- not bulletproof by any means, but workable for now.
     case when 
         disposition_date ~ '^(19|20)\d{6}$' and 
         disposition_date !~ '0931$' and disposition_date !~ '023\d$' then disposition_date::date else NULL 
