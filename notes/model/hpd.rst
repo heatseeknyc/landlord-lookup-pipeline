@@ -7,6 +7,10 @@ very closely with the flat files they were loaded from (upto BBL/BIN normalizati
     select count(*) from push.hpd_registration; 161747
     select count(*) from push.hpd_contact; 648875
 
+And this derived analytical view, which we'll explain later:
+
+    select count(*) from push.hpd_bin_xref; 305360  
+
 
 hpd_building
 ------------
@@ -24,15 +28,15 @@ Represents "buildings under HPD jurisdiction" - in theory, all residential build
 
 Notes: 
   - ``bbl`` and ``bin`` in the usual sense
+  - ``id`` is the HPD building ID
 
 
 hpd_registration
 ----------------
 
-In the 'push' schema we've dropped the address fields, restrct only to 
+In the 'push' schema we've dropped the address fields, restrict only to 
 fields that convey essential relationship information: 
 
- 
     select * from push.hpd_registration limit 3;
        id   |    bbl     | building_id |   bin   | last_date  |  end_date  
     --------+------------+-------------+---------+------------+------------
@@ -44,4 +48,33 @@ A couple of notes as to what we have here:
   - ``id`` is the *registration id* 
   - ``bbl`` and ``bin`` in the usual sense
   - ``building_id`` is the HPD building ID
+
+
+
+HPD v. DOB building identifiers
+-------------------------------
+
+Recall that BIN is present only in ``hpd_building`` and ``hpd_registration``.
+And at least it's always non-null in each:
+
+    select count(*) from push.hpd_registration where bin is null; 0
+    select count(*) from push.hpd_building where bin is null; 0
+
+We would expect it to be at least an alternte key in ``hpd_building``, but unforunately this is far from the case:
+
+    select count(*),sum(total) from (
+        select bin,count(*) as total from push.hpd_building group by bin having count(*) > 1 order by count(*)
+    ) as x; (2778,6445)
+
+The analogous query applied to ``id`` returns 0 rows -- so at least it's unique in that table.
+
+Recall that ``hpd_registration`` is a ledger of registration events (not buildings), so we won't expect its identifiers to be unique. 
+It'd be at least comforting if BIN and HPD id were 1-to-1 in this table; and indeed we can confirm that this is the case, 
+as the following query has empty row count:
+
+    select building_id,count(distinct bin) from push.hpd_registration group by building_id having count(distinct bin) > 1; 
+
+This leaves open the question of to what extent the identifiers overlap across the two tables.
+
+(to be continued)
 
