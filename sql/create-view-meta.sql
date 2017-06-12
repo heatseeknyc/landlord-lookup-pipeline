@@ -110,16 +110,6 @@ select
   c.points                   as building_points,
   c.parts                    as building_parts,
   d.status                   as stable_status,
-  /*
-  d.dhcr_421a                as stable_421a,
-  d.dhcr_j51                 as stable_j51,
-  d.taxbill_unitcount        as stable_units,
-  d.dhcr_special             as stable_flags,
-  d.dhcr_present             as stable_dhcr,
-  d.confirmed                as stable_confirmed,
-  d.disputed                 as stable_disputed,
-  d.likely                   as stable_likely,
-  */
   coalesce(e.contact,0)      as hpd_contact_count,
   coalesce(e.complaint,0)    as hpd_complaint_count,
   coalesce(e.violation,0)    as hpd_violation_count,
