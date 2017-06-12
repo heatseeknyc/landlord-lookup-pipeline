@@ -4,11 +4,26 @@
 
 begin;
 
+-- A simple filter to determine whether we've been given a valid
+-- YYYYMMDD string.  Not bullet proof by any means, but will at least
+-- block some invalid cases we've seen so far. 
+create or replace function public.is_valid_yyyymmdd (datestr text) 
+returns boolean AS $$
+begin
+    return 
+        datestr is not null and
+        datestr ~ '^(19|20)(1[012]|0\d)\d{2}$' and
+        datestr !~ '023\d$' and 
+        datestr !~ '0931$' and 
+        datestr !~ '1131$';
+end
+$$ language plpgsql;
+
 create or replace function public.is_valid_bbl (bbl bigint) 
 returns boolean AS $$
 begin
     return 
-      bbl is not null and 
+      bbl is not null and
       bbl > 1000000000 and bbl < 6000000000 and 
       bbl not in (2000000000,3000000000,4000000000,5000000000);
 end
