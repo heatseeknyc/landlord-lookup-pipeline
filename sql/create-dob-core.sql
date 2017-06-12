@@ -77,7 +77,8 @@ select
     end as bbl,
     bin,
     case when 
-        issue_date ~ '^\d{8}$' then issue_date::date else NULL 
+        issue_date ~ '^(19|20)\d{6}$' and 
+        issue_date !~ '0931$' and issue_date !~ '023\d$' then issue_date::date else NULL 
     end as issue_date, 
     violation_type_code,
     violation_number,
