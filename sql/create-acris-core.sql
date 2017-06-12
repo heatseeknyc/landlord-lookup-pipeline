@@ -46,10 +46,10 @@ select
   postal, date_valid_thru 
 from flat.acris_party;
 
--- This MV is costly time-wise (90 sec or so) but tiny space-wise (currently 749 rows)
+-- This table is costly time-wise (90 sec or so) but tiny space-wise (currently 749 rows)
 -- and should make the de-duping select in the next view go much faster.
-drop materialized view if exists core.acris_master_docid_count cascade; 
-create materialized view core.acris_master_docid_count as 
+drop table if exists core.acris_master_docid_count cascade; 
+create table core.acris_master_docid_count as 
 select docid,count(*) as total from core.acris_master group by docid having count(*) > 1;
 create index on core.acris_master_docid_count(docid);
 
