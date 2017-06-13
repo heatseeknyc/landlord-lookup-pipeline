@@ -27,7 +27,7 @@ of the loading steps will break due to novel brokenness in the raw files, for wh
 only real "fix" is to patch the loading scripts (and if it all possible, submit a pull
 request).  But assumign they load we can continue thusly:
     
-   etl init flat
+   etl init core 
 
 
 
