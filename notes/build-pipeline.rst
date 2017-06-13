@@ -31,10 +31,11 @@ request).  But assumign they load we can continue thusly:
    etl push pluto        --  47 sec
    etl push dob          -- 118 sec
    etl push hpd          -- 306 sec
-   etl push acris        --     sec
-   etl push stable       --     sec
-   etl push misc         --     sec
+   etl push acris        --  30 min 
+   etl push stable       --   3 sec
+   etl push misc         --   1 sec
 
+Size-wise, the two stapes take up about 27.3G.
 
 
 TODO:
