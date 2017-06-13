@@ -38,6 +38,7 @@ request).  But assumign they load we can continue thusly:
 Size-wise, the two stapes take up about 27.3G.
 
    etl init hard         --  70 sec + 1.2G
+   etl inid deco          -   0 sec
 
 
 TODO:
