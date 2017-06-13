@@ -9,14 +9,25 @@ From Scratch
    psql -U postgres -f sql/create-database.sql 
    psql -U postgres -f sql/grant-privileges-writeuser.sql 
    bin/dopg.py -f sql/create-schema.sql
+   bin/dopg.py -f sql/create-functions.sql
 
    etl init flat
-   etl load pluto        -- 44 sec
-   etl load dob 
-   etl load hpd 
-   etl load acris 
-   etl load stable
-   etl load misc
+   etl fix dob.permit
+   etl fix dob.violation
+   etl fix dob.contact
+   etl load pluto        --  44 sec
+   etl load dob          --  45 sec
+   etl load hpd          --  68 sec
+   etl load acris        -- 356 sec
+   etl load stable       --  12 sec
+   etl load misc         -- 0.5 sec
+
+Note that it's not only quite possible, but over time, *very likely* that one or more
+of the loading steps will break due to novel brokenness in the raw files, for which the
+only real "fix" is to patch the loading scripts (and if it all possible, submit a pull
+request).  But assumign they load we can continue thusly:
+    
+   etl init flat
 
 
 
