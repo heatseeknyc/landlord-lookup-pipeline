@@ -20,10 +20,8 @@ Fix: regex check on the date field before casting.
 
 (2) About 749 rows with duplicate instances of "DocID"
 
-Or was it 749 duplicate DocID's across N rows?  
-Are they (always) corrections, or sometimes something different?
-
-Either way, we don't know how to interpret these duplcated DocIDs at present --  
-so are fix is simply to drop them, via a special de-duping step in the ``push`` schema.
+Which may be corrections, or someting else.  Either way, we don't know how to interpret these 
+rows at present, and given their small number, don't have the appetite to figure it out  -- so our
+fix is simply to drop them, via a special de-duping step in the ``push`` schema.
 
 
