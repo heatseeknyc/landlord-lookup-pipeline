@@ -1,6 +1,7 @@
 
 begin;
 
+drop view if exists core.pluto_taxlot cascade; 
 create view core.pluto_taxlot as 
 select
     BBL                   as bbl, 
@@ -41,6 +42,7 @@ from flat.pluto_taxlot;
 -- (exactly 3 fail these criteria in 16v2).  This will still leave us 
 -- with a significant number (6000+) of rows with "noisy" BBLs or BINs
 -- (or both), but that's OK for now.
+drop view if exists core.pluto_building cascade; 
 create view core.pluto_building as 
 select * from flat.pluto_building
 where 
@@ -53,6 +55,7 @@ where
 -- the (bbl,bin) as a primary key.  Of course this dismbiguation is arbitary,
 -- in that we just pick the BIN which matches the first DoITT ID, but 
 -- that's OK for now.
+drop view if exists core.pluto_building_canonical cascade; 
 create view core.pluto_building_canonical as
 select bbl, bin, min(doitt_id) as doitt_id
 from core.pluto_building
@@ -61,12 +64,14 @@ group by bbl,bin;
 -- Gives us the "physical" building count per BBL, ie the number
 -- of building shapefiles for each lot - as the NumBldgs column is 
 -- known to be sometimes noisy.
+drop view if exists core.pluto_building_count cascade; 
 create view core.pluto_building_count as 
 select bbl,count(*) as bldg_count from core.pluto_building group by bbl;
 
 -- An extension of our MapPluto set to include the above column.
 -- If there's no BBL in the building set (which happens frequently,
 -- for vacant lots) then we assign a building count of zero.
+drop view if exists core.pluto_taxlot_remix cascade; 
 create view core.pluto_taxlot_remix as
 select a.*,coalesce(b.bldg_count,0) as bldg_count
 from core.pluto_taxlot as a 
