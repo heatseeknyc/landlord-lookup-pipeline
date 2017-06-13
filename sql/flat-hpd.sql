@@ -9,12 +9,12 @@ create table flat.hpd_building (
     LowHouseNumber text,
     HighHouseNumber text,
     StreetName text,
-    Zip integer,
+    Zip text, -- sometimes blank spaces
     Block integer not null,
     Lot smallint not null,
     BIN integer,
     CommunityBoard smallint,
-    CensusTract integer,
+    CensusTract text, -- sometimes has embedded period, eg "195.00" 
     ManagementProgram text,
     DoBBuildingClassID smallint,
     DoBBuildingClass text,
