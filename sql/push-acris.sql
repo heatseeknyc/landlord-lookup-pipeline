@@ -4,7 +4,6 @@
 
 begin;
 
-
 --
 -- First, a 3-stage de-duping step for the 'master' table.
 -- Ths involves creating a hard table which we'll later drop.
@@ -30,7 +29,6 @@ drop view if exists push.acris_master_tidy cascade;
 create view push.acris_master_tidy as  
 select docid,doctag,doctype,amount,percentage,date_filed,date_modified 
 from push.acris_master_clean;
-
 
 --
 -- Now we can select into our tables of direct interest. 
@@ -63,7 +61,9 @@ select * from core.acris_party;
 create index on push.acris_party(docid);
 create index on push.acris_party(docid,party_type);
 
--- Cleanup
+--
+-- Finally, purge the counting table we no longer need. 
+--
 drop table if exists push.acris_master_docid_count cascade; 
 
 commit;
