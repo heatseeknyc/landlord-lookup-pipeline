@@ -1,4 +1,12 @@
 
+
+
+
+Older Stuff
+-----------
+
+Everything below here is outdate, and will be taken care of shortly.
+
 (1) Staging
 
 As a pre-requisite, make sure the steps in the Data Staging writeup 
