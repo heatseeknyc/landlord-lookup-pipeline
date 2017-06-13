@@ -49,6 +49,9 @@ select
   postal, date_valid_thru 
 from flat.acris_party;
 
+commit;
+
+/*
 -- This table is costly time-wise (90 sec or so) but tiny space-wise (currently 749 rows)
 -- and should make the de-duping select in the next view go much faster.
 drop table if exists core.acris_master_docid_count cascade; 
@@ -67,6 +70,5 @@ where b.docid is null;
 drop view if exists core.acris_master_docid_tidy cascade; 
 create view core.acris_master_tidy as 
 select docid,doctag,doctype,amount,percentage,date_filed,date_modified from core.acris_master_clean;
-
-commit;
+*/
 
