@@ -25,11 +25,13 @@ def getcfg_source(prefix,name):
     else:
         raise ValueError("invalid source name '%s' for prefix '%s'" % (name,prefix))
 
-def getval(prefix,name,attr):
+def getval(prefix,name,attr,strict=False):
     """Shorthand to fetch an attribute value by source name.  The attribute need not
     be present, but the named source must be."""
     d = getcfg_source(prefix,name)
     log.debug("config[%s] = %s" % (name,d))
+    if strict and attr not in d:
+        raise ValueError("invalid configuration - no '%s' attribute" % attr)
     return d.get(attr)
 
 
