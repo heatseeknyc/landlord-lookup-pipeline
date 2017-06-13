@@ -22,7 +22,7 @@ create table flat.acris_master (
     crfn char(13),
     boro smallint not null,
     doctype text not null,
-    date_document date, 
+    date_document text, -- sometimes has corrupted year values, e.g. '05/29/0200'
     amount numeric not null,
     date_filed date not null, 
     date_modified date not null, 

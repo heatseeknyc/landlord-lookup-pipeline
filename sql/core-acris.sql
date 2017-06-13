@@ -27,7 +27,10 @@ drop view if exists core.acris_master cascade;
 create view core.acris_master as 
 select 
   a.docid, a.crfn, a.boro, b.doctag, a.doctype, a.amount, a.percentage, a.reel_year, a.reel_number, a.reel_page,  
-  a.date_document, a.date_filed, a.date_modified, a.date_valid_thru
+  case when 
+      public.is_valid_yyyymmdd(a.date_document) then a.date_document::date else NULL 
+  end as a.date_document, 
+  a.date_filed, a.date_modified, a.date_valid_thru
 from flat.acris_master            as a 
 left join core.acris_control as b on a.doctype = b.doctype; 
 
