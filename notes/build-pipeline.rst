@@ -1,5 +1,28 @@
 
 
+From Scratch
+------------
+
+   [edit config/postgres.json]
+   [edit /~.pgpass]
+   source bin/init-env.rc
+   psql -U postgres -f sql/create-database.sql 
+   psql -U postgres -f sql/grant-privileges-writeuser.sql 
+   bin/dopg.py -f sql/create-schema.sql
+
+   etl init flat
+   etl load pluto        -- 44 sec
+   etl load dob 
+   etl load hpd 
+   etl load acris 
+   etl load stable
+   etl load misc
+
+
+
+TODO:
+ - make database creation dynamic, based on config/postgres.json
+
 
 
 Older Stuff
