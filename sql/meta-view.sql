@@ -139,7 +139,7 @@ select
   coalesce(f.permit,0)       as dob_permit_count,
   coalesce(f.complaint,0)    as dob_complaint_count,
   coalesce(f.violation,0)    as dob_violation_count,
-  g.status                   as residential
+  g.status                   as residential_likely
 from      push.pluto_taxlot           as a 
 left join push.pluto_building_canonical as b on a.bbl = b.bbl
 left join push.pluto_building         as c on b.bbl = c.bbl and b.doitt_id = c.doitt_id
