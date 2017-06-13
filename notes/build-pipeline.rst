@@ -28,6 +28,12 @@ only real "fix" is to patch the loading scripts (and if it all possible, submit 
 request).  But assumign they load we can continue thusly:
     
    etl init core 
+   etl push pluto        --  47 sec
+   etl push dob          -- 118 sec
+   etl push hpd          -- 306 sec
+   etl push acris        --     sec
+   etl push stable       --     sec
+   etl push misc         --     sec
 
 
 

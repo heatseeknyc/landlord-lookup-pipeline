@@ -14,5 +14,7 @@ to filter these out.
 The file contains many columns with garbled fields over a small set of rows.  
 These issues are described (and fixed) in the SQL code for the ``core`` schema.
 
+``complaint.csv``
 
+Various broken date fields over a small set of rows.
 
