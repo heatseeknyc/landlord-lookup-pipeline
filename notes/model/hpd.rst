@@ -1,4 +1,23 @@
-Notes about the *hpd* data model.
+Notes about the HPD raw files + data model.
+
+Raw Files
+---------
+
+Line counts + file sizes (June 2017):
+
+    311,066    40M  hpd/building.csv
+  1,033,312    97M  hpd/complaint.csv
+    649,623    56M  hpd/contact.csv   -- around 47k of which are dups 
+     69,886     7M  hpd/legal.csv
+    164,893    17M  hpd/registration.csv
+  2,185,731   850M  hpd/violation.csv
+  4,414,511  1067M  total
+
+
+
+
+Relationships
+-------------
 
 Let's start from the tables in the 'push' schema, which are still aligned 
 very closely with the flat files they were loaded from (upto BBL/BIN normalization): 
@@ -6,11 +25,11 @@ very closely with the flat files they were loaded from (upto BBL/BIN normalizati
     table_name         count    keys (primary; secondary) 
    ------------------
     hpd_building       298251   hpd_building_id; BBL, BIN                   | entity information for buildings
-    hpd_registration   161747   registration_id; BBL, BIN, hpd_building_id  | registration group <=> building -or- taxlot
+    hpd_registration   161747   registration_id; BBL, BIN, HPDid  | registration group <=> building -or- taxlot
     hpd_contact        648875   registration_id, contact_id                 | contacts per registration group
-    hpd_complaint;    1014313   complaint_id; BBL, hpd_building_id
-    hpd_violation;    2104236   violation_id; BBL, hpd_building_id, registrtion_id, nov_id
-    hpd_legal;          69474   litigation_id; BBL, hpd_building_id
+    hpd_complaint;    1014313   complaint_id; BBL, HPDid
+    hpd_violation;    2104236   violation_id; BBL, HPDid, registrtion_id, nov_id
+    hpd_legal;          69474   litigation_id; BBL, HPDid
 
 And this derived analytical view, which we'll explain later:
 
@@ -58,6 +77,32 @@ A couple of notes as to what we have here:
   - ``id`` is the *registration id* 
   - ``bbl`` and ``bin`` in the usual sense
   - ``building_id`` is the HPD building ID
+
+
+hpd_contact
+-----------
+
+   select count(*) from push.hpd_contact; 648875
+   select count(distinct id) from push.hpd_contact; 602645
+   select count(*),sum(total) from (
+       select id,count(*) as total from push.hpd_contact group by id having count(*) > 1
+   ) as x; (293,46523)
+
+    select id,count(*) as total from push.hpd_contact group by id having count(*) > 1 order by count(*) desc limit 40;
+        id    | total 
+    ----------+-------
+     91174103 |  1448
+     91174113 |  1448
+     91174104 |  1448
+     91174106 |  1448
+     91174105 |  1448
+     91254705 |   894
+     91254713 |   894
+     91254703 |   894
+     91254706 |   894
+     91254704 |   894
+     91323603 |   698
+     91323606 |   698
 
 
 
