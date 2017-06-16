@@ -52,6 +52,15 @@ begin
 end
 $$ language plpgsql;
 
+create or replace function public.is_coop_bldg_class (bldg_class char(2)) 
+returns boolean AS $$
+begin
+    if bldg_class in ('A8','C6','C8','D0','D4','H7') then return true;
+    else return false; 
+    end if;
+end
+$$ language plpgsql;
+
 -- 
 -- Maps the composite key (boro_id,block,lot) to a properly typed (bigint) primary key.
 --
