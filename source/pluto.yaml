@@ -10,3 +10,11 @@
  name:  taxlot 
  label: Pluto-Taxlots
 
+-
+ name:  refdata-bldgclass
+ label: Pluto-Referene-BldgClass
+
+-
+ name:  refdata-landuse
+ label: Pluto-Reference-LandUse
+
