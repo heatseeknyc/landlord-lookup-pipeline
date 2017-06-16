@@ -52,6 +52,17 @@ begin
 end
 $$ language plpgsql;
 
+create or replace function public.is_condo_secondary (bbl bigint) 
+returns boolean AS $$
+declare
+    lot smallint := 0;
+begin
+    if bbl is NULL then return false; end if;
+    lot := cast(bbl % 10000 as smallint);
+    return lot between 1001 and 6999;
+end
+$$ language plpgsql;
+
 create or replace function public.is_coop_bldg_class (bldg_class char(2)) 
 returns boolean AS $$
 begin
