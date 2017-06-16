@@ -41,6 +41,17 @@ begin
 end
 $$ language plpgsql;
 
+create or replace function public.is_condo_bbl (bbl bigint) 
+returns boolean AS $$
+declare
+    lot smallint := 0;
+begin
+    if bbl is NULL then return false; end if;
+    lot := cast(bbl % 10000 as smallint);
+    return lot between 7501 and 7599;
+end
+$$ language plpgsql;
+
 -- 
 -- Maps the composite key (boro_id,block,lot) to a properly typed (bigint) primary key.
 --
