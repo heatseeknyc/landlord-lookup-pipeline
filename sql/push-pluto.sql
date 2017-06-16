@@ -31,5 +31,14 @@ select bbl,public.bbl2qblock(bbl) as qblock from flat.pluto_taxlot where public.
 create index on push.pluto_condo(bbl);
 create index on push.pluto_condo(qblock);
 
+/*
+create view push.pluto_condo_qblock as
+select qblock,count(*) as total from push.pluto_condo group by qblock;
+*/
+
+create table push.pluto_condo_qblock as
+select qblock,count(*) as total from push.pluto_condo group by qblock;
+create index on push.pluto_condo_qblock(qblock);
+
 commit;
 
