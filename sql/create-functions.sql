@@ -83,21 +83,21 @@ end
 $$ language plpgsql;
 
 create or replace function public.bbl2boro (bbl bigint) 
-returns bigint AS $$
+returns smallint AS $$
 begin
     return cast(bbl/1000000000 as smallint);
 end
 $$ language plpgsql;
 
 create or replace function public.bbl2block (bbl bigint) 
-returns bigint AS $$
+returns integer AS $$
 begin
     return cast((bbl % 1000000000)/10000 as integer);
 end
 $$ language plpgsql;
 
 create or replace function public.bbl2lot (bbl bigint) 
-returns bigint AS $$
+returns smallint AS $$
 begin
     return cast(bbl % 10000 as smallint);
 end
