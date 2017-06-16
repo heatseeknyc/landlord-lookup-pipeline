@@ -103,6 +103,15 @@ begin
 end
 $$ language plpgsql;
 
+-- A local convention (to our data model) that provides what we call the "fully qualified block", a 
+-- 6-digit number which includes the borough id.  Useful for uniquely identifying blocks in a single column. 
+create or replace function public.bbl2qblock (bbl bigint) 
+returns integer AS $$
+begin
+    return cast(bbl/10000 as integer);
+end
+$$ language plpgsql;
+
 
 -- 
 -- Given a BBL, return the 2-letter Borough Code used in many GIS systems 
