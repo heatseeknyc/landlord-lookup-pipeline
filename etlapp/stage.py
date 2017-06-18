@@ -16,6 +16,9 @@ def mkpath(stage,branch,prefix,name,autoviv=False):
     dirpath = mkdir_branch(stage,branch,prefix,autoviv)
     return "%s/%s.csv" % (dirpath,name)
 
+def export(prefix,name,stage=STAGE,autoviv=False):
+    return mkpath(stage,'export',prefix,name,autoviv)
+
 def incoming(prefix,name,stage=STAGE,autoviv=False):
     return mkpath(stage,'incoming',prefix,name,autoviv)
 
