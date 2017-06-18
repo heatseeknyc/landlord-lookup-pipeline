@@ -1,3 +1,4 @@
+import os
 from etlapp.util.source import loadcfg_source
 from etlapp.logging import log
 
@@ -9,6 +10,8 @@ def configpath(prefix):
 
 def loadcfg(prefix):
     path = configpath(prefix)
+    if not os.path.exists(path):
+        raise ValueError("unrecognized source '%s'" % prefix)
     CONFIG[prefix] = loadcfg_source(path)
     return CONFIG[prefix]
 
