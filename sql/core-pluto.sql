@@ -50,6 +50,14 @@ where
   bbl >= 1000000000 and bbl < 6000000000 and
   bbl >= 1000000 and bin < 6000000;
 
+create view core.pluto_building_tidy as
+select 
+    bbl, bin, doitt_id, 
+    lat_ctr::float(1), lon_ctr::float(1), radius::float(1), 
+    parts, substr(points,0,40) as points 
+from core.pluto_building;
+
+
 -- Disambiguates those rare case (numbering about 348 rows) of (bbl,bin)
 -- pairs matching more than one building record -- thus allowing us to use
 -- the (bbl,bin) as a primary key.  Of course this dismbiguation is arbitary,
