@@ -64,8 +64,8 @@ group by bbl,bin;
 -- Gives us the "physical" building count per BBL, ie the number
 -- of building shapefiles for each lot - as the NumBldgs column is 
 -- known to be sometimes noisy.
-drop view if exists core.pluto_building_count cascade; 
-create view core.pluto_building_count as 
+drop materialized view if exists core.pluto_building_count cascade; 
+create materialized view core.pluto_building_count as 
 select bbl,count(*) as bldg_count from core.pluto_building group by bbl;
 
 -- An extension of our MapPluto set to include the above column.
