@@ -17,5 +17,8 @@ create schema norm;
 create view norm.acris_control as select * from flat.acris_control;
 create view norm.acris_condo_maybe as select * from p1.acris_condo_maybe;
 
+create view norm.pluto_condo_primary as
+select * from push.pluto_taxlot_tidy is_condo_primary(bbl) order by bbl;
+
 commit;
 
