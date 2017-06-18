@@ -32,9 +32,52 @@ def matchup():
     log.info("done")
     return True
 
+"""
+A quick hack to impose integer types on selected columns.
+We'd prefer something more robust and flexible, but for now this is much preferable
+to loading some large framework (e.g. pandas) to do this for us.
+"""
+def castint(r,keys):
+    """
+    Casts dict values (corresponding to the given sequence) to int, in-place.
+    We also return the dict struct as a convenience for generator-type expressions.
+    """
+    for k in keys:
+        if k in r:
+            v = r[k]
+            if v is not None:
+                r[k] = int(v)
+    return r
+
+
+_intcols = (
+    'bbl',
+    'units_total','units_res','bldg_count','num_bldgs','year_built', # pluto columns
+    'history_count','lot_max','condo_depth','docid_count'            # acris columns
+ )
+def loadstreams(_pluto,_acris):
+    """
+    A simple idiom to load the two respective streams of interest.
+    Note that it assumed that sufficient checking of pre-conditions has been done by this,
+    hence there's basically no error handling at this stage.
+    """
+    def cast(r):
+        return castint(r,_intcols)
+    count = {}
+    pluto = list(cast(r) for r in _pluto)
+    log.debug("slurp pluto ..")
+    count['pluto'] = len(pluto)
+    log.debug("slurp acris..")
+    acris = list(cast(r) for r in _acris)
+    count['acris'] = len(acris)
+    return pluto,acris,count
 
 @timedsingle
-def match_streams(pluto,acris):
+def match_streams(_pluto,_acris):
+    pluto,acris,count = loadstreams(_pluto,_acris)
+    log.info("count = %s" % count)
+    print(pluto[0])
+    print(acris[0])
     return True
 
 
