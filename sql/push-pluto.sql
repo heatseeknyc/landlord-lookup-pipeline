@@ -3,9 +3,11 @@ begin;
 create table push.pluto_taxlot as
 select * from core.pluto_taxlot_remix;
 create index on push.pluto_taxlot(bbl);
+
 create view push.pluto_taxlot_tidy as
 select bbl, address, owner_name, bldg_class, land_use, year_built, units_total, units_res, num_bldgs, bldg_count
 from push.pluto_taxlot;
+
 
 create table push.pluto_building as
 select * from core.pluto_building;
