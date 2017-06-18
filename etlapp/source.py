@@ -19,19 +19,21 @@ def getcfg(prefix):
     config = CONFIG.get(prefix)
     return config if config else loadcfg(prefix)
 
-def getcfg_source(prefix,name):
+def getcfg_source(prefix,name,strict=True):
     """Shorthand to get the config dict for a named source.  If not present,
     a ValueError is raised."""
     config = getcfg(prefix)
     if name in config:
         return config[name]
-    else:
+    if strict:
         raise ValueError("invalid source name '%s' for prefix '%s'" % (name,prefix))
+    else:
+        return None
 
-def getval(prefix,name,attr,strict=False):
+def getval(prefix,name,attr,strict=True):
     """Shorthand to fetch an attribute value by source name.  The attribute need not
     be present, but the named source must be."""
-    d = getcfg_source(prefix,name)
+    d = getcfg_source(prefix,name,strict)
     log.debug("config[%s] = %s" % (name,d))
     if strict and attr not in d:
         raise ValueError("invalid configuration - no '%s' attribute" % attr)
@@ -56,4 +58,17 @@ def select(prefix,query):
     (according to the match function in this module)."""
     config = getcfg(prefix)
     return list(k for k,v in config.items() if matches(v,query))
+
+
+def exists(prefix,name=None):
+    """Determines whether the named source (single or grouped) has a valid source configuration.""" 
+    if prefix is None:
+        raise ValueError("invalid usage -- need at least a prefix")
+    config = getcfg(prefix)
+    if config is None:
+        return False
+    if name is None:
+        return True
+    return name in config
+
 
