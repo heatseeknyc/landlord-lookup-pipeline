@@ -1,6 +1,6 @@
 from . import load
 from . import pull
-from . import dump 
+from . import dump
 
 def resolve(command):
     if command == 'load':
