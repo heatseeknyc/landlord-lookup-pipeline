@@ -3,6 +3,9 @@ begin;
 create table push.pluto_taxlot as
 select * from core.pluto_taxlot_remix;
 create index on push.pluto_taxlot(bbl);
+create view push.pluto_taxlot_tidy as
+select bbl, address, owner_name, bldg_class, land_use, year_built, units_total, units_res, num_bldgs, bldg_count
+from push.pluto_taxlot;
 
 create table push.pluto_building as
 select * from core.pluto_building;
@@ -27,7 +30,7 @@ create index on push.pluto_refdata_landuse(tag);
 -- A pre-baked table of primary condo lots, with qualified block numbes slotted in.
 -- Yields 7440 rows in 16v2.
 create table push.pluto_condo as
-select bbl,public.bbl2qblock(bbl) as qblock from flat.pluto_taxlot where public.is_condo_primary(bbl);
+select bbl, public.bbl2qblock(bbl) as qblock from flat.pluto_taxlot where public.is_condo_primary(bbl);
 create index on push.pluto_condo(bbl);
 create index on push.pluto_condo(qblock);
 
@@ -43,6 +46,50 @@ select qblock,count(*) as total from push.pluto_condo group by qblock;
 create table push.pluto_condo_qblock as
 select qblock,count(*) as total from push.pluto_condo group by qblock;
 create index on push.pluto_condo_qblock(qblock);
+
+
+create view push.pluto_qblock_count as
+select 
+   public.bbl2qblock(bbl) as qblock, 
+   count(*) as total
+from push.pluto_taxlot 
+group by public.bbl2qblock(bbl);
+
+-- Ranges for "regular" no-condo lots, i.e below the 7501 range 
+create view push.pluto_qblock_range as
+select 
+   public.bbl2qblock(bbl) as qblock, 
+   min(public.bbl2lot(bbl)) as lot_min,
+   max(public.bbl2lot(bbl)) as lot_max
+from push.pluto_taxlot 
+where public.bbl2lot(bbl) < 7500
+group by public.bbl2qblock(bbl);
+
+-- Condos per qblock
+create view push.pluto_qblock_condo as
+select qblock,count(*) as total from push.pluto_condo group by qblock;
+
+-- So-caled overflow lots with numbers above the condo range.
+create view push.pluto_qblock_overflow as
+select 
+   public.bbl2qblock(bbl) as qblock, 
+   count(*) as total
+from push.pluto_taxlot 
+where public.bbl2lot(bbl) > 7599
+group by public.bbl2qblock(bbl);
+
+create table push.pluto_qblock_summary as
+select 
+   a.qblock, 
+   b.lot_min, b.lot_max,
+   coalesce(c.total,0) as condo, 
+   coalesce(d.total,0) as overflow,
+   a.total as total
+from      push.pluto_qblock_count    as a
+left join push.pluto_qblock_range    as b on a.qblock = b.qblock 
+left join push.pluto_qblock_condo    as c on a.qblock = c.qblock 
+left join push.pluto_qblock_overflow as d on a.qblock = d.qblock;
+create index on push.pluto_qblock_summary(qblock);
 
 commit;
 
