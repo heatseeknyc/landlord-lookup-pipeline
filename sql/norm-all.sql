@@ -1,6 +1,12 @@
 --
 -- The "norm" schema contains what are (usually) final-form, normalized 
--- relations for consumption by the REST API and/or CSV export. 
+-- relations for consumption by the REST gateway and/or CSV export. 
+--
+-- In particular, while the REST gateway sometimes pulls from other schema, 
+-- currently the (automated) CSV dumping -must- look in this schema for an 
+-- object to pull.  This is slightly cumbersome, but useful as a constraint
+-- in that it forces us to present a well-defined inteface (and naming scheme)
+-- for what can be dumped and what not. 
 --
 
 begin;
