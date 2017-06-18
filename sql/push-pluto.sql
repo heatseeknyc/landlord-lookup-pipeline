@@ -29,6 +29,10 @@ create table push.pluto_refdata_landuse as
 select * from flat.pluto_refdata_landuse;
 create index on push.pluto_refdata_landuse(tag);
 
+--
+-- Analytical views
+--
+
 -- A pre-baked table of primary condo lots, with qualified block numbes slotted in.
 -- Yields 7440 rows in 16v2.
 create table push.pluto_condo as
@@ -39,11 +43,6 @@ create index on push.pluto_condo(qblock);
 create table push.pluto_coop as
 select bbl from push.pluto_taxlot where public.is_coop_bldg_class(bldg_class);
 create index on push.pluto_coop(bbl);
-
-/*
-create view push.pluto_condo_qblock as
-select qblock,count(*) as total from push.pluto_condo group by qblock;
-*/
 
 create table push.pluto_condo_qblock as
 select qblock,count(*) as total from push.pluto_condo group by qblock;
