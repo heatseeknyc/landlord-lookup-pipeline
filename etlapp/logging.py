@@ -1,3 +1,7 @@
+"""
+A bit of compartmentalization for the standard 'logging' module,
+to make things easier to manage in the rest of the code base.
+"""
 import os
 import sys
 import logging
