@@ -3,7 +3,6 @@ from etlapp.logging import log
 from etlapp.decorators import timedsingle
 from etlapp.util.pull import make_pull_command
 from etlapp.util.source import splitpath
-from etlapp.shell import dopsql
 import etlapp.source
 import etlapp.stage
 import etlapp
