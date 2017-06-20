@@ -2,8 +2,24 @@
 # NYC DOB
 #
 - 
+  name:  permit
+  label: DOB-Permit-Issuance
+  slug:  'ipu4-2q9a'
 
- label: DOB-Permit-Issuance
- name:  permit
- slug:  'ipu4-2q9a'
+-
+  name:  violation
+  label: DOB-Violations
+  slug: '3h2n-5cm9'
+
+-
+  name:  complaint
+  label: DOB-Complaints-Received
+  slug:  'eabe-havv'
+
+
+-
+  name:  ecb-violations
+  label: DOB-ECB-Violations
+  slug:  '6bgk-3dad'
+  active: false
 
