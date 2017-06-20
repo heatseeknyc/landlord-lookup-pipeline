@@ -1,3 +1,8 @@
+-- 
+-- "Folklore" first/last functions, taken from:
+--
+--     https://wiki.postgresql.org/wiki/First/last_(aggregate)
+--
 -- Create a function that always returns the first non-NULL item
 CREATE OR REPLACE FUNCTION public.first_agg ( anyelement, anyelement )
 RETURNS anyelement LANGUAGE SQL IMMUTABLE STRICT AS $$
