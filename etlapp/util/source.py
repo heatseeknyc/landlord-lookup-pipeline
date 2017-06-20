@@ -37,7 +37,6 @@ def recs2dict(recs):
         d[name] = deepcopy(r)
     return d
 
-
 def loadcfg_source(path):
     recs = load_config_recs(path)
     return recs2dict(recs)
