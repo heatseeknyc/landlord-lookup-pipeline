@@ -7,6 +7,7 @@ drop schema if exists push cascade; create schema push;
 drop schema if exists meta cascade; create schema meta; 
 drop schema if exists hard cascade; create schema hard; 
 drop schema if exists deco cascade; create schema deco; 
+drop schema if exists norm cascade; create schema norm;
 
 commit;
 
