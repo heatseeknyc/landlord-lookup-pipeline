@@ -62,11 +62,22 @@ def bbl2lot(bbl):
     assert_valid_bbl(bbl)
     return bbl % 10000
 
-def split_bbl(bbl):
+def split_bbl(bbl,q=False):
+    """Splits a BBL into a tuple of (boro,block,lot), where each of the components are ints.
+    Of the :q flag evaluates to True, then it splits into a tuple of (qblock,lot)."""
+    return _split_bbl_qualified(bbl) if q else _split_bbl(bbl)
+
+def _split_bbl(bbl):
     assert_valid_bbl(bbl)
     boro,blocklot = divmod(bbl,1000000000)
     block,lot = divmod(blocklot,10000)
     return boro,block,lot
+
+def _split_bbl_qualified(bbl):
+    """Like split_bbl, but returns a tuple of (qblock,lot)"""
+    assert_valid_bbl(bbl)
+    qblock,lot = divmod(bbl,10000)
+    return qblock,lot
 
 def bbl2qblock(bbl):
     """
