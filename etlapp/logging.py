@@ -14,7 +14,8 @@ LEVEL = {
   'debug':logging.DEBUG
 }
 def setlevel(logger,tag):
-    """Sets the logging level on the given logging.Logger instance according to the named
+    """
+    Sets the logging level on the given logging.Logger instance according to the named
     loggging level tag.  Supplied as a convenience method so we can manipulate logging levels
     without importing the 'logging' namespace into our calling application.  So instead of
 
