@@ -4,10 +4,9 @@ STAGE = 'stage'
 
 def mkdir_branch(stage,branch,prefix,autoviv=False):
     dirpath = "%s/%s/%s" % (stage,branch,prefix)
-    # print("dirpath = %s / = %s" % (dirpath,autoviv))
     if not os.path.exists(dirpath):
         if autoviv:
-            stat = os.mkdir(dirpath)
+            os.mkdir(dirpath)
         else:
             raise ValueError("invalid state -- can't find dirpath '%s'" % dirpath)
     return dirpath
