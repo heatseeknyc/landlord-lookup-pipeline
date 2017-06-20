@@ -52,9 +52,9 @@ end
 $$ language plpgsql;
 
 
--- A lot is said to he "marginal" if it's -not- "degenerate", -and- either 
--- its block or lot numbers are all zeros or all nines.  (SO the 'marginal' 
--- and 'degenerate' categories should be mutually exlusive
+-- A lot is said to he "marginal" if its valid, but -not- "degenerate", and 
+-- either its block or lot numbers are all zeros or all nines.  Note in particular
+-- that the 'marginal' and 'degenerate' categories are mutually exclusive.
 create or replace function public.is_marginal (bbl bigint) 
 returns boolean AS $$
 declare
@@ -78,7 +78,7 @@ $$ language plpgsql;
 create or replace function public.is_kosher_bbl (bbl bigint) 
 returns boolean AS $$
 begin
-    return is_valid_bbl(bbl) and not (is_degnerate(bbl) or is_marginal(bbl));
+    return is_valid_bbl(bbl) and not (is_degenerate(bbl) or is_marginal(bbl));
 end
 $$ language plpgsql;
 
