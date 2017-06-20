@@ -6,14 +6,16 @@ from etlapp.logging import log
 from etlapp.util.argparse import splitargv
 from etlapp.decorators import timedsingle
 
-etlapp.pgconf = io.slurp_json("config/postgres.json")
 
+etlapp.pgconf = io.slurp_json("config/postgres.json")
+TRACE = False # for noisy exception tracing
 
 USAGE = """etl command [arguments] [<keyword-arguments>]"""
 def parse_options(kwargv):
     parser = argparse.ArgumentParser()
     parser.add_argument("--stage", type=str, required=False, help="staging root", default='stage')
-    parser.add_argument("--debug", required=False, action="store_true") 
+    parser.add_argument("--debug", required=False, action="store_true", help="more debugging")
+    parser.add_argument("--trace", required=False, action="store_true", help="show noisy exception traces")
     return parser.parse_args(kwargv)
 
 def parse_args():
@@ -32,7 +34,8 @@ def dispatch(command,posargs,options=None):
         try:
             return handler(posargs,options)
         except (ValueError, RuntimeError) as e:
-            # log.exception(e)
+            if TRACE:
+                log.exception(e)
             log.error(str(e))
             return False
     else:
@@ -40,9 +43,13 @@ def dispatch(command,posargs,options=None):
         return False
 
 def main():
+    global TRACE
     command,posargs,options = parse_args()
+    print("options = ",options)
     if options.debug:
         etlapp.logging.setlevel(log,'debug')
+    if options.trace:
+        TRACE = True
     status,delta = dispatch(command,posargs,options)
     _status = 'OK' if status else 'FAILED'
     log.info("status = %s in %.3f sec" % (_status,delta))
