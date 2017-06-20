@@ -57,6 +57,13 @@ select
     parts, substr(points,0,40) as points 
 from core.pluto_building;
 
+create materialized view core.pluto_building_orphan as
+select a.*
+from      core.pluto_building_tidy as a
+left join push.pluto_taxlot        as b on a.bbl = b.bbl where b.bbl is null;
+
+create view core.pluto_building_orphan_count as
+select bbl, count(*) from core.pluto_building_orphan group by bbl;
 
 -- Disambiguates those rare case (numbering about 348 rows) of (bbl,bin)
 -- pairs matching more than one building record -- thus allowing us to use
