@@ -21,13 +21,14 @@ begin
 end
 $$ language plpgsql;
 
+-- We call a BBL "valid" if it is at least structurally valid, 
+-- that is, integer and not obviously out of range.
 create or replace function public.is_valid_bbl (bbl bigint) 
 returns boolean AS $$
 begin
     return 
       bbl is not null and
-      bbl > 1000000000 and bbl < 6000000000 and 
-      bbl not in (2000000000,3000000000,4000000000,5000000000);
+      bbl >= 1000000000 and bbl < 6000000000;
 end
 $$ language plpgsql;
 
@@ -68,6 +69,20 @@ begin
     return block in (0,99999) or lot in (0,9999);
 end
 $$ language plpgsql;
+
+create or replace function public.is_overflow (bbl bigint) 
+returns boolean AS $$
+declare
+    block integer := 0;
+    lot smallint := 0;
+begin
+    if bbl is null then 
+        return false; end if; 
+    lot := (bbl % 10000)::smallint;
+    return lot between 7600 and 9998;
+end
+$$ language plpgsql;
+
 
 create or replace function public.is_condo_primary (bbl bigint) 
 returns boolean AS $$
