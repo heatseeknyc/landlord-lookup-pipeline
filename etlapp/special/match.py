@@ -1,5 +1,6 @@
 import os
 import copy
+from tabulate import tabulate
 from collections import OrderedDict
 from etlapp.logging import log
 from etlapp.decorators import timedsingle
@@ -48,10 +49,18 @@ def castint(r,keys):
     for k in keys:
         if k in r:
             v = r[k]
-            if v is not None:
+            if v != '':
                 r[k] = int(v)
     return r
 
+def count_pair(pluto,acris):
+    """We do this task often enough - generate a dict of len counts
+    on a pair of sequence-providing objects for pluto and acris
+    that we wrote a re-usable function for it."""
+    count = {}
+    count['pluto'] = len(pluto)
+    count['acris'] = len(acris)
+    return count
 
 _intcols = (
     'bbl',
@@ -66,28 +75,22 @@ def loadstreams(_pluto,_acris):
     """
     def cast(r):
         return castint(r,_intcols)
-    count = {}
-    pluto = list(cast(r) for r in _pluto)
     log.debug("slurp pluto ..")
-    count['pluto'] = len(pluto)
+    pluto = list(cast(r) for r in _pluto)
     log.debug("slurp acris..")
     acris = list(cast(r) for r in _acris)
-    count['acris'] = len(acris)
-    return pluto,acris,count
+    return pluto,acris
 
 def loadtables(_pluto,_acris):
     log.debug("..")
-    pluto,acris,count = loadstreams(_pluto,_acris)
+    pluto,acris = loadstreams(_pluto,_acris)
+    count = count_pair(pluto,acris)
     log.debug("count = %s" % count)
     log.debug("pivot pluto ..")
     pluto = pivotrecs(pluto,inplace=True)
     log.debug("pivot acris..")
     acris = pivotrecs(acris,inplace=True)
-    # In theory, there's no way the dict counts can differ from the stream counts.
-    # But on general principles, we should redoc the counts anyway.
-    count['pluto'] = len(pluto)
-    count['acris'] = len(acris)
-    return pluto,acris,count
+    return pluto,acris
 
 
 def pivotrecs(recs,inplace=False):
@@ -111,10 +114,91 @@ def pivotrecs(recs,inplace=False):
         d[bbl] = rr
     return d
 
+def stagger(d):
+    """Staggers an OrderedDict, presumed to be keyed on BBL entries, into a
+    special bi-level (ordered) dict-of-dict struct based on the tuple (qblock,lot)
+    for each BBL."""
+    dd = OrderedDict()
+    for bbl,r in d.items():
+        qblock,lot = nycgeo.split_bbl(bbl,q=True)
+        # log.debug("bbl=%s  > %s,%s" % (bbl,qblock,lot))
+        if qblock not in dd:
+            dd[qblock] = OrderedDict()
+        dd[qblock][lot] = r
+    return dd
+
+
+def common_blocks(_pluto,_acris):
+    pluto = set(_pluto.keys())
+    acris = set(_acris.keys())
+    both  = sorted(pluto.intersection(acris))
+    p_not_a = sorted(pluto - acris)
+    a_not_p = sorted(acris - pluto)
+    log.debug("pluto - acris = %s" % str(p_not_a))
+    log.debug("acris - pluto = %s" % str(a_not_p))
+    count_pluto_only = sum(len(_pluto[k]) for k in p_not_a)
+    count_acris_only = sum(len(_acris[k]) for k in a_not_p)
+    log.info("pluto - acris = %d blocks, %d rows" % (len(p_not_a),count_pluto_only))
+    log.info("acris - pluto = %d blocks, %d rows" % (len(a_not_p),count_acris_only))
+    count = {}
+    count['pluto'] = sum(len(_pluto[k]) for k in both)
+    count['acris'] = sum(len(_acris[k]) for k in both)
+    log.debug("pluto ^ acris = %d blocks, %d pluto rows, %d acris rows" % (len(both),count['pluto'],count['acris']))
+    return both,count
+
+
+def rowset(qblock,d):
+    if len(d) == 0:
+        return None
+    return [
+        [nycgeo.make_bbl(qblock=qblock,lot=lot)] + list(r.values())
+        for lot,r in d.items()
+    ]
+
+
+def rangeify(keys):
+    init,prev = (None,None)
+    for k in keys:
+        if init is None:
+            init,prev = k,k
+        elif k > prev+1:
+            yield (init,prev)
+            init,prev = k,k
+        else:
+            prev = k
+    if prev is not None:
+        yield (init,prev)
+
+
+def dump_blocks(blocks,pluto,acris):
+    for k in blocks:
+        print("")
+        print("pluto[%d] .." % k)
+        rows = rowset(k,pluto[k])
+        print(tabulate(rows))
+        print("acris[%d] .." % k)
+        rows = rowset(k,acris[k])
+        # print(tabulate(rows))
+        tuples = list(rangeify(acris[k].keys()))
+        print("that be %d tuple(s):" % len(tuples))
+        for a,b in tuples:
+            depth = b-a+1
+            print("%.4d-%.4d: %d" % (a,b,depth))
+        # print(tuples)
+        # print("acris[%d] = %s" % (k,acris[k]))
+
 @timedsingle
 def match_streams(_pluto,_acris):
-    pluto,acris,count = loadtables(_pluto,_acris)
+    pluto,acris = loadtables(_pluto,_acris)
+    count = count_pair(pluto,acris)
     log.info("count = %s" % count)
+    pluto = stagger(pluto)
+    acris = stagger(acris)
+    count = count_pair(pluto,acris)
+    log.info("count = %s" % count)
+    common,count = common_blocks(pluto,acris)
+    log.info("diff = %d blocks, %d pluto rows, %d acris rows" % (len(common),count['pluto'],count['acris']))
+    dump_blocks(common,pluto,acris)
     return True
 
 
