@@ -45,7 +45,6 @@ def dispatch(command,posargs,options=None):
 def main():
     global TRACE
     command,posargs,options = parse_args()
-    print("options = ",options)
     if options.debug:
         etlapp.logging.setlevel(log,'debug')
     if options.trace:
