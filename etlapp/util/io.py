@@ -3,6 +3,7 @@ Some simple abstractions for CSV i/o.
 """
 import csv
 import simplejson as json
+from collections import OrderedDict
 
 def slurp_json(path):
     with open(path,"rtU") as f:
@@ -22,7 +23,7 @@ def read_recs(path,encoding="utf-8",csvargs=None):
             header = values
         else:
             if len(values) == len(header):
-                yield dict(zip(header,values))
+                yield OrderedDict(zip(header,values))
             else:
                 raise ValueError("length mismatch between row and header at line %d" % i)
 
