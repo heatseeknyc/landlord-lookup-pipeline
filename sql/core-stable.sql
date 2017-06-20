@@ -32,6 +32,11 @@ select
 from       flat.stable_dhcr2015_grouped as a
 full outer join core.stable_joined_lastyear as b on a.bbl = b.bbl; 
 
+
+--
+-- Deprecated Stuff
+--
+
 -- A restriction of the most recent taxbills rowset to just those tax lots 
 -- having some kind of stability marking. 
 drop view if exists core.stable_taxbill_2016Q4 cascade; 
