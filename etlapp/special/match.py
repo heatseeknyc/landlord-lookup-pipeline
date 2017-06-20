@@ -4,9 +4,7 @@ from tabulate import tabulate
 from collections import OrderedDict
 from etlapp.logging import log
 from etlapp.decorators import timedsingle
-from etlapp.util.source import splitpath, tablename
 from etlapp.util.io import read_recs
-from etlapp.shell import dopsql
 import etlapp.util.nycgeo as nycgeo
 import etlapp.source
 import etlapp.stage
