@@ -55,6 +55,12 @@ create index on push.acris_legal(bbl);
 create index on push.acris_legal(docid);
 create index on push.acris_legal(docid,bbl);
 
+drop table if exists push.acris_legal_count cascade;
+create table push.acris_legal_count as
+select bbl, count(*) as total, count(distinct proptype) as proptype
+from push.acris_legal group by bbl;
+create index on push.acris_legal_count(bbl);
+
 drop table if exists push.acris_party cascade;
 create table push.acris_party as
 select * from core.acris_party;
