@@ -3,7 +3,7 @@ begin;
 
 create table push.dob_permit as
 select * from core.dob_permit where 
-    public.is_valid_bbl(bbl) and public.is_valid_bin(bin);
+    public.is_kosher_bbl(bbl) and public.is_valid_bin(bin);
 create index on push.dob_permit(bbl);
 create index on push.dob_permit(bin);
 create index on push.dob_permit(bbl,bin);
@@ -13,7 +13,7 @@ select bin,count(*) as total from push.dob_permit group by bin;
 
 create table push.dob_violation as
 select * from core.dob_violation where 
-    public.is_valid_bbl(bbl) and public.is_valid_bin(bin);
+    public.is_kosher_bbl(bbl) and public.is_valid_bin(bin);
 create index on push.dob_violation(bbl);
 create index on push.dob_violation(bin);
 create index on push.dob_violation(bbl,bin);

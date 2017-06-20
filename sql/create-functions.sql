@@ -75,7 +75,7 @@ $$ language plpgsql;
 -- nor marginal.  That is to say, it may be still be mistyped or otherwise not
 -- describe a real taxlot, but at least it's not clearly erroneous (or otherwise
 -- suggestive of as being "marked for deprecation.")
-create or replace function public.is_kosher (bbl bigint) 
+create or replace function public.is_kosher_bbl (bbl bigint) 
 returns boolean AS $$
 begin
     return is_valid_bbl(bbl) and not (is_degnerate(bbl) or is_marginal(bbl));
