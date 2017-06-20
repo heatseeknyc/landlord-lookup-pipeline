@@ -2,9 +2,6 @@ import os
 import sys
 import logging
 
-# appbase = os.path.basename(sys.argv[0])
-# appname,ext = os.path.splitext(appbase)
-
 logdir = 'log'
 if not os.path.exists(logdir):
     os.mkdir(logdir)
@@ -44,9 +41,4 @@ logging.basicConfig(
     level    = logging.INFO
 )
 log = logging.getLogger('app')
-
-# Downgrade logging for the 'requests' package.
-reqlog = logging.getLogger("requests")
-if reqlog:
-    reqlog.setLevel(logging.WARNING)
 
