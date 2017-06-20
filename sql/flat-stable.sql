@@ -15,7 +15,7 @@ create table flat.stable_taxbill (
     UNIQUE (bbl, year, quarter)
 );
 
-create table flat.stable_dhcr2015 ( 
+create table flat.stable_dhcr2015_grouped ( 
     bbl bigint primary key,
     count integer not null,
     dwell char(1),

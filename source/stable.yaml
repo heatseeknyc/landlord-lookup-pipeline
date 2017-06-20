@@ -11,6 +11,6 @@
  label: Taxbills-Joined-NoCrossTab
 
 -
- name:  dhcr2015 
- label: 'DHCR-Stabilization-List-2015' 
+ name:  dhcr2015-grouped
+ label: DHCR-Stabilization-List-2015-Grouped
 

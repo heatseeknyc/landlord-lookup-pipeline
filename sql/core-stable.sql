@@ -29,7 +29,7 @@ select
   a.count as bldg_count, a.has_421a, a.has_j51, a.special,
   a.bbl is not null as in_dhcr,
   b.bbl is not null as in_taxbill
-from       flat.stable_dhcr2015 as a
+from       flat.stable_dhcr2015_grouped as a
 full outer join core.stable_joined_lastyear as b on a.bbl = b.bbl; 
 
 -- A restriction of the most recent taxbills rowset to just those tax lots 
@@ -51,7 +51,7 @@ select
   b.unitcount, a.special,
   a.bbl is not null as in_dhcr,
   b.bbl is not null as in_taxbill
-from flat.stable_dhcr2015 as a
+from flat.stable_dhcr2015_grouped as a
 full outer join core.stable_taxbill_2016Q4 as b on a.bbl = b.bbl; 
 
 commit;
