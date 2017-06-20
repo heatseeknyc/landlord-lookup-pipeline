@@ -51,6 +51,7 @@ begin
 end
 $$ language plpgsql;
 
+
 -- A lot is said to he "marginal" if it's -not- "degenerate", -and- either 
 -- its block or lot numbers are all zeros or all nines.  (SO the 'marginal' 
 -- and 'degenerate' categories should be mutually exlusive
@@ -69,6 +70,18 @@ begin
     return block in (0,99999) or lot in (0,9999);
 end
 $$ language plpgsql;
+
+-- Finally, a BBL is said to be "kosher" if it is valid but neither degenerate
+-- nor marginal.  That is to say, it may be still be mistyped or otherwise not
+-- describe a real taxlot, but at least it's not clearly erroneous (or otherwise
+-- suggestive of as being "marked for deprecation.")
+create or replace function public.is_kosher (bbl bigint) 
+returns boolean AS $$
+begin
+    return is_valid_bbl(bbl) and not (is_degnerate(bbl) or is_marginal(bbl));
+end
+$$ language plpgsql;
+
 
 create or replace function public.is_overflow (bbl bigint) 
 returns boolean AS $$
