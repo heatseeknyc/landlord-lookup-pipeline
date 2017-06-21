@@ -50,6 +50,16 @@ create table flat.stable_joined_nocrosstab (
     UNIQUE (ucbbl, year)
 );
 
+-- An experimenatl list of properties known to be wrongly assigned in regard  
+-- to their stabilization status in either of the two main datasets.
+create table flat.stable_wrongly_assigned (
+    bbl bigint not null CHECK (bbl >= 1000000000 and bbl < 6000000000),
+    status boolean not null,
+    date_of_inquiry date not null,
+    address text not null,
+    remarks text not null
+);
+
 -- Deprecated
 create table flat.stable_joined (
     bbl bigint not null CHECK (bbl >= 1000000000 and bbl < 6000000000),
