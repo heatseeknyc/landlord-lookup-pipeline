@@ -1,5 +1,7 @@
 begin;
 
+-- 45064 rows for the 2007-2015 version of this dataset.
+-- There were no non-kosher rows  
 drop view if exists core.stable_joined cascade;
 create view core.stable_joined as
 select
@@ -8,7 +10,8 @@ select
   unitcount, 
   case when estimate = 'Y' then true else false end as estimate,
   abatements
-from flat.stable_joined_nocrosstab;
+from flat.stable_joined_nocrosstab
+where is_kosher_bbl(ucbbl);
 
 drop view if exists core.stable_joined_maxyear cascade;
 create view core.stable_joined_maxyear as
@@ -21,15 +24,27 @@ select a.bbl, a.year, b.unitcount, b.estimate, b.abatements
 from      core.stable_joined_maxyear as a
 left join core.stable_joined         as b on a.bbl = b.bbl and a.year = b.year;
 
-drop view if exists core.stable_confirmed cascade;
-create view core.stable_confirmed as
+-- Restricts the freshly loaded "flat" file kosher BBLs only, dropping
+-- the 3 rows with broken block numbers + the catch-all "zombie" bbl (9999999999); 
+-- Leaving 39927 rows total.
+drop view if exists core.stable_dhcr2015_grouped;
+create view core.stable_dhcr2015_grouped as
+select * from flat.stable_dhcr2015_grouped
+where is_kosher_bbl(bbl);
+
+-- And finally row which tells us everything we know about a given BBL using both 
+-- sources taken together.  The data still require interpretation, and still not 
+-- every BBL is guaranteed to match valid Pluto (in fact, several hundred do not),
+-- but at least we can compare the results side-by-side.
+drop view if exists core.stable_combined cascade;
+create view core.stable_combined as
 select 
   coalesce(a.bbl,b.bbl) as bbl, 
   b.year, b.unitcount, b.abatements,
   a.count as bldg_count, a.has_421a, a.has_j51, a.special,
   a.bbl is not null as in_dhcr,
   b.bbl is not null as in_taxbill
-from       flat.stable_dhcr2015_grouped as a
+from       core.stable_dhcr2015_grouped as a
 full outer join core.stable_joined_lastyear as b on a.bbl = b.bbl; 
 
 
