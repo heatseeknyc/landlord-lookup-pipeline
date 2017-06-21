@@ -16,8 +16,8 @@ The basic idea is that instead of wrestling with the two datasets (and their
 attendant caveats) individually, you can work with (and quickly import) a single 
 dataset that will tell you:
 
- - What tell you what each dataset says about a given BBL, provided it exists
-   in either of the original datasets.
+ - What each dataset says about a given taxlot (via its BBL), provided it exists
+   (and has significant information) in either of the original datasets.
  - Restricted any case only to *structurally valid* BBLs (i.e. with no outright "junk BBLS")
  - And restricted additionally (if you grab the ``-restricted.csv``) only to BBLs which 
    can be matched in Pluto.
