@@ -12,6 +12,7 @@ def mkdir_branch(stage,branch,prefix,autoviv=False):
     return dirpath
 
 def mkpath(stage,branch,prefix,name,autoviv=False):
+    name = name.replace('-','_')
     dirpath = mkdir_branch(stage,branch,prefix,autoviv)
     return "%s/%s.csv" % (dirpath,name)
 
