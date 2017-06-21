@@ -14,10 +14,12 @@ begin;
 drop schema if exists norm cascade; 
 create schema norm;
 
+/*
 create view norm.acris_control as select * from flat.acris_control;
 create view norm.acris_condo_maybe as 
 select bbl, history_count, docid_count
 from p1.acris_condo_maybe order by bbl;
+*/
 
 create view norm.pluto_condo_primary as
 select * from push.pluto_taxlot_tidy where is_condo_primary(bbl) order by bbl;
