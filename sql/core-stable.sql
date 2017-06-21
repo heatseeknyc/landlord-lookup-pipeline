@@ -36,6 +36,7 @@ where is_kosher_bbl(bbl);
 -- sources taken together.  The data still require interpretation, and still not 
 -- every BBL is guaranteed to match valid Pluto (in fact, several hundred do not),
 -- but at least we can compare the results side-by-side.
+-- 47260 rows
 drop view if exists core.stable_combined cascade;
 create view core.stable_combined as
 select 
