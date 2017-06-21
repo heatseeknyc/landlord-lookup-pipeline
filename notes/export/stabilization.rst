@@ -35,8 +35,11 @@ Some basic caveats as the source datasets:
 
  - Both datasets were restricted to *structurally valid* BBLs before joining --
    that is, rejecting any obviously invalid BBLs (block or lot values all 9s or 0s).
+   This restriction led to the exclusion of some 86 rows in the DHCR list, but none 
+   of the taxbill rows were affected.
  - The ``restricted`` dataset was further constrained to exclude rows with BBLs that 
-   could not be matched in Pluto 16v2 (dropping some 813 rows).
+   could not be matched in Pluto 16v2 (dropping some 813 rows across the join of both
+   datasets).
  - While the ``withorphans`` retains such rows (on the theory that perhaps some day
    some of these BBLs can be fixed or updated).
 
