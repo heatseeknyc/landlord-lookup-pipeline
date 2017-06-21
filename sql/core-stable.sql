@@ -47,12 +47,17 @@ create view core.stable_combined as
 select 
   -- first the primary key
   coalesce(a.bbl,b.bbl) as bbl, 
-  -- then DHCR columns 
-  a.bbl is not null as in_dhcr,
-  a.count as dhcr_bldg_count, a.dhcr_421a, a.dhcr_j51, a.dhcr_special,
-  -- then taxbill columns,
-  b.bbl is not null as in_taxbill,
-  b.taxbill_lastyear, b.taxbill_unitcount, b.taxbill_abatements
+  -- then the DHCR + taxbill columns, respectively. 
+  -- note that the first column in each bunch also serves (via NULL/non-NULL status)
+  -- as a boolean indicator of whether the BBL is present in that respective dataset
+  -- or not.
+  a.count      as dhcr_bldg_count, -- non-NULL iff row exists in DHCR
+  a.has_421a   as dhcr_421a, 
+  a.has_j51    as dhcr_j51, 
+  a.special    as dhcr_special,
+  b.year       as taxbill_lastyear, -- non-NULL iff row exists in taxbills
+  b.unitcount  as taxbill_unitcount, 
+  b.abatements as taxbill_abatements
 from       core.stable_dhcr2015_grouped as a
 full outer join core.stable_joined_lastyear as b on a.bbl = b.bbl; 
 
