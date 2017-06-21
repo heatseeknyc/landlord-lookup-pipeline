@@ -1,16 +1,34 @@
 Notes about exported datasets having to do with rent stabilization. 
 
-Currently we have two datasets available for export:
+Currently we have two datasets available for export::
  
     export/stable_confirmed_restricted.csv   |  46441 data rows 
     export/stable_confirmed_withorphans.csv  |  47260 data rows 
 
-Each dataset represents a "union" (a full outer join) of the two major datasets 
-currently available for rent stabilization (per BBL) to the extent to which each
-set can be cleanly parsed and scraped:
+Each dataset represents a *union* of the two datasets currently available for rent 
+stabilization (per BBL) to the extent to which each of these could be cleanly scraped 
+and parsed, an of course, the extent to which the sets can be cleanly joined: 
 
  - The DHCR 2015 Rent Stabilization list 
  - JK's taxbill scrapes 2007-105
+
+The basic idea is that instead of wrestling with the two datasets (and their 
+attendant caveats) individually, you can work with (and quickly import) a single 
+dataset that will tell you:
+
+ - What tell you what each dataset says about a given BBL, provided it exists
+   in either of the original datasets.
+ - Restricted any case only to *structurally valid* BBLs (i.e. with no outright "junk BBLS")
+ - And restricted additionally (if you grab the ``-restricted.csv``) only to BBLs which 
+   can be matched in Pluto.
+
+Live links the datasets will be appearing (very) shortly.  Please note there are significant 
+caveats to each dataset, so our hope is that whoever makes use of these datasets will be sure
+to read and understand the description and caveats carefully.
+
+
+The Details
+-----------
 
 Some basic caveats as the source datasets:
 
