@@ -23,9 +23,9 @@ dataset that will tell you:
  - And restricted additionally (if you grab the ``-restricted.csv``) only to BBLs which 
    can be matched in Pluto.
 
-Live links the datasets will be appearing (very) shortly.  Please note there are significant 
-caveats to each dataset, so our hope is that whoever makes use of these datasets will be sure
-to read and understand the description and caveats carefully.
+Live links to the actual CSV files will be appearing (very) shortly.  Please note there are 
+significant caveats to each dataset, so our hope is that whoever makes use of these datasets 
+will be sure to read and understand the description and caveats carefully.
 
 
 The Details
