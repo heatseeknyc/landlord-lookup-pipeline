@@ -1,4 +1,5 @@
 import os
+from etlapp.logging import log
 
 STAGE = 'stage'
 
@@ -12,7 +13,6 @@ def mkdir_branch(stage,branch,prefix,autoviv=False):
     return dirpath
 
 def mkpath(stage,branch,prefix,name,autoviv=False):
-    name = name.replace('-','_')
     dirpath = mkdir_branch(stage,branch,prefix,autoviv)
     return "%s/%s.csv" % (dirpath,name)
 
@@ -25,6 +25,8 @@ def incoming(prefix,name,stage=STAGE,autoviv=False):
 def latest(prefix,name,stage=STAGE):
     _incoming = mkpath(stage,'incoming',prefix,name,stage)
     _xtracted = mkpath(stage,'xtracted',prefix,name,stage)
+    log.debug("_incoming = '%s'" % _incoming)
+    log.debug("_xtracted = '%s'" % _xtracted)
     return \
         _xtracted if os.path.exists(_xtracted) else \
         _incoming if os.path.exists(_incoming) else \
