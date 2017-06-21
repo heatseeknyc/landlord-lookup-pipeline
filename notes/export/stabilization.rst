@@ -18,7 +18,8 @@ dataset that will tell you:
 
  - What each dataset says about a given taxlot (via its BBL), provided it exists
    (and has significant information) in either of the original datasets.
- - Restricted any case only to *structurally valid* BBLs (i.e. with no outright "junk BBLS")
+ - Restricted any case only to *structurally valid* BBLs (i.e. presenting no rows with 
+   outright "junk BBLS" that can never be matched to other datasets)
  - And restricted additionally (if you grab the ``-restricted.csv``) only to BBLs which 
    can be matched in Pluto.
 
