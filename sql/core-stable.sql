@@ -61,19 +61,5 @@ select bbl,unitcount,has_421a,has_j51
 from flat.stable_taxbill
 where year = 2016 and quarter = 4 and (has_421a or has_j51 or unitcount is not null);
 
--- A unified view of taxlots having confirmed stability markings across 
--- both data sources.  Current rowcount = 45261.
-drop view if exists core.stable_stable_deprecated cascade;
-create view core.stable_stable_deprecated as
-select 
-  coalesce(a.bbl,b.bbl) as bbl, 
-  a.has_421a or b.has_421a as has_421a,
-  a.has_j51 or b.has_j51 as has_j51,
-  b.unitcount, a.special,
-  a.bbl is not null as in_dhcr,
-  b.bbl is not null as in_taxbill
-from flat.stable_dhcr2015_grouped as a
-full outer join core.stable_taxbill_2016Q4 as b on a.bbl = b.bbl; 
-
 commit;
 
