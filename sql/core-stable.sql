@@ -1,7 +1,10 @@
 begin;
 
 -- 45064 rows for the 2007-2015 version of this dataset.
--- There were no non-kosher rows  
+-- There were are no structually invalid rows, but we keep the constraint
+-- on kosher-ness in-place, on general principles (in case we get a different
+-- version of this dataset in the future).  Note also thatapparently some 
+-- 335 of these rows will nonetheless fail to match in Pluto 16v2.
 drop view if exists core.stable_joined cascade;
 create view core.stable_joined as
 select
@@ -18,6 +21,8 @@ create view core.stable_joined_maxyear as
 select bbl,max(year) as year from core.stable_joined
 where unitcount > 0 group by bbl;
 
+-- Our primary reference view for the taxbills dataset. 
+-- Still 45064 rows, 335 of which won't match in Pluto. 
 drop view if exists core.stable_joined_lastyear cascade;
 create view core.stable_joined_lastyear as
 select a.bbl, a.year, b.unitcount, b.estimate, b.abatements
@@ -36,13 +41,13 @@ where is_kosher_bbl(bbl);
 -- sources taken together.  The data still require interpretation, and still not 
 -- every BBL is guaranteed to match valid Pluto (in fact, several hundred do not),
 -- but at least we can compare the results side-by-side.
--- 47260 rows
+-- 47260 rows, of which 819 are outside Pluto.
 drop view if exists core.stable_combined cascade;
 create view core.stable_combined as
 select 
   coalesce(a.bbl,b.bbl) as bbl, 
   b.year, b.unitcount, b.abatements,
-  a.count as bldg_count, a.has_421a, a.has_j51, a.special,
+  a.count as dhcr_bldg_count, a.has_421a, a.has_j51, a.special,
   a.bbl is not null as in_dhcr,
   b.bbl is not null as in_taxbill
 from       core.stable_dhcr2015_grouped as a
