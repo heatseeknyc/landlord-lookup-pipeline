@@ -24,18 +24,6 @@ create table flat.stable_dhcr2015_grouped (
     special text
 );
 
--- Deprecated
-create table flat.stable_joined (
-    bbl bigint not null CHECK (bbl >= 1000000000 and bbl < 6000000000),
-    year smallint not null, 
-    unitcount integer,
-    estimate boolean not null,
-    in_dhcr boolean not null,
-    abatements text,
-    UNIQUE (bbl, year)
-);
-
--- JK's 'joined-crosstab.csv', as-is.  Note that we'll only be needing the 
 -- first 6 columns (and so won't sweat the column types in the rest).
 create table flat.stable_joined_nocrosstab (
     ucbbl bigint not null CHECK (ucbbl >= 1000000000 and ucbbl < 6000000000),
@@ -62,5 +50,17 @@ create table flat.stable_joined_nocrosstab (
     UNIQUE (ucbbl, year)
 );
 
+-- Deprecated
+create table flat.stable_joined (
+    bbl bigint not null CHECK (bbl >= 1000000000 and bbl < 6000000000),
+    year smallint not null, 
+    unitcount integer,
+    estimate boolean not null,
+    in_dhcr boolean not null,
+    abatements text,
+    UNIQUE (bbl, year)
+);
+
+-- JK's 'joined-crosstab.csv', as-is.  Note that we'll only be needing the 
 commit;
 
