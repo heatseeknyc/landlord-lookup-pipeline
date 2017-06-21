@@ -39,13 +39,13 @@ def load_multi(prefix,names,strict=True):
 
 @timedsingle
 def load_source_named(prefix,name):
+    infile = etlapp.stage.latest(prefix,name)
+    log.info("infile = '%s'" % infile)
+    assert_loadable(prefix,name,infile)
     if not etlapp.source.getval(prefix,name,'active'):
         raise ValueError("source inactive by configuration")
     table = tablename('flat',prefix,name)
     log.info("table = '%s'" % table)
-    infile = etlapp.stage.latest(prefix,name)
-    log.info("infile = '%s'" % infile)
-    assert_loadable(prefix,name,infile)
     psql = make_copy_command(table,infile)
     log.debug("psql = [%s]" % psql)
     return dopsql(psql,etlapp.pgconf)
