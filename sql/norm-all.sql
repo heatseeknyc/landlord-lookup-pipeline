@@ -25,6 +25,22 @@ select * from push.pluto_taxlot_tidy where is_condo_primary(bbl) order by bbl;
 create view norm.acris_declare as
 select * from p1.acris_history where doctype = 'DECL' order by bbl, date_filed desc;
 
+--
+-- Rent stabilization exports
+--
+
+-- Minus BBLs not present Pluto 16v2 (some 819 rows).
+create view norm.stable_confirmed_restricted as
+select a.* 
+from      push.stable_confrimed as a
+left join push.pluto_taxlot     as b on a.bbl = b.bbl where b.bbl is not null
+order by bbl; 
+
+-- Includes BBLs which are structurally valid not in Pluto, aka "orphans".
+create view norm.stable_confirmed_withorphans as
+select * from push.stable_confrimed 
+order by bbl; 
+
 commit;
 
 
