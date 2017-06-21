@@ -39,6 +39,7 @@ def load_multi(prefix,names,strict=True):
 
 @timedsingle
 def load_source_named(prefix,name):
+    log.debug("source = '%s'.'%s'" % (prefix,name))
     infile = etlapp.stage.latest(prefix,name)
     log.info("infile = '%s'" % infile)
     assert_loadable(prefix,name,infile)
