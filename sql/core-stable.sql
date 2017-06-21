@@ -5,6 +5,8 @@ begin;
 -- on kosher-ness in-place, on general principles (in case we get a different
 -- version of this dataset in the future).  Note also thatapparently some 
 -- 335 of these rows will nonetheless fail to match in Pluto 16v2.
+--
+-- 405576 rows
 drop view if exists core.stable_joined cascade;
 create view core.stable_joined as
 select
@@ -16,18 +18,23 @@ select
 from flat.stable_joined_nocrosstab
 where is_kosher_bbl(ucbbl);
 
+-- Aggregate by BBL, selecting last year with non-zero unit count
+-- (and restricting to BBLs with at least one year where that count is
+-- present and non-zero), which drops some 257 rows.
+-- 44807 rows 
 drop view if exists core.stable_joined_maxyear cascade;
 create view core.stable_joined_maxyear as
 select bbl,max(year) as year from core.stable_joined
 where unitcount > 0 group by bbl;
 
 -- Our primary reference view for the taxbills dataset. 
--- Still 45064 rows, 335 of which won't match in Pluto. 
-drop view if exists core.stable_joined_lastyear cascade;
-create view core.stable_joined_lastyear as
+-- Still 44807 rows, 335 of which won't match in Pluto. 
+drop materialized view if exists core.stable_joined_lastyear cascade;
+create materialized view core.stable_joined_lastyear as
 select a.bbl, a.year, b.unitcount, b.estimate, b.abatements
 from      core.stable_joined_maxyear as a
 left join core.stable_joined         as b on a.bbl = b.bbl and a.year = b.year;
+create index on core.stable_joined_lastyear(bbl);
 
 -- Restricts the freshly loaded "flat" file kosher BBLs only, dropping
 -- the 3 rows with broken block numbers + the catch-all "zombie" bbl (9999999999); 
