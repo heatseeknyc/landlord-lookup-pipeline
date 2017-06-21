@@ -21,16 +21,24 @@ Some basic caveats as the source datasets:
  - While the ``withorphans`` retains such rows (on the theory that perhaps some day
    some of these BBLs can be fixed or updated).
 
-Finally, because the lists were fundamentally different in the type of entity they 
-attempted keep track of -- the DHCR list tracking buildings (sometimes many to a lot),
-while the Taxbill dataset (by definition) tracks stabilization by taxlot (grouping 
-unit counts across buildings) -- it was necessary to aggregate the DHCR list before 
-(that is, group by BBL) before the two could be joined.  
+Additionally, because the lists fundamentally different in the type of entites they 
+were tracking and how what dimensions they were measuring, each of them had to be
+aggregated differently before joining: 
+
+  - The DHCR list was, therefore, *aggregated by BBL* before joining (merging attributes,
+    and adding a new columng for building count.
+  - While the Taxbill rowset was *aggregated by BBL and the last year of non-zero unitcount*,
+    which now appears as the ``taxbill_lastyear`` column, and restricting to BBLs for which
+    this date value could be derived (that is, where there as at least one year of non-zero
+    ``unitcount``).
 
 While the aggregation in the DHCR list as ultimately somewhat ad-hoc (effectively
 collapsing sometimes contradictory attibutes for each many-to-1 lot), it was completely
 unavoidable if the two datasets were to be joined (and in any case affects only about
 3 percent of the total set of BBLs).
+
+Meanwhile, the restriction on non-zero ``unitcount`` led to the exclusion of some
+257 BBLs from the original ``joined-nocrosstab.csv``.  
 
 
 Column Description
