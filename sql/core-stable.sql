@@ -45,11 +45,14 @@ where is_kosher_bbl(bbl);
 drop view if exists core.stable_combined cascade;
 create view core.stable_combined as
 select 
+  -- first the primary key
   coalesce(a.bbl,b.bbl) as bbl, 
-  b.year, b.unitcount, b.abatements,
-  a.count as dhcr_bldg_count, a.has_421a, a.has_j51, a.special,
+  -- then DHCR columns 
   a.bbl is not null as in_dhcr,
-  b.bbl is not null as in_taxbill
+  a.count as dhcr_bldg_count, a.dhcr_421a, a.dhcr_j51, a.dhcr_special,
+  -- then taxbill columns,
+  b.bbl is not null as in_taxbill,
+  b.taxbill_lastyear, b.taxbill_unitcount, b.taxbill_abatements
 from       core.stable_dhcr2015_grouped as a
 full outer join core.stable_joined_lastyear as b on a.bbl = b.bbl; 
 
