@@ -10,8 +10,8 @@
 begin;
 
 
-drop view if exists core.acris_control cascade; 
-create view core.acris_control as 
+drop view if exists core.acris_refdata_control cascade; 
+create view core.acris_refdata_control as 
 select
   doctype, description, classcode, ptype1, ptype2, ptype3,
   case
@@ -21,7 +21,7 @@ select
     when classcode = 'MORTGAGES & INSTRUMENTS' then 'MORT'
     else NULL
   end as doctag
-from flat.acris_control;
+from flat.acris_refdata_control;
 
 drop view if exists core.acris_master cascade; 
 create view core.acris_master as 
@@ -32,7 +32,7 @@ select
   end as date_document, 
   a.date_filed, a.date_modified, a.date_valid_thru
 from flat.acris_master            as a 
-left join core.acris_control as b on a.doctype = b.doctype; 
+left join core.acris_refdata_control as b on a.doctype = b.doctype; 
 
 drop view if exists core.acris_legal cascade; 
 create view core.acris_legal as 

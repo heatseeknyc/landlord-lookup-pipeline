@@ -18,12 +18,12 @@
  slug:  '8h5j-fqxa'
 
 - 
- name:  control 
+ name:  refdata-control 
  label: 'ACRIS-Document-Control-Codes'
  slug:  '7isb-wh4c'
 
 - 
- name:  proptype 
+ name:  refdata-proptype 
  label: ACRIS-Property-Types-Codes
  slug:  '94g4-w6xz'
 

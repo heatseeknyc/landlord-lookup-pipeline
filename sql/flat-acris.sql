@@ -6,7 +6,7 @@ drop table if exists flat.acris_master cascade;
 drop table if exists flat.acris_legal cascade; 
 drop table if exists flat.acris_party cascade; 
 
-create table flat.acris_control (
+create table flat.acris_refdata_control (
     rectype char(1) not null,
     doctype text primary key, 
     description text not null,
