@@ -9,6 +9,7 @@ select bbl, address, owner_name, bldg_class, land_use, year_built, units_total, 
 from push.pluto_taxlot;
 
 -- Records the "depth" of multiple matches on (bbl,bin) where the total is > 1 
+/*
 drop view if exists push.pluto_building_count_keytup cascade; 
 create view push.pluto_building_count_keytup as
 select bbl, bin, count(*) as total 
@@ -18,8 +19,9 @@ drop view if exists push.pluto_building_count_bin cascade;
 create view push.pluto_building_count_bin as
 select bin, count(*) as total 
 from core.pluto_building_ideal group by bin;
+*/
 
-drop table if exists push.pluto_building cascade; 
+/*
 create table push.pluto_building as
 select 
     a.*, 
@@ -27,7 +29,10 @@ select
     coalesce(c.total,0) as depth_bin
 from      core.pluto_building_ideal as a
 left join push.pluto_building_count_keytup as b on a.bbl = b.bbl and a.bin = b.bin
-left join push.pluto_building_count_bin    as c on a.bin = c.bin;
+left join push.pluto_building_count_bin    as c on a.bin = c.bin; */
+drop table if exists push.pluto_building cascade; 
+create table push.pluto_building as
+select * from  core.pluto_building_ideal;
 create index on push.pluto_building(bbl);
 create index on push.pluto_building(bin);
 create index on push.pluto_building(bbl,bin);
