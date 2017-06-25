@@ -65,19 +65,6 @@ select bbl, count(*) as total, count(distinct bin) as bin
 from push.pluto_building_orphan group by bbl;
 create index on push.pluto_building_orphan_count(bbl);
 
--- Lots in Pluto taxlots with no adjoiing records in the buildings set. 
--- Most of these are vacant lots, but some are simply "stranded" for various reasons.
-drop materailized view if exists push.pluto_taxlot_empty cascade; 
-create materialized view push.pluto_taxlot_empty as
-select a.*
-from      push.pluto_taxlot_tidy     as a
-left join push.pluto_building_count  as b on a.bbl = b.bbl where b.bbl is null;
-create index on push.pluto_taxlot_empty(bbl);
-
-
-
-
-
 
 
 
