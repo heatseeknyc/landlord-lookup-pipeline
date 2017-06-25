@@ -18,6 +18,15 @@ create index on push.pluto_building_ideal(bbl);
 create index on push.pluto_building_ideal(bin);
 create index on push.pluto_building_ideal(bbl,bin);
 
+create materialized view push.pluto_building_kosher as
+select * from push.pluto_building_ideal where is_kosher_bin(bin);
+create index on push.pluto_building_kosher(bbl);
+create index on push.pluto_building_kosher(bin);
+create index on push.pluto_building_kosher(bbl,bin);
+
+
+
+
 create table push.pluto_building_canonical as
 select * from core.pluto_building_canonical;
 create index on push.pluto_building_canonical(bbl,bin);
