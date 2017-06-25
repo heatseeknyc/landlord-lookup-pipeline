@@ -47,6 +47,7 @@ create index on push.pluto_refdata_landuse(tag);
 --
 
 
+-- "Orphaned" buildings/lots with no BBL in Pluto
 drop materialized view if exists push.pluto_building_orphan cascade; 
 create materialized view push.pluto_building_orphan as
 select a.bbl, a.bin, a.doitt_id
