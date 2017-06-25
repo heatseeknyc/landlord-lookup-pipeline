@@ -14,6 +14,10 @@ create index on push.pluto_building(bbl);
 create index on push.pluto_building(bin);
 create index on push.pluto_building(bbl,bin);
 
+create materialized view push.pluto_building_count as
+select bbl, count(*) as total, count(distinct bin) as building
+from push.pluto_building group by bbl; 
+
 /*
 create materialized view push.pluto_building_kosher as
 select * from push.pluto_building where is_kosher_bin(bin);
@@ -60,6 +64,15 @@ create materialized view push.pluto_building_orphan_count as
 select bbl, count(*) as total, count(distinct bin) as bin 
 from push.pluto_building_orphan group by bbl;
 create index on push.pluto_building_orphan_count(bbl);
+
+-- Lots in Pluto taxlots with no adjoiing records in the buildings set. 
+-- Most of these are vacant lots, but some are simply "stranded" for various reasons.
+drop materailized view if exists push.pluto_taxlot_empty cascade; 
+create materialized view push.pluto_taxlot_empty as
+select a.*
+from      push.pluto_taxlot_tidy     as a
+left join push.pluto_building_count  as b on a.bbl = b.bbl where b.bbl is null;
+create index on push.pluto_taxlot_empty(bbl);
 
 
 
