@@ -5,7 +5,7 @@ select * from core.pluto_taxlot_remix;
 create index on push.pluto_taxlot(bbl);
 
 create view push.pluto_taxlot_tidy as
-select bbl, address, owner_name, bldg_class, land_use, year_built, units_total, units_res, num_floors, num_bldgs, bldg_count
+select bbl, address, owner_name, bldg_class, land_use, year_built, units_total, units_res, num_floors, num_bldgs, building_count
 from push.pluto_taxlot;
 
 create table push.pluto_building as
@@ -14,11 +14,13 @@ create index on push.pluto_building(bbl);
 create index on push.pluto_building(bin);
 create index on push.pluto_building(bbl,bin);
 
+/*
 create materialized view push.pluto_building_kosher as
-select * from push.pluto_building_ideal where is_kosher_bin(bin);
+select * from push.pluto_building where is_kosher_bin(bin);
 create index on push.pluto_building_kosher(bbl);
 create index on push.pluto_building_kosher(bin);
 create index on push.pluto_building_kosher(bbl,bin);
+*/
 
 
 
