@@ -62,6 +62,7 @@ from core.pluto_building_ideal group by bbl;
 create index on core.pluto_building_count(bbl);
 
 -- Finds "orphaned" buildings in the buildings list but not in pluto.
+/*
 drop materialized view if exists core.pluto_building_orphan cascade; 
 create materialized view core.pluto_building_orphan as
 select a.bbl, a.bin, a.doitt_id
@@ -74,6 +75,7 @@ create materialized view core.pluto_building_orphan_count as
 select bbl, count(*) as total, count(distinct bin) as bin
     from core.pluto_building_orphan group by bbl;
 create index on core.pluto_building_orphan_count(bbl);
+*/
 
 -- Disambiguates those rare case (numbering about 348 rows) of (bbl,bin)
 -- pairs matching more than one building record -- thus allowing us to use
