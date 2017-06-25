@@ -4,8 +4,12 @@ Various generic support functions for the NYC property ecosystem.
 """
 
 def is_valid_bbl(bbl):
-    """Returns True/False as to whether the given :bbl is structurally valid
-    (though keep in mind it may be still be unsuitable for various reasons.)"""
+    """Determins whether the given :bbl is structurally valid (meaning simply:
+    an integer 11 digits in length, starting with digits 1-5.  The intent is simply
+    to filter outright 'junk' BBLs that can't possibly have a valid interpretation,
+    and would basically never occur in the city's databases.  Keep in mind though
+    that even though a BBL is considered 'valid' it may still be unsuitable for
+    a whole bunch of reasons."""
     return isinstance(bbl,int) and bbl >= 1000000000 and bbl < 6000000000
 
 def is_valid_boro(boro):
@@ -19,6 +23,16 @@ def is_valid_lot(lot):
 
 def is_valid_qblock(qblock):
     return isinstance(qblock,int) and qblock >= 100000 and qblock <= 599999
+
+def is_valid_bin(bin_):
+    """Determins whether the given :bin is structurally valid, meaning simply:
+    an integer 7 digits in length, starting with digits 1-5.  As with the method
+    of a similar name that determines whether a BBL is 'valid', the intent is
+    simply to identify 'junk' BINs that can't possibly have a valid interpretation,
+    and would basically never occur in the city's databases.  Keep in mind though
+    that even though a BIN is considered 'valid' it may still be unsuitable for
+    a whole bunch of reasons."""
+    return isinstance(bin_,int) and bin_ >= 1000000 and bin_ < 6000000
 
 #
 # Yes, there's a lot of repetition in next 5 assertion functions, given that 
