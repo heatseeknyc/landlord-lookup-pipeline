@@ -54,8 +54,8 @@ from      push.pluto_building as a
 left join push.pluto_taxlot         as b on a.bbl = b.bbl where b.bbl is null;
 create index on push.pluto_building_orphan(bbl);
 
-drop materialized view if exists core.pluto_building_orphan_count cascade; 
-create materialized view core.pluto_building_orphan_count as
+drop materialized view if exists push.pluto_building_orphan_count cascade; 
+create materialized view push.pluto_building_orphan_count as
 select bbl, count(*) as total, count(distinct bin) as bin 
 from push.pluto_building_orphan group by bbl;
 create index on push.pluto_building_orphan_count(bbl);
