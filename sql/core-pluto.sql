@@ -45,13 +45,20 @@ create view core.pluto_building as
 select * from flat.pluto_building
 where is_valid_bbl(bbl) and is_valid_bin(bin);
 
--- An identity table restricted to kosher BBLs (drops 143 outlier rows across
--- 57 BBLs in 16v2).
-drop view if exists core.pluto_building_ideal cascade; 
-create view core.pluto_building_ideal as
+-- An identity table restricted to kosher BBLs (drops 143 outlier rows across 57 BBLs)
+-- Our final 'push.pluto_building' will be 1-1 with this rowset.
+drop materialized view if exists core.pluto_building_ideal cascade; 
+create materialized view core.pluto_building_ideal as
 select bbl, bin, doitt_id
 from core.pluto_building where is_kosher_bbl(bbl);
+create index on core.pluto_building_ideal(bbl);
+create index on core.pluto_building_ideal(bin);
 
+drop materialized view if exists core.pluto_building_count cascade; 
+create materialized view core.pluto_building_count as 
+select 
+    bbl, count(*) as total, count(distinct BIN) as bin
+from core.pluto_building_ideal group by bbl;
 
 
 drop view if exists core.pluto_building_tidy cascade; 
@@ -84,9 +91,6 @@ group by bbl,bin;
 -- Gives us the "physical" building count per BBL, ie the number
 -- of building shapefiles for each lot - as the NumBldgs column is 
 -- known to be sometimes noisy.
-drop materialized view if exists core.pluto_building_count cascade; 
-create materialized view core.pluto_building_count as 
-select bbl,count(*) as bldg_count from core.pluto_building group by bbl;
 
 -- An extension of our MapPluto set to include the above column.
 -- If there's no BBL in the building set (which happens frequently,
