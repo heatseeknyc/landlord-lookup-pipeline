@@ -64,6 +64,17 @@ create table flat.acris_party (
     date_valid_thru date not null
 );
 
+-- DOCUMENT ID,RECORD TYPE,REMARK LINE NBR,REMARK TEXT LINE,GOOD THROUGH DATE
+-- 2003011400574002,R,1,PROPERTY IS ALSO KNOWN AS (4434 MONTICELLO AVENUE),07/31/2015
+-- 2003011400574003,R,1,PROPERTY IS ALSO KNOWN AS (4434 MONTICELLO AVENUE),07/31/2015
+create table flat.acris_remark (
+    docid char(16) not null,
+    rectype char(1) not null,
+    remark_line_nbr integer not null,
+    remark_text_line text,
+    good_through_date date not null
+);
+
 commit;
 
 
