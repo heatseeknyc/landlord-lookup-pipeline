@@ -8,8 +8,17 @@ create view push.pluto_taxlot_tidy as
 select bbl, address, owner_name, bldg_class, land_use, year_built, units_total, units_res, num_floors, num_bldgs, building_count
 from push.pluto_taxlot;
 
+-- Records the "depth" of multiple matches on (bbl,bin) where the total is > 1 
+drop view if exists push.pluto_building_depth cascade; 
+create view push.pluto_building_depth as
+select bbl, bin, count(*) as depth  
+from core.pluto_building_ideal group by bbl, bin;
+
+drop table if exists push.pluto_building cascade; 
 create table push.pluto_building as
-select * from core.pluto_building_ideal;
+select a.*, coalesce(b.depth,0) as depth 
+from      core.pluto_building_ideal as a
+left join push.pluto_building_depth as b on a.bbl = b.bbl and a.bin = b.bin; 
 create index on push.pluto_building(bbl);
 create index on push.pluto_building(bin);
 create index on push.pluto_building(bbl,bin);
@@ -64,7 +73,6 @@ create materialized view push.pluto_building_orphan_count as
 select bbl, count(*) as total, count(distinct bin) as bin 
 from push.pluto_building_orphan group by bbl;
 create index on push.pluto_building_orphan_count(bbl);
-
 
 
 
