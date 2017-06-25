@@ -4,8 +4,8 @@ Various generic support functions for the NYC property ecosystem.
 """
 
 def is_valid_bbl(bbl):
-    """Determins whether the given :bbl is structurally valid (meaning simply:
-    an integer 11 digits in length, starting with digits 1-5.  The intent is simply
+    """Determins whether the given :bbl is structurally valid, meaning simply:
+    an integer 10 digits in length, starting with digits 1-5.  The intent is simply
     to filter outright 'junk' BBLs that can't possibly have a valid interpretation,
     and would basically never occur in the city's databases.  Keep in mind though
     that even though a BBL is considered 'valid' it may still be unsuitable for
