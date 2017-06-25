@@ -13,16 +13,16 @@ def is_valid_bbl(bbl):
     return isinstance(bbl,int) and bbl >= 1000000000 and bbl < 6000000000
 
 def is_valid_boro(boro):
-    return isinstance(boro,int) and boro >= 1 and boro <= 5
+    return isinstance(boro,int) and boro >= 1 and boro < 6
 
 def is_valid_block(block):
-    return isinstance(block,int) and block >= 0 and block <= 99999
+    return isinstance(block,int) and block >= 0 and block < 100000
 
 def is_valid_lot(lot):
-    return isinstance(lot,int) and lot >= 0 and lot <= 9999
+    return isinstance(lot,int) and lot >= 0 and lot < 10000
 
 def is_valid_qblock(qblock):
-    return isinstance(qblock,int) and qblock >= 100000 and qblock <= 599999
+    return isinstance(qblock,int) and qblock >= 100000 and qblock < 600000
 
 def is_valid_bin(bin_):
     """Determins whether the given :bin is structurally valid, meaning simply:
