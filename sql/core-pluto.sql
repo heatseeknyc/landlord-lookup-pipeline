@@ -59,34 +59,34 @@ create materialized view core.pluto_building_count as
 select 
     bbl, count(*) as total, count(distinct BIN) as bin
 from core.pluto_building_ideal group by bbl;
+create index on core.pluto_building_count(bbl);
 
-
-drop view if exists core.pluto_building_tidy cascade; 
-create view core.pluto_building_tidy as
-select 
-    bbl, bin, doitt_id, 
-    lat_ctr::float(1), lon_ctr::float(1), radius::float(1), 
-    parts, substr(points,0,40) as points 
-from core.pluto_building;
-
+-- Finds "orphaned" buildings in the buildings list but not in pluto.
+drop materialized view if exists core.pluto_building_orphan cascade; 
 create materialized view core.pluto_building_orphan as
-select a.*
-from      core.pluto_building_tidy as a
-left join push.pluto_taxlot        as b on a.bbl = b.bbl where b.bbl is null;
+select a.bbl, a.bin, a.doitt_id
+from      core.pluto_building_ideal as a
+left join push.pluto_taxlot         as b on a.bbl = b.bbl where b.bbl is null;
+create index on core.pluto_building_orphan(bbl);
 
-create view core.pluto_building_orphan_count as
-select bbl, count(*) from core.pluto_building_orphan group by bbl;
+drop materialized view if exists core.pluto_building_orphan_count cascade; 
+create materialized view core.pluto_building_orphan_count as
+select bbl, count(*) as total, count(distinct bin) as bin
+    from core.pluto_building_orphan group by bbl;
+create index on core.pluto_building_orphan_count(bbl);
 
 -- Disambiguates those rare case (numbering about 348 rows) of (bbl,bin)
 -- pairs matching more than one building record -- thus allowing us to use
 -- the (bbl,bin) as a primary key.  Of course this dismbiguation is arbitary,
 -- in that we just pick the BIN which matches the first DoITT ID, but 
 -- that's OK for now.
+/*
 drop view if exists core.pluto_building_canonical cascade; 
 create view core.pluto_building_canonical as
 select bbl, bin, min(doitt_id) as doitt_id
 from core.pluto_building
 group by bbl,bin;
+*/
 
 -- Gives us the "physical" building count per BBL, ie the number
 -- of building shapefiles for each lot - as the NumBldgs column is 
@@ -97,9 +97,20 @@ group by bbl,bin;
 -- for vacant lots) then we assign a building count of zero.
 drop view if exists core.pluto_taxlot_remix cascade; 
 create view core.pluto_taxlot_remix as
-select a.*,coalesce(b.bldg_count,0) as bldg_count
+select a.*, coalesce(b.total,0) as building_count
 from core.pluto_taxlot as a 
 left join core.pluto_building_count as b on b.bbl = a.bbl;
+
+/*
+drop view if exists core.pluto_building_tidy cascade; 
+create view core.pluto_building_tidy as
+select 
+    bbl, bin, doitt_id, 
+    lat_ctr::float(1), lon_ctr::float(1), radius::float(1), 
+    parts, substr(points,0,40) as points 
+from core.pluto_building_ideal;
+*/
+
 
 commit;
 
