@@ -37,8 +37,7 @@ returns boolean AS $$
 begin
     return 
       bin is not null and 
-      bin > 1000000 and bin < 6000000 and 
-      bin not in (2000000,3000000,4000000,5000000);
+      bin >= 1000000 and bin < 6000000;
 end
 $$ language plpgsql;
 
@@ -79,6 +78,18 @@ create or replace function public.is_kosher_bbl (bbl bigint)
 returns boolean AS $$
 begin
     return is_valid_bbl(bbl) and not (is_degenerate(bbl) or is_marginal(bbl));
+end
+$$ language plpgsql;
+
+-- "kosherness" is definied analogously for BINs, except that we're only 
+-- concerned about all-zero BINs (and not with BINs containing all 9s).
+create or replace function public.is_kosher_bin (bin integer) 
+returns boolean AS $$
+begin
+    return 
+      bin is not null and 
+      bin > 1000000 and bin < 6000000 and 
+      bin not in (2000000,3000000,4000000,5000000);
 end
 $$ language plpgsql;
 
