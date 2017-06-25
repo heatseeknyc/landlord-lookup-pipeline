@@ -38,18 +38,23 @@ select
     points                as points 
 from flat.pluto_taxlot;
 
--- Omit a small number of rows with clearly degenerate BBLs or BINs 
--- (exactly 3 fail these criteria in 16v2).  This will still leave us 
--- with a significant number (6000+) of rows with "noisy" BBLs or BINs
--- (or both), but that's OK for now.
+-- Omit a small number of rows with structurally invalid BBLs or BINs 
+-- (3 in the former category, 1 in the latter, with 1 in the overlap).
 drop view if exists core.pluto_building cascade; 
 create view core.pluto_building as 
 select * from flat.pluto_building
-where 
-  bbl is not null and 
-  bbl >= 1000000000 and bbl < 6000000000 and
-  bbl >= 1000000 and bin < 6000000;
+where is_valid_bbl(bbl) and is_valid_bin(bin);
 
+-- An identity table restricted to kosher BBLs (drops 143 outlier rows across
+-- 57 BBLs in 16v2).
+drop view if exists core.pluto_building_ideal cascade; 
+create view core.pluto_building_ideal as
+select bbl, bin, doitt_id
+from core.pluto_building where is_kosher_bbl(bbl);
+
+
+
+drop view if exists core.pluto_building_tidy cascade; 
 create view core.pluto_building_tidy as
 select 
     bbl, bin, doitt_id, 
