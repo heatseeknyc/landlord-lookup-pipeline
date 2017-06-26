@@ -18,6 +18,20 @@ def perform(posargs=None,options=None):
         raise ValueError("invalid usage")
 
 def matchup():
+    log.info("..")
+    infile_graph = etlapp.stage.export('acris','condo-graph')
+    if not os.path.exists(infile_graph):
+        raise ValueError("can't find infile '%s'" % infile_graph)
+    log.info("file ok!")
+    graph = list(read_recs(infile_graph))
+    log.info("that be %d recs" % len(graph))
+    # status,delta = match_streams(pluto,acris)
+    # _status = 'OK' if status else 'FAIL'
+    # log.info("status = %s in %.3f sec" % (_status,delta))
+    log.info("done")
+    return True
+
+def match_olde():
     infile_acris = etlapp.stage.export('acris','condo-maybe')
     infile_pluto = etlapp.stage.export('pluto','condo-primary')
     log.info("..")
