@@ -43,6 +43,11 @@ create view norm.stable_combined_withorphans as
 select * from push.stable_combined
 order by bbl; 
 
+create view norm.acris_condo_graph as
+select bbl,docid from (
+    select bbl,docid,count(*) from p1.acris_declare group by bbl,docid
+) as x order by docid,bbl;
+
 commit;
 
 
