@@ -117,9 +117,8 @@ create table flat.dob_complaint (
     disposition_date text, -- usually MM/DD/YYYY but sometimes not
     disposition_code text,
     inspection_date char(10), -- sometimes broken, e.g. '10/06/0000'
-    dob_run_date timestamp 
+    dob_run_date timestamp
 );
-
 
 commit;
 
