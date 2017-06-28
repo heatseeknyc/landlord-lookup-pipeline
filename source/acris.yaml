@@ -27,3 +27,15 @@
  label: ACRIS-Property-Types-Codes
  slug:  '94g4-w6xz'
 
+-
+ name:  propref
+ label: 'ACRIS-Real-Property-References'
+ slug:  'pwkr-dpni'
+ active: false
+
+-
+ name:  remark
+ label: 'ACRIS-Real-Property-Remarks'
+ slug:  '9p4w-7npp'
+ active: false
+
