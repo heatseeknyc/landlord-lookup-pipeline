@@ -1,6 +1,6 @@
 import re
 """
-Various generic support functions for the NYC property ecosystem.
+Various generic support functions for the NYC real estate data ecosystem.
 """
 
 def is_valid_bbl(bbl):
