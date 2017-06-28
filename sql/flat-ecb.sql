@@ -34,19 +34,20 @@ And a sample row:
 
 begin;
 
+drop table if exists flat.ecb_violation cascade;
 create table flat.ecb_violation (
     ISN_DOB_BIS_EXTRACT integer,
-    ECB_VIOLATION_NUMBER integer,
+    ECB_VIOLATION_NUMBER text,
     ECB_VIOLATION_STATUS text,
     DOB_VIOLATION_NUMBER text,
-    BIN integer, 
+    BIN text, -- sometimes garbled, eg 'Z391875'
     BORO integer, 
-    BLOCK integer,
-    LOT integer,
+    BLOCK text, -- sometimes garbled
+    LOT text, -- sometimes empty
     HEARING_DATE date, -- YYYYMMDD
     HEARING_TIME smallint, -- HHMM
-    SERVED_DATE date, -- YYYYMMDD,
-    ISSUE_DATE date, -- YYYYMMDD
+    SERVED_DATE text, -- should be YYYYMMDD but sometimes 0
+    ISSUE_DATE text, -- should be YYYYMMDD but sometimes 0
     SEVERITY text,
     VIOLATION_TYPE text,
     RESPONDENT_NAME text,
