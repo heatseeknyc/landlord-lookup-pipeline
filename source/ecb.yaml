@@ -1,0 +1,10 @@
+#
+# The NYC ECB is officially part of the DOB, but in our world, it has a 
+# first-class prefix of its own.  
+#
+-
+  name:  violations
+  label: DOB-ECB-Violations
+  slug:  '6bgk-3dad'
+  active: false
+
