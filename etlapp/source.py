@@ -1,4 +1,5 @@
 import os
+import glob
 from etlapp.util.source import loadcfg_source
 from etlapp.logging import log
 
@@ -14,6 +15,13 @@ def srcdir():
 
 def configpath(prefix):
     return "%s/%s.yaml" % (srcdir(),prefix)
+
+def prefixes():
+    """Returns, in sorted order, a list of prefixes for available data sources."""
+    srcpat = "%s/*.yaml" % srcdir()
+    files = (os.path.basename(_) for _ in glob.glob(srcpat))
+    tuples = (os.path.splitext(_) for _ in files)
+    return sorted((root for root,ext in tuples))
 
 def loadcfg(prefix):
     path = configpath(prefix)
