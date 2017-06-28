@@ -4,6 +4,6 @@
 #
 srcfile='stage/1-incoming/hpd/contact.csv'
 dstfile='stage/3-xtracted/hpd/contact.csv'
-# A quick hack to sort the data rows, but keep the header in place.
+# A quick hack to uniqify the data rows, but keep the header in place.
 head -1 $srcfile > $dstfile 
 grep -v '^RegistrationContactID,' $srcfile | sort | uniq >> $dstfile 
