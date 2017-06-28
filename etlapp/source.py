@@ -68,7 +68,7 @@ def select(prefix,query):
 
 
 def exists(prefix,name=None):
-    """Determines whether the named source (single or grouped) has a valid source configuration.""" 
+    """Determines whether the named source (single or grouped) has a valid source configuration."""
     if prefix is None:
         raise ValueError("invalid usage -- need at least a prefix")
     config = getcfg(prefix)
