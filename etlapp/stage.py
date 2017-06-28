@@ -41,13 +41,3 @@ def latest(prefix,name,stage=STAGE):
             return _filepath
     return None
 
-"""
-    _xtracted = mkpath(stage,'xtracted',prefix,name,stage)
-    log.debug("_incoming = '%s'" % _incoming)
-    log.debug("_xtracted = '%s'" % _xtracted)
-    return \
-        _xtracted if os.path.exists(_xtracted) else \
-        _incoming if os.path.exists(_incoming) else \
-        None
-"""
-
