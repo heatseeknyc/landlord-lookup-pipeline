@@ -22,8 +22,15 @@ def export(prefix,name,stage=STAGE,autoviv=False):
 def incoming(prefix,name,stage=STAGE,autoviv=False):
     return mkpath(stage,'incoming',prefix,name,autoviv)
 
+_phases = ('xtracted','unpack','incoming')
 def latest(prefix,name,stage=STAGE):
-    _incoming = mkpath(stage,'incoming',prefix,name,stage)
+    for phase in _phases:
+        filepath = mkpath(stage,phase,prefix,name)
+        if os.path.exists(filepath):
+            return filepath
+    return None
+
+"""
     _xtracted = mkpath(stage,'xtracted',prefix,name,stage)
     log.debug("_incoming = '%s'" % _incoming)
     log.debug("_xtracted = '%s'" % _xtracted)
@@ -31,4 +38,5 @@ def latest(prefix,name,stage=STAGE):
         _xtracted if os.path.exists(_xtracted) else \
         _incoming if os.path.exists(_incoming) else \
         None
+"""
 
