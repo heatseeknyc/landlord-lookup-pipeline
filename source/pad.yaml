@@ -1,0 +1,10 @@
+#
+# The DCP PAD
+#
+-
+  name: address 
+  unpack:
+    archive: pad17b.zip 
+    srcfile: bobaadr.txt
+  active: true 
+
