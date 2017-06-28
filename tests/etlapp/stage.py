@@ -10,8 +10,9 @@ from collections import OrderedDict
 import etlapp.stage as stage
 import etlapp.source as source
 
+
 """
-The names for these methods are kind of loosey-goosey.
+Okay, so the names for these methods are kind of obtuse-sounding.
 But hey, it's just a test suite.
 """
 
@@ -22,10 +23,8 @@ def datafor(prefix,name):
     return active,path
 
 def resolve(prefix):
-    """
-    Resolves a prefix into an OrderedDict of (name,values), where :values is
-    a tuple of values of interest.
-    """
+    """Resolves a prefix into an OrderedDict of (name,values), where :values is
+    a tuple of values of interest."""
     names = source.names(prefix)
     print("names[%s] = %s" % (prefix,names))
     pairs = ((name,datafor(prefix,name)) for name in names)
@@ -33,7 +32,7 @@ def resolve(prefix):
 
 def construct(sources):
     """Construct our big nested struct from a sequence of prefixes.
-    Reutrns: a nifty OrderdDict-of-OrderedDict-of-sequence struct."""
+    Returns: a nifty OrderdDict-of-OrderedDict-of-sequence struct."""
     pairs = ((prefix,resolve(prefix)) for prefix in sources)
     return OrderedDict(pairs)
 
