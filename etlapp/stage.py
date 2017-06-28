@@ -24,8 +24,10 @@ def incoming(prefix,name,stage=STAGE,autoviv=False):
 
 _phases = ('xtracted','unpack','incoming')
 def latest(prefix,name,stage=STAGE):
-    for phase in _phases:
-        filepath = mkpath(stage,phase,prefix,name)
+    n = len(_phases)
+    for j,phase in enumerate(_phases):
+        phasedir = "%d-%s" % (n-j,phase)
+        filepath = mkpath(stage,phasedir,prefix,name)
         if os.path.exists(filepath):
             return filepath
     return None
