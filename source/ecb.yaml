@@ -6,5 +6,5 @@
   name:  violation
   label: DOB-ECB-Violations
   slug:  '6bgk-3dad'
-  active: false
+  active: true 
 
