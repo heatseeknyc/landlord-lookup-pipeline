@@ -30,10 +30,10 @@ def resolve(prefix):
     pairs = ((name,datafor(prefix,name)) for name in names)
     return OrderedDict(pairs)
 
-def construct(sources):
+def construct(prefixes):
     """Construct our big nested struct from a sequence of prefixes.
     Returns: a nifty OrderdDict-of-OrderedDict-of-sequence struct."""
-    pairs = ((prefix,resolve(prefix)) for prefix in sources)
+    pairs = ((prefix,resolve(prefix)) for prefix in prefixes)
     return OrderedDict(pairs)
 
 def rollout(d):
@@ -43,9 +43,9 @@ def rollout(d):
             yield tuple([k,kk] + list(vv))
 
 def main():
-    sources = source.prefixes()
-    print("sources = ",sources)
-    d = construct(sources)
+    prefixes = source.prefixes()
+    print("prefixes = ",prefixes)
+    d = construct(prefixes)
     rows = list(rollout(d))
     print(tabulate(rows))
 
