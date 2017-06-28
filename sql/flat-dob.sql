@@ -120,5 +120,25 @@ create table flat.dob_complaint (
     dob_run_date timestamp
 );
 
+
+-- TEMPORARY
+-- Probably not ultimately needed because it's apparently just a select from the violations table. 
+-- However, we're not yet sure how select is done.  In order to find that out, we need to load it up first!
+--
+-- Borough Name,Community Board,BIN,House Number,Street Name,Complaint Number,Date Complaint Received,DOBRunDate
+-- Brooklyn,306,3026512,391         ,14 STREET                       ,3406587,03/21/2012 12:00:00 AM,04/26/2013 12:00:00 AM
+-- Brooklyn,301,3061986,205         ,NORTH    7 STREET               ,3350267,08/03/2010 12:00:00 AM,04/26/2013 12:00:00 AM
+
+create table flat.dob_stalled (
+    borough text,
+    cb integer,
+    bin integer,
+    house_number text,
+    street_name text,
+    complaint_number integer,
+    date_complaint_received date,
+    dob_run_date timestamp 
+);
+
 commit;
 
