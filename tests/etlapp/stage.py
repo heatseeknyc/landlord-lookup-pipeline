@@ -24,7 +24,7 @@ def datafor(prefix,name):
 
 def resolve(prefix):
     """Resolves a prefix into an OrderedDict of (name,values), where :values is
-    a tuple of values of interest."""
+    the tuple of values of interest."""
     names = source.names(prefix)
     print("names[%s] = %s" % (prefix,names))
     pairs = ((name,datafor(prefix,name)) for name in names)
