@@ -1,19 +1,30 @@
 import os
+from collections import OrderedDict
 from etlapp.logging import log
 
 STAGE = 'stage'
+PHASERANK = OrderedDict([('xtracted',3),('unpack',2),('incoming',1)])
+
+def dirpath(stage,branch,prefix):
+    j = PHASERANK.get(branch)
+    phasedir = "%d-%s" % (j,branch) if j is not None else branch
+    return "%s/%s/%s" % (stage,phasedir,prefix)
+
+def filepath(stage,branch,prefix,name):
+    _dirpath = dirpath(stage,branch,prefix)
+    return "%s/%s.csv" % (_dirpath,name)
 
 def mkdir_branch(stage,branch,prefix,autoviv=False):
-    dirpath = "%s/%s/%s" % (stage,branch,prefix)
+    _dirpath = dirpath(stage,branch,prefix)
     if not os.path.exists(dirpath):
         if autoviv:
             os.mkdir(dirpath)
         else:
             raise ValueError("invalid state -- can't find dirpath '%s'" % dirpath)
-    return dirpath
+    return _dirpath
 
 def mkpath(stage,branch,prefix,name,autoviv=False):
-    dirpath = mkdir_branch(stage,branch,prefix,autoviv)
+    _dirpath = mkdir_branch(stage,branch,prefix,autoviv)
     return "%s/%s.csv" % (dirpath,name)
 
 def export(prefix,name,stage=STAGE,autoviv=False):
@@ -22,14 +33,12 @@ def export(prefix,name,stage=STAGE,autoviv=False):
 def incoming(prefix,name,stage=STAGE,autoviv=False):
     return mkpath(stage,'incoming',prefix,name,autoviv)
 
-_phases = ('xtracted','unpack','incoming')
 def latest(prefix,name,stage=STAGE):
-    n = len(_phases)
-    for j,phase in enumerate(_phases):
-        phasedir = "%d-%s" % (n-j,phase)
-        filepath = mkpath(stage,phasedir,prefix,name)
-        if os.path.exists(filepath):
-            return filepath
+    for phase in PHASERANK.keys():
+        _filepath = filepath(stage,phase,prefix,name)
+        print("%s.%s:%s -> %s" % (prefix,name,phase,_filepath))
+        if os.path.exists(_filepath):
+            return _filepath
     return None
 
 """
