@@ -10,11 +10,15 @@ from collections import OrderedDict
 import etlapp.stage as stage
 import etlapp.source as source
 
+def datafor(prefix,name):
+    active = source.getval(prefix,name,'active')
+    path = stage.latest(prefix,name)
+    return active,path
 
 def resolve(prefix):
     names = source.names(prefix)
     print("names[%s] = %s" % (prefix,names))
-    pairs = ((name,[stage.latest(prefix,name)]) for name in names)
+    pairs = ((name,datafor(prefix,name)) for name in names)
     return OrderedDict(pairs)
 
 def construct(sources):
