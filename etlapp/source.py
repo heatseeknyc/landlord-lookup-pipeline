@@ -34,6 +34,9 @@ def getcfg(prefix):
     config = CONFIG.get(prefix)
     return config if config else loadcfg(prefix)
 
+def names(prefix):
+    return sorted(getcfg(prefix).keys())
+
 def getcfg_source(prefix,name,strict=True):
     """Shorthand to get the config dict for a named source.  If not present,
     a ValueError is raised."""
