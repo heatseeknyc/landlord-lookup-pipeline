@@ -284,5 +284,59 @@ begin
 end
 $$ language plpgsql;
 
+
+--
+-- The next 3 functions are generally for scrubbing fixed-width fields.
+--
+
+-- A simple "normalize fixed-width string" function which returns NULL if
+-- the input looks NULL-ish (that is, is all spaces), or the TRIM'd version
+-- of the string, otherwise.
+create or replace function public.normfw (s text)
+returns text as $$
+begin
+    if s is null or s ~ '^\s*$' then return null;
+    else return trim(s);
+    end if;
+end
+$$ language plpgsql;
+
+--
+-- Analogous to normfw(), but for cases where we're expecting our column to
+-- be a cleanly formatted integer, or a string of blank spaces (so we return
+-- an integer if we can be cast to one, or NULL otherwise).
+--
+-- Note that "dirty" strings (e.g. with embedded spaces or non-digit chars)
+-- will be simply cast to NULL; and it will simply choke on longer digit strings
+-- which should really be returned as bigints.  So you have to be on the lookout
+-- for that, and only use this function if you feel confident that your data
+-- meet the criteria above.
+---
+create or replace function public.soft_int (s text)
+returns integer as $$
+begin
+    if s is null then return null; end if;
+    if s ~ '^\d+$' then return s::integer; end if;
+    return null;
+end
+$$ language plpgsql;
+
+--
+-- Analogous to the above two functions, for the case where the BBL is presented
+-- in fixed-width fields (with similar caveats).  To be used only where your raw
+-- fields are very clean (that is, where youre characters are either all digits,
+-- or all blanks spaces).
+--
+create or replace function public.soft_bbl (boro_id text, block text, lot text)
+returns bigint AS $$
+begin
+    if boro_id is null or block is null or lot is null then
+        return null; end if;
+    if boro_id ~ '^\d{1}$' and block ~ '^\d{1,5}$' and lot ~ '^\d{1,4}$' then
+        return make_bbl(boro_id::smallint, block::integer, lot::smallint); end if;
+    return null;
+end
+$$ language plpgsql;
+
 commit;
 
