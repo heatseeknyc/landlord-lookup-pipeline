@@ -303,8 +303,9 @@ $$ language plpgsql;
 
 --
 -- Analogous to normfw(), but for cases where we're expecting our column to
--- be a cleanly formatted integer, or a string of blank spaces (so we return
--- an integer if we can be cast to one, or NULL otherwise).
+-- be a cleanly formatted integer (perhaps padded with spaces on either sidee), 
+-- or a string of blank spaces.  Either way, we return an integer if we can 
+-- reasonably cast to one, or null otherwise.
 --
 -- Note that "dirty" strings (e.g. with embedded spaces or non-digit chars)
 -- will be simply cast to NULL; and it will simply choke on longer digit strings
@@ -312,10 +313,14 @@ $$ language plpgsql;
 -- for that, and only use this function if you feel confident that your data
 -- meet the criteria above.
 ---
+-- XXX could perhaps be made more performant by using regexes to capture 
+-- space-embedded integers (rather than calling the trim() function beforehand,
+-- each and every time).
 create or replace function public.soft_int (s text)
 returns integer as $$
 begin
     if s is null then return null; end if;
+    s = trim(s);
     if s ~ '^\d+$' then return s::integer; end if;
     return null;
 end
@@ -327,11 +332,15 @@ $$ language plpgsql;
 -- fields are very clean (that is, where youre characters are either all digits,
 -- or all blanks spaces).
 --
+-- XXX similar performance caveats was with the soft_int() function.
 create or replace function public.soft_bbl (boro_id text, block text, lot text)
 returns bigint AS $$
 begin
     if boro_id is null or block is null or lot is null then
         return null; end if;
+    boro_id = trim(boro_id);
+    block = trim(block);
+    lot = trim(lot);
     if boro_id ~ '^\d{1}$' and block ~ '^\d{1,5}$' and lot ~ '^\d{1,4}$' then
         return make_bbl(boro_id::smallint, block::integer, lot::smallint); end if;
     return null;
