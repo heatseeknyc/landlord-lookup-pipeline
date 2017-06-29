@@ -17,16 +17,26 @@
 
 */
 
+
+--
+-- Flat schema for the ADR and BBL fixed-width tables in the 
+-- Bytes of the Big Apple Property Address Directory (PAD), v17b.
+--
+-- Character widths in both tables are aligned exactly to the data dictionary 
+-- for that release (except the 'physical_id' column, which wasn't present
+-- in the dictionary for some reason).
+--
+
 begin;
 
 drop table if exists flat.pad_adr cascade;
 create table flat.pad_adr (
-    boro smallint,
-    block integer,
-    lot smallint,
-    bin integer,
+    boro char(1) 
+    block char(5) 
+    lot char(4),
+    bin char(7),
     lhnd char(12), 
-    lhns char(12), 
+    lhns char(11), 
     lcontpar char(1), 
     lsos char(1),
     hhnd char(12), 
@@ -86,8 +96,8 @@ create table flat.pad_bbl (
     condoflag char(1), 
     condonum char(4), 
     coopnum char(4),
-    numbf integer, 
-    numaddr text, 
+    numbf char(2), 
+    numaddr char(4), 
     vacant char(1), 
     interior char(1)
 );
