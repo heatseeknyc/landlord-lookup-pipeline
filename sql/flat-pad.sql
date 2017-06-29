@@ -19,8 +19,8 @@
 
 begin;
 
-drop table if exists flat.pad_address cascade;
-create table flat.pad_address (
+drop table if exists flat.pad_adr cascade;
+create table flat.pad_adr (
     boro smallint,
     block integer,
     lot smallint,
@@ -65,8 +65,8 @@ create table flat.pad_address (
    1234   1234
 */
 
-drop table if exists flat.pad_lotinfo cascade;
-create table flat.pad_lotinfo (
+drop table if exists flat.pad_bbl cascade;
+create table flat.pad_bbl (
     loboro char(1),   
     loblock char(5),   
     lolot char(4),   
