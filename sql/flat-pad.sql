@@ -13,8 +13,8 @@ begin;
 
 drop table if exists flat.pad_adr cascade;
 create table flat.pad_adr (
-    boro char(1) 
-    block char(5) 
+    boro char(1),
+    block char(5), 
     lot char(4),
     bin char(7),
     lhnd char(12), 
