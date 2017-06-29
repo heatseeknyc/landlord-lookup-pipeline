@@ -49,5 +49,48 @@ create table flat.pad_address (
     physical_id char(7)
 );
 
+
+/*
+  "loboro","loblock","lolot","lobblscc",
+  "hiboro","hiblock","hilot","hibblscc",
+  "boro","block","lot","bblscc",
+  "billboro","billblock","billlot","billbblscc",
+  "condoflag","condonum","coopnum","numbf","numaddr","vacant","interior"
+
+  "1","00001","0010","7",
+  "1","00001","0010","7",
+  "1","00001","0010","7"," ",
+  "     ","    "," "," ",
+  "    ","    ","27","0461"," ", " "
+   1234   1234
+*/
+
+drop table if exists flat.pad_lotinfo cascade;
+create table flat.pad_lotinfo (
+    loboro char(1),   
+    loblock char(5),   
+    lolot char(4),   
+    lobblscc char(1),
+    hiboro char(1),   
+    hiblock char(5),
+    hilot char(4),
+    hibblscc char(1),
+    boro char(1),
+    block char(5),
+    lot char(4),
+    bblscc char(1),
+    billboro char(1), 
+    billblock char(5), 
+    billlot char(4), 
+    billbblscc char(1),
+    condoflag char(1), 
+    condonum char(4), 
+    coopnum char(4),
+    numbf integer, 
+    numaddr text, 
+    vacant char(1), 
+    interior char(1)
+);
+
 commit;
 

@@ -8,3 +8,10 @@
     srcfile: bobaadr.txt
   active: true 
 
+-
+  name: lotinfo 
+  unpack:
+    archive: pad17b.zip 
+    srcfile: bobabbl.txt
+  active: true 
+
