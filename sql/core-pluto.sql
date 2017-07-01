@@ -45,12 +45,12 @@ create view core.pluto_building as
 select * from flat.pluto_building
 where is_valid_bbl(bbl) and is_valid_bin(bin);
 
--- An identity table restricted to kosher BBLs (drops 143 outlier rows across 57 BBLs)
+-- An identity table restricted to regular BBLs (drops 143 outlier rows across 57 BBLs)
 -- Our final 'push.pluto_building' will be 1-1 with this rowset.
 drop materialized view if exists core.pluto_building_ideal cascade; 
 create materialized view core.pluto_building_ideal as
 select bbl, bin, doitt_id
-from core.pluto_building where is_kosher_bbl(bbl);
+from core.pluto_building where is_regular_bbl(bbl);
 create index on core.pluto_building_ideal(bbl);
 create index on core.pluto_building_ideal(bin);
 

@@ -61,11 +61,11 @@ begin
 end
 $$ language plpgsql;
 
--- Finally, a BBL is said to be "kosher" if it is valid but neither degenerate
+-- Finally, a BBL is said to be "regular" if it is valid but neither degenerate
 -- nor marginal.  That is to say, it may be still be mistyped or otherwise not
 -- describe a real taxlot, but at least it's not clearly erroneous (or otherwise
 -- suggestive of as being "marked for deprecation.")
-create or replace function public.is_kosher_bbl (bbl bigint) 
+create or replace function public.is_regular_bbl (bbl bigint) 
 returns boolean AS $$
 begin
     return is_valid_bbl(bbl) and not (is_degenerate(bbl) or is_marginal(bbl));
@@ -81,9 +81,9 @@ begin
 end
 $$ language plpgsql;
 
--- "kosherness" is definied analogously for BINs, except that we're only 
+-- "regularity" is definied analogously for BINs, except that we're only 
 -- concerned about all-zero BINs (and not with BINs containing all 9s).
-create or replace function public.is_kosher_bin (bin integer) 
+create or replace function public.is_regular_bin (bin integer) 
 returns boolean AS $$
 begin
     return 

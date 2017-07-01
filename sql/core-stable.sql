@@ -2,9 +2,9 @@ begin;
 
 -- 45064 rows for the 2007-2015 version of this dataset.
 -- There were are no structually invalid rows, but we keep the constraint
--- on kosher-ness in-place, on general principles (in case we get a different
--- version of this dataset in the future).  Note also thatapparently some 
--- 335 of these rows will nonetheless fail to match in Pluto 16v2.
+-- on regularness (of BBLs) in-place, on general principles (in case we get a 
+-- different version of this dataset in the future).  Note also thatapparently 
+-- some 335 of these rows will nonetheless fail to match in Pluto 16v2.
 --
 -- 405576 rows
 drop view if exists core.stable_joined cascade;
@@ -16,7 +16,7 @@ select
   case when estimate = 'Y' then true else false end as estimate,
   abatements
 from flat.stable_joined_nocrosstab
-where is_kosher_bbl(ucbbl);
+where is_regular_bbl(ucbbl);
 
 -- Aggregate by BBL, selecting last year with non-zero unit count
 -- (and restricting to BBLs with at least one year where that count is
@@ -36,13 +36,13 @@ from      core.stable_joined_maxyear as a
 left join core.stable_joined         as b on a.bbl = b.bbl and a.year = b.year;
 create index on core.stable_joined_lastyear(bbl);
 
--- Restricts the freshly loaded "flat" file kosher BBLs only, dropping
+-- Restricts the freshly loaded "flat" file regular BBLs only, dropping
 -- the 3 rows with broken block numbers + the catch-all "zombie" bbl (9999999999); 
 -- Leaving 39927 rows total.
 drop view if exists core.stable_dhcr2015_grouped;
 create view core.stable_dhcr2015_grouped as
 select * from flat.stable_dhcr2015_grouped
-where is_kosher_bbl(bbl);
+where is_regular_bbl(bbl);
 
 -- And finally row which tells us everything we know about a given BBL using both 
 -- sources taken together.  The data still require interpretation, and still not 

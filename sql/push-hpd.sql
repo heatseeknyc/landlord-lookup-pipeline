@@ -14,7 +14,7 @@ drop table if exists push.hpd_building cascade;
 create table push.hpd_building as
 select id, bbl, bin, program, dob_class_id, legal_stories, legal_class_a, legal_class_b, lifecycle, status_id
 from core.hpd_building
-where public.is_kosher_bbl(bbl) and public.is_valid_bin(bin);
+where public.is_regular_bbl(bbl) and public.is_valid_bin(bin);
 create index on push.hpd_building(id);
 create index on push.hpd_building(bbl);
 create index on push.hpd_building(bin);
@@ -26,7 +26,7 @@ drop table if exists push.hpd_registration cascade;
 create table push.hpd_registration as
 select id, bbl, building_id, bin, last_date, end_date 
 from core.hpd_registration
-where public.is_kosher_bbl(bbl) and public.is_valid_bin(bin);
+where public.is_regular_bbl(bbl) and public.is_valid_bin(bin);
 create index on push.hpd_registration(id);
 create index on push.hpd_registration(bbl);
 create index on push.hpd_registration(building_id);
@@ -49,7 +49,7 @@ drop table if exists push.hpd_legal cascade;
 create table push.hpd_legal as
 select id, building_id, bbl, case_type, case_open_date, case_status, case_status_date, case_judgement 
 from core.hpd_legal
-where public.is_kosher_bbl(bbl);
+where public.is_regular_bbl(bbl);
 create index on push.hpd_legal(id);
 create index on push.hpd_legal(bbl);
 create index on push.hpd_legal(building_id);
