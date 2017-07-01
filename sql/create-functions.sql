@@ -9,7 +9,7 @@ begin;
 --
 
 -- We call a BBL "valid" if it is at least structurally valid, 
--- that is, integer and not obviously out of range.
+-- that is, integer and not completely out of range.
 create or replace function public.is_valid_bbl (bbl bigint) 
 returns boolean AS $$
 begin
@@ -31,7 +31,6 @@ begin
       bbl in (1000000000,2000000000,3000000000,4000000000,5000000000);
 end
 $$ language plpgsql;
-
 
 -- A lot is said to he "marginal" if its valid, but -not- "degenerate", and 
 -- either its block or lot numbers are all zeros or all nines.  Note in particular
@@ -63,8 +62,8 @@ begin
 end
 $$ language plpgsql;
 
-
-
+-- An overlfow BBL has a lot number above the condo range, but is still not
+-- marginal.  These are sometimes used as placeholder or temporary BBLs.
 create or replace function public.is_overflow_bbl (bbl bigint) 
 returns boolean AS $$
 declare
@@ -78,7 +77,6 @@ begin
 end
 $$ language plpgsql;
 
-
 create or replace function public.is_condo_primary (bbl bigint) 
 returns boolean AS $$
 declare
@@ -90,6 +88,7 @@ begin
 end
 $$ language plpgsql;
 
+-- DEPRECATED
 create or replace function public.is_condo_secondary (bbl bigint) 
 returns boolean AS $$
 declare
@@ -100,9 +99,6 @@ begin
     return lot between 1001 and 6999;
 end
 $$ language plpgsql;
-
-
-
 
 
 -- 
@@ -144,7 +140,6 @@ begin
     return cast(bbl/10000 as integer);
 end
 $$ language plpgsql;
-
 
 -- 
 -- Given a BBL, return the 2-letter Borough Code used in many GIS systems 
