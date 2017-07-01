@@ -32,15 +32,6 @@ begin
 end
 $$ language plpgsql;
 
-create or replace function public.is_valid_bin (bin integer) 
-returns boolean AS $$
-begin
-    return 
-      bin is not null and 
-      bin >= 1000000 and bin < 6000000;
-end
-$$ language plpgsql;
-
 create or replace function public.is_degenerate (bbl bigint) 
 returns boolean AS $$
 begin
@@ -78,6 +69,15 @@ create or replace function public.is_kosher_bbl (bbl bigint)
 returns boolean AS $$
 begin
     return is_valid_bbl(bbl) and not (is_degenerate(bbl) or is_marginal(bbl));
+end
+$$ language plpgsql;
+
+create or replace function public.is_valid_bin (bin integer) 
+returns boolean AS $$
+begin
+    return 
+      bin is not null and 
+      bin >= 1000000 and bin < 6000000;
 end
 $$ language plpgsql;
 
