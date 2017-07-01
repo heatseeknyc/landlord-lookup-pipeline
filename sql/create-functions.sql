@@ -32,7 +32,7 @@ begin
 end
 $$ language plpgsql;
 
-create or replace function public.is_degenerate (bbl bigint) 
+create or replace function public.is_degenerate_bbl (bbl bigint) 
 returns boolean AS $$
 begin
     return 
@@ -45,7 +45,7 @@ $$ language plpgsql;
 -- A lot is said to he "marginal" if its valid, but -not- "degenerate", and 
 -- either its block or lot numbers are all zeros or all nines.  Note in particular
 -- that the 'marginal' and 'degenerate' categories are mutually exclusive.
-create or replace function public.is_marginal (bbl bigint) 
+create or replace function public.is_marginal_bbl (bbl bigint) 
 returns boolean AS $$
 declare
     block integer := 0;
@@ -68,7 +68,7 @@ $$ language plpgsql;
 create or replace function public.is_regular_bbl (bbl bigint) 
 returns boolean AS $$
 begin
-    return is_valid_bbl(bbl) and not (is_degenerate(bbl) or is_marginal(bbl));
+    return is_valid_bbl(bbl) and not (is_degenerate_bbl(bbl) or is_marginal_bbl(bbl));
 end
 $$ language plpgsql;
 
@@ -94,7 +94,7 @@ end
 $$ language plpgsql;
 
 
-create or replace function public.is_overflow (bbl bigint) 
+create or replace function public.is_overflow_bbl (bbl bigint) 
 returns boolean AS $$
 declare
     block integer := 0;
