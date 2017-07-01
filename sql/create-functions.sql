@@ -4,6 +4,10 @@
 
 begin;
 
+--
+-- Functions related to BBLs
+--
+
 -- We call a BBL "valid" if it is at least structurally valid, 
 -- that is, integer and not obviously out of range.
 create or replace function public.is_valid_bbl (bbl bigint) 
