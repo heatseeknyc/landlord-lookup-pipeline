@@ -32,6 +32,10 @@ begin
 end
 $$ language plpgsql;
 
+-- A BBL is 'degenerate' (or informally, a 'billion'-BBL) if all of its 
+-- non-leading digits are zero.  There are no real lots (either physical or 
+-- financial) with these numbers; but in practice these numbers are used as 
+-- stand-ins for NULL.
 create or replace function public.is_degenerate_bbl (bbl bigint) 
 returns boolean AS $$
 begin
