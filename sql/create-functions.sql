@@ -76,26 +76,6 @@ begin
 end
 $$ language plpgsql;
 
-create or replace function public.is_valid_bin (bin integer) 
-returns boolean AS $$
-begin
-    return 
-      bin is not null and 
-      bin >= 1000000 and bin < 6000000;
-end
-$$ language plpgsql;
-
--- "regularity" is definied analogously for BINs, except that we're only 
--- concerned about all-zero BINs (and not with BINs containing all 9s).
-create or replace function public.is_regular_bin (bin integer) 
-returns boolean AS $$
-begin
-    return 
-      bin is not null and 
-      bin > 1000000 and bin < 6000000 and 
-      bin not in (2000000,3000000,4000000,5000000);
-end
-$$ language plpgsql;
 
 
 create or replace function public.is_overflow_bbl (bbl bigint) 
@@ -133,6 +113,33 @@ begin
     return lot between 1001 and 6999;
 end
 $$ language plpgsql;
+
+
+--
+-- Functions related to BINs (Building Identification Numbers)
+--
+
+create or replace function public.is_valid_bin (bin integer) 
+returns boolean AS $$
+begin
+    return 
+      bin is not null and 
+      bin >= 1000000 and bin < 6000000;
+end
+$$ language plpgsql;
+
+-- "regularity" is definied analogously for BINs, except that we're only 
+-- concerned about all-zero BINs (and not with BINs containing all 9s).
+create or replace function public.is_regular_bin (bin integer) 
+returns boolean AS $$
+begin
+    return 
+      bin is not null and 
+      bin > 1000000 and bin < 6000000 and 
+      bin not in (2000000,3000000,4000000,5000000);
+end
+$$ language plpgsql;
+
 
 create or replace function public.is_coop_bldg_class (bldg_class char(2)) 
 returns boolean AS $$
