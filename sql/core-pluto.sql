@@ -60,7 +60,7 @@ create index on core.pluto_building_ideal(bin);
 drop materialized view if exists core.pluto_building_count cascade; 
 create materialized view core.pluto_building_count as 
 select bbl, count(*) as total, count(distinct BIN) as bin
-from core.pluto_building_ideal group by bbl;
+from core.pluto_building group by bbl;
 create index on core.pluto_building_count(bbl);
 
 -- Finds "orphaned" buildings in the buildings list but not in pluto.
