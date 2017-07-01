@@ -4,23 +4,6 @@
 
 begin;
 
--- A simple filter to determine whether we've been given a valid
--- YYYYMMDD string.  Not bullet proof by any means, but will at least
--- catch certain invalid cases we've seen so far. 
-create or replace function public.is_valid_yyyymmdd (datestr text) 
-returns boolean AS $$
-begin
-    return 
-        datestr is not null and
-        datestr ~ '^(19|20)(0\d|1[012])[0123]\d$' and
-        datestr !~ '023\d$' and 
-        datestr !~ '0431$' and 
-        datestr !~ '0631$' and 
-        datestr !~ '0931$' and 
-        datestr !~ '1131$';
-end
-$$ language plpgsql;
-
 -- We call a BBL "valid" if it is at least structurally valid, 
 -- that is, integer and not obviously out of range.
 create or replace function public.is_valid_bbl (bbl bigint) 
@@ -225,6 +208,23 @@ $$ language plpgsql;
 --
 -- Miscellaneous functions
 -- 
+
+-- A simple filter to determine whether we've been given a valid
+-- YYYYMMDD string.  Not bullet proof by any means, but will at least
+-- catch certain invalid cases we've seen so far. 
+create or replace function public.is_valid_yyyymmdd (datestr text) 
+returns boolean AS $$
+begin
+    return 
+        datestr is not null and
+        datestr ~ '^(19|20)(0\d|1[012])[0123]\d$' and
+        datestr !~ '023\d$' and 
+        datestr !~ '0431$' and 
+        datestr !~ '0631$' and 
+        datestr !~ '0931$' and 
+        datestr !~ '1131$';
+end
+$$ language plpgsql;
 
 create or replace function public.boroname2boroid (boro_name text) 
 returns smallint AS $$
