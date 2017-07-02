@@ -22,8 +22,6 @@ drop table if exists push.dcp_pad_bbl_count cascade;
 create table push.dcp_pad_bbl_count as
 select distinct(x.bbl) from (
   select distinct(bbl) as bbl from push.dcp_pad_bbl union 
-  select distinct(lo_bbl) from push.dcp_pad_bbl union 
-  select distinct(hi_bbl) from push.dcp_pad_bbl union 
   select distinct(bill_bbl) from push.dcp_pad_bbl 
 ) as x;
 
