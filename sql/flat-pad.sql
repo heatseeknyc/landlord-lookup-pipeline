@@ -70,38 +70,3 @@ create table flat.pad_bbl (
 
 commit;
 
-
-/*
-
-"boro","block","lot","bin",
-"lhnd","lhns","lcontpar","lsos",
-"hhnd","hhns","hcontpar","hsos",
-"scboro","sc5","sclgc","stname","addrtype","realb7sc","validlgcs","dapsflag",
-"naubflag","parity","b10sc","segid","zipcode","physical_id"
-
-"1","00001","0010","1089249",
- 1234567890ab
-"            ","           "," ","L",
-"            ","           "," ","L",                    12345678   12345678
-"1","00074","01","HUGH CAREY TNNL VENTILATOR BLDG ","N","        ","01      "," ",
-" ","0","10007401010","0132761","10004","       "
-         1234567890A                     1234567
-
-*/
-
-/*
-  "loboro","loblock","lolot","lobblscc",
-  "hiboro","hiblock","hilot","hibblscc",
-  "boro","block","lot","bblscc",
-  "billboro","billblock","billlot","billbblscc",
-  "condoflag","condonum","coopnum","numbf","numaddr","vacant","interior"
-
-  "1","00001","0010","7",
-  "1","00001","0010","7",
-  "1","00001","0010","7"," ",
-  "     ","    "," "," ",
-  "    ","    ","27","0461"," ", " "
-   1234   1234
-*/
-
-
