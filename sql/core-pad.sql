@@ -32,7 +32,7 @@ select
 from flat.pad_adr;
 
 -- Creates BBLs + casts other columns as appropriate. 
--- Drops the 3 SCC columns, as these don't seem to have any external meaning. 
+-- But we drop the 4 SCC columns, as these don't seem to have any external meaning. 
 drop view if exists core.pad_bbl cascade; 
 create view core.pad_bbl as
 select
