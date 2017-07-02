@@ -62,10 +62,12 @@ create index on push.pluto_building_canonical(bbl,bin);
 -- But the tables are small, and it's convenient to have everything together here 
 -- in the 'push' schema.
 
+drop table if exists push.pluto_refdata_bldgclass cascade; 
 create table push.pluto_refdata_bldgclass as
 select * from flat.pluto_refdata_bldgclass;
 create index on push.pluto_refdata_bldgclass(tag);
 
+drop table if exists push.pluto_refdata_landuse cascade; 
 create table push.pluto_refdata_landuse as
 select * from flat.pluto_refdata_landuse;
 create index on push.pluto_refdata_landuse(tag);
