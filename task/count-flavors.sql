@@ -21,7 +21,13 @@ select x.prefix, x.source, x.flavor, x.uniqbbl, x.rowcount from (
   select 2, 'acris', 'legal', 'valid', count(*), sum(total) from push.acris_legal_count where is_valid_bbl(bbl) union 
   select 3, 'acris', 'legal', 'regular', count(*), sum(total) from push.acris_legal_count where is_regular_bbl(bbl) union
   select 4, 'acris', 'legal', 'marginal', count(*), sum(total) from push.acris_legal_count where is_marginal_bbl(bbl) union 
-  select 5, 'acris', 'legal', 'degenerate', count(*), sum(total) from push.acris_legal_count where is_degenerate_bbl(bbl) 
+  select 5, 'acris', 'legal', 'degenerate', count(*), sum(total) from push.acris_legal_count where is_degenerate_bbl(bbl) union
+
+  select 1, 'pad', 'bbl', 'total' as flavor, count(*), NULL from push.pad_bbl_count union 
+  select 2, 'pad', 'bbl', 'valid', count(*), NULL from push.pad_bbl_count where is_valid_bbl(bbl) union 
+  select 3, 'pad', 'bbl', 'regular', count(*), NULL from push.pad_bbl_count where is_regular_bbl(bbl) union
+  select 4, 'pad', 'bbl', 'marginal', count(*), NULL from push.pad_bbl_count where is_marginal_bbl(bbl) union 
+  select 5, 'pad', 'bbl', 'degenerate', count(*), NULL from push.pad_bbl_count where is_degenerate_bbl(bbl) 
 
 ) as x order by prefix, source, rank;
 
