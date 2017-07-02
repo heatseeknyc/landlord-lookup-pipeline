@@ -1,7 +1,12 @@
+--
+-- Columns in both table are cast in the "obvious" way:
+-- That is, BBLs created where indicated, and other columns cast to trimmed text 
+-- (via 'normfw') or to integers (via 'soft_int'), in both cases defaulting to NULL 
+-- where appropriate.
+--
 
 begin;
 
--- All columns cast in the obvious way. 
 drop view if exists core.pad_adr cascade; 
 create view core.pad_adr as
 select
@@ -31,8 +36,7 @@ select
     soft_int(physical_id) as physical_id 
 from flat.pad_adr;
 
--- Creates BBLs + casts other columns as appropriate. 
--- But we drop the 4 SCC columns, as these don't seem to have any external meaning. 
+-- We drop the 4 SCC columns, as these don't seem to have any external meaning. 
 drop view if exists core.pad_bbl cascade; 
 create view core.pad_bbl as
 select
