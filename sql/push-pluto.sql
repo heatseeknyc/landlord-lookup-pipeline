@@ -32,7 +32,7 @@ left join push.pluto_building_count_keytup as b on a.bbl = b.bbl and a.bin = b.b
 left join push.pluto_building_count_bin    as c on a.bin = c.bin; */
 drop table if exists push.pluto_building cascade; 
 create table push.pluto_building as
-select * from  core.pluto_building_ideal;
+select * from  core.pluto_building;;
 create index on push.pluto_building(bbl);
 create index on push.pluto_building(bin);
 create index on push.pluto_building(bbl,bin);
