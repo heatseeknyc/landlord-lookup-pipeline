@@ -1,7 +1,9 @@
 #
-# Source specification the two primary tabels (ADR and BBL)in the
-# Bytes of the Big Apple Property Address Directory (PAD).
+# Various fine DCP datasets. 
 #
+
+# The next two entries are for the ADR and BBL tables from the 
+# "Bytes of the Big Apple Property Address Directory" (PAD)
 -
   name: pad-adr 
   unpack:
@@ -16,6 +18,7 @@
     srcfile: bobabbl.txt
   active: true 
 
+# The PAWS dataset 
 - 
  name: paws
  label: 'Publicly-Accessible-Waterfront-Spaces-PAWS-'
