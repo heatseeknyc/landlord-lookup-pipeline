@@ -16,16 +16,16 @@ def filepath(stage,branch,prefix,name):
 
 def mkdir_branch(stage,branch,prefix,autoviv=False):
     _dirpath = dirpath(stage,branch,prefix)
-    if not os.path.exists(dirpath):
+    if not os.path.exists(_dirpath):
         if autoviv:
-            os.mkdir(dirpath)
+            os.mkdir(_dirpath)
         else:
             raise ValueError("invalid state -- can't find dirpath '%s'" % dirpath)
     return _dirpath
 
 def mkpath(stage,branch,prefix,name,autoviv=False):
     _dirpath = mkdir_branch(stage,branch,prefix,autoviv)
-    return "%s/%s.csv" % (dirpath,name)
+    return "%s/%s.csv" % (_dirpath,name)
 
 def export(prefix,name,stage=STAGE,autoviv=False):
     return mkpath(stage,'export',prefix,name,autoviv)
