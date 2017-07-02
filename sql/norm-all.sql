@@ -48,6 +48,10 @@ select bbl,docid from (
     select bbl,docid,count(*) from p1.acris_declare group by bbl,docid
 ) as x order by docid,bbl;
 
+create view norm.dcp_pad_bbl as
+select lo_bbl, hi_bbl, bbl, bill_bbl, condoflag, condonum, coopnum
+from push.dcp_pad_bbl order by bbl;
+
 commit;
 
 
