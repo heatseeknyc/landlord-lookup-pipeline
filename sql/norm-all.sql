@@ -22,7 +22,7 @@ from p1.acris_condo_maybe order by bbl;
 */
 
 create view norm.pluto_condo_primary as
-select * from push.pluto_taxlot_tidy where is_condo_primary(bbl) order by bbl;
+select * from push.pluto_taxlot_tidy where is_condo_bbl(bbl) order by bbl;
 
 create view norm.acris_declare as
 select * from p1.acris_history where doctype = 'DECL' order by bbl, date_filed desc;

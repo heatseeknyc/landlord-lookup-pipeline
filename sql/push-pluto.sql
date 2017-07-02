@@ -97,7 +97,7 @@ create index on push.pluto_building_orphan_count(bbl);
 -- A pre-baked table of primary condo lots, with qualified block numbes slotted in.
 -- Yields 7440 rows in 16v2.
 create table push.pluto_condo as
-select bbl, public.bbl2qblock(bbl) as qblock from flat.pluto_taxlot where public.is_condo_primary(bbl);
+select bbl, public.bbl2qblock(bbl) as qblock from flat.pluto_taxlot where public.is_condo_bbl(bbl);
 create index on push.pluto_condo(bbl);
 create index on push.pluto_condo(qblock);
 

@@ -77,7 +77,7 @@ begin
 end
 $$ language plpgsql;
 
-create or replace function public.is_condo_primary (bbl bigint) 
+create or replace function public.is_condo_bbl (bbl bigint) 
 returns boolean AS $$
 declare
     lot smallint := 0;
