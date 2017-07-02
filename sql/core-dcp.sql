@@ -7,8 +7,8 @@
 
 begin;
 
-drop view if exists core.pad_adr cascade; 
-create view core.pad_adr as
+drop view if exists core.dcp_pad_adr cascade; 
+create view core.dcp_pad_adr as
 select
     soft_bbl(boro,block,lot) as bbl,
     soft_int(bin) as bin,
@@ -34,11 +34,11 @@ select
     soft_int(segid) as segid,
     soft_int(zipcode) as zipcode, 
     soft_int(physical_id) as physical_id 
-from flat.pad_adr;
+from flat.dcp_pad_adr;
 
 -- We drop the 4 SCC columns, as these don't seem to have any external meaning. 
-drop view if exists core.pad_bbl cascade; 
-create view core.pad_bbl as
+drop view if exists core.dcp_pad_bbl cascade; 
+create view core.dcp_pad_bbl as
 select
     soft_bbl(loboro,loblock,lolot) as lo_bbl,
     soft_bbl(hiboro,hiblock,hilot) as hi_bbl,
@@ -51,7 +51,7 @@ select
     normfw(numaddr) as numaddr,
     normfw(vacant) as vacant,
     normfw(interior) as interior
-from flat.pad_bbl;
+from flat.dcp_pad_bbl;
 
 commit;
 

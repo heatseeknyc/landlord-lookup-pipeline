@@ -11,8 +11,8 @@
 
 begin;
 
-drop table if exists flat.pad_adr cascade;
-create table flat.pad_adr (
+drop table if exists flat.dcp_pad_adr cascade;
+create table flat.dcp_pad_adr (
     boro char(1),
     block char(5), 
     lot char(4),
@@ -41,8 +41,8 @@ create table flat.pad_adr (
     physical_id char(7)
 );
 
-drop table if exists flat.pad_bbl cascade;
-create table flat.pad_bbl (
+drop table if exists flat.dcp_pad_bbl cascade;
+create table flat.dcp_pad_bbl (
     loboro char(1),   
     loblock char(5),   
     lolot char(4),   
