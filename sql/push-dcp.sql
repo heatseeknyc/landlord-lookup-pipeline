@@ -18,7 +18,7 @@ create index on push.dcp_pad_bbl(hi_bbl);
 create index on push.dcp_pad_bbl(bbl);
 create index on push.dcp_pad_bbl(bill_bbl);
 
-drop materialized view push.dcp_pad_bbl_count if exists cascade;
+drop materialized view if exists push.dcp_pad_bbl_count cascade;
 create materialized view push.dcp_pad_bbl_count as
 select distinct(x.bbl) from (
   select distinct(bbl) as bbl from push.dcp_pad_bbl union 
