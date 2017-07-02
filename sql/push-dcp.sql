@@ -21,9 +21,17 @@ create index on push.dcp_pad_bbl(bill_bbl);
 drop table if exists push.dcp_pad_bbl_count cascade;
 create table push.dcp_pad_bbl_count as
 select distinct(x.bbl) from (
-  select distinct(bbl) as bbl from push.dcp_pad_bbl union 
-  select distinct(bill_bbl) from push.dcp_pad_bbl 
+  select bbl as bbl from push.dcp_pad_bbl union 
+  select bill_bbl from push.dcp_pad_bbl where bill_bbl is not null 
 ) as x;
 
 commit;
+
+/*
+drop table if exists push.dcp_wtf cascade;
+create table push.dcp_wtf as
+select 1 as k,bbl as bbl from push.dcp_pad_bbl union 
+select 2,bill_bbl from push.dcp_pad_bbl;
+*/
+
 
