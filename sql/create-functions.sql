@@ -88,7 +88,8 @@ begin
 end
 $$ language plpgsql;
 
--- DEPRECATED
+-- DEPRECATED 
+/*
 create or replace function public.is_condo_secondary (bbl bigint) 
 returns boolean AS $$
 declare
@@ -98,7 +99,7 @@ begin
     lot := cast(bbl % 10000 as smallint);
     return lot between 1001 and 6999;
 end
-$$ language plpgsql;
+$$ language plpgsql; */
 
 
 -- 
