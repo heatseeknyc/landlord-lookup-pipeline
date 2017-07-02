@@ -20,7 +20,7 @@
 
 # The PAWS dataset 
 - 
- name: paws
- label: 'Publicly-Accessible-Waterfront-Spaces-PAWS-'
- slug: '388s-pnvc'
+  name: paws
+  label: 'Publicly-Accessible-Waterfront-Spaces-PAWS-'
+  slug: '388s-pnvc'
 
