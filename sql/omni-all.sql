@@ -31,7 +31,8 @@ select
     a.in_condo as in_pad_condo,
     a.bbl is not null as in_pad,
     b.bbl is not null as in_acris,
-    qualify_bbl(coalesce(a.bbl,b.bbl)) as qualify
+    qualify_bbl(coalesce(a.bbl,b.bbl)) as qualify,
+    bbl2qblock(coalesce(a.bbl,b.bbl)) as qblock
 from omni.dcp_all as a
 full outer join push.acris_legal_count as b on a.bbl = b.bbl;
 create index on omni.taxlot_origin(bbl);
