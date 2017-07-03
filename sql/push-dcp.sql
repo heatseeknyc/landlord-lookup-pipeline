@@ -41,7 +41,7 @@ create table push.dcp_pad_outer as
 select 
     coalesce(a.bbl,b.bbl) as bbl, 
     a.bbl is not null as in_bbl, 
-    b.bbl is not null as in_pad 
+    b.bbl is not null as in_adr
 from            push.dcp_pad_bbl_count as a
 full outer join push.dcp_pad_adr_count as b on a.bbl = b.bbl;
 create index on push.dcp_pad_outer(bbl);
