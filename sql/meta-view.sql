@@ -148,6 +148,22 @@ left join push.hpd_taxlot_summary     as e on a.bbl = e.bbl
 left join meta.dob_taxlot_summary     as f on a.bbl = f.bbl 
 left join meta.residential            as g on a.bbl = g.bbl;
 
+-- Everything you really need to know about a given taxlot. 
+drop view if exists meta.taxlot cascade;
+create view meta.taxlot as
+select 
+    a.*,
+    b.land_use, b.units_total, b.units_res, b.building_count, b.year_built, 
+    b.address, b.owner_name, b.lon_ctr, b.lat_ctr, b.radius, b.parts
+from omni.taxlot_origin     as a
+left join push.pluto_taxlot as b on a.bbl = b.bbl;
+
+
+
+
+
+
+
 -- A simplified view of push.contacts with some column names, other columns 
 -- catenated for brevity / tidier reporting (and minus contact_title), and the
 -- ordering rank for contact_type slotted in.
