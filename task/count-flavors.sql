@@ -31,7 +31,14 @@ select x.prefix, x.source, x.flavor, x.uniqbbl, x.rowcount from (
   select 3, 'dcp', 'pad-adr', 'regular', count(*), NULL from push.dcp_pad_adr_count where is_regular_bbl(bbl) union
   select 4, 'dcp', 'pad-adr', 'marginal', count(*), NULL from push.dcp_pad_adr_count where is_marginal_bbl(bbl) union
   select 5, 'dcp', 'pad-adr', 'degenerate', count(*), NULL from push.dcp_pad_adr_count where is_degenerate_bbl(bbl) union
-  select 6, 'dcp', 'pad-adr', 'condo', count(*), NULL from push.dcp_pad_adr_count where is_condo_bbl(bbl)
+  select 6, 'dcp', 'pad-adr', 'condo', count(*), NULL from push.dcp_pad_adr_count where is_condo_bbl(bbl) union
+
+  select 1, 'dcp', 'pad-bbl', 'total' as flavor, count(*), NULL from push.dcp_pad_bbl_count union
+  select 2, 'dcp', 'pad-bbl', 'valid', count(*), NULL from push.dcp_pad_bbl_count where is_valid_bbl(bbl) union
+  select 3, 'dcp', 'pad-bbl', 'regular', count(*), NULL from push.dcp_pad_bbl_count where is_regular_bbl(bbl) union
+  select 4, 'dcp', 'pad-bbl', 'marginal', count(*), NULL from push.dcp_pad_bbl_count where is_marginal_bbl(bbl) union
+  select 5, 'dcp', 'pad-bbl', 'degenerate', count(*), NULL from push.dcp_pad_bbl_count where is_degenerate_bbl(bbl) union
+  select 6, 'dcp', 'pad-bbl', 'condo', count(*), NULL from push.dcp_pad_bbl_count where is_condo_bbl(bbl)
 
 ) as x order by prefix, source, rank;
 
