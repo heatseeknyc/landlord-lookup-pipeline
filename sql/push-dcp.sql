@@ -25,6 +25,12 @@ select distinct(x.bbl) from (
   select bill_bbl from push.dcp_pad_bbl where bill_bbl is not null 
 ) as x;
 
+-- A unified view of all (primary) BBLs between BBL+ADR tables
+drop table if exists push.dcp_pad_bbl_count cascade;
+create table push.dcp_pad_outer as
+select coalesce(a.bbl,b.bbl) as bbl, a.bbl as in_bbl, b.bbl as in_pad
+from            push.dcp_pad_bbl_count as a
+full outer join push.dcp_pad_adr_count as b on a.bbl = b.bbl;
 
 commit;
 
