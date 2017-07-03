@@ -42,6 +42,16 @@ create materialized view push.pluto_building_count as
 select bbl, count(*) as total, count(distinct bin) as building
 from push.pluto_building group by bbl; 
 
+-- A counting table by (BBL,BIN) with the restriction that both columns 
+-- are non-null.  Currently excludes the single tuple (NULL,0) in 16v2.
+create table push.pluto_keytup as
+select bbl, bin, count(*) as total 
+from push.pluto_building where bbl is not null and bin is not null
+group by bbl, bin;
+create index on push.pluto_keytup(bbl);
+create index on push.pluto_keytup(bin);
+create index on push.pluto_keytup(bbl,bin);
+
 
 -- These next two statements just copy existing tables from the 'flat' schema. 
 -- But the tables are small, and it's convenient to have everything together here 
