@@ -99,24 +99,41 @@ $$ language plpgsql;
 -- Note that the categories are mutually exclusive (and should cover all
 -- inputs, assuming their underlying deermination functions are working 
 -- propertly).  
---
--- But unfortunately these methods have been implemented (for now) with
--- an optimization for clarify of expression, rather than speed (as it's
--- easy to screw switches like these up).
+
+
 --
 -- Returns a smallint signifying the structural cetegory for the given BBL:
+--
+--     { 0:invalid, 1:regular, 2:degenerate, 3:marginal }
+--
+-- It will always return a number in the range 0-3. 
+--
 create or replace function public.qualify_bbl (bbl bigint) 
 returns smallint AS $$
+declare
+    block integer := 0;
+    lot smallint := 0;
 begin
-    if not is_valid_bbl(bbl) then return 0; end if;
-    if is_regular_bbl(bbl) then return 1; end if;
-    if is_degenerate_bbl(bbl) then return 2; end if;
-    if is_marginal_bbl(bbl) then return 3; end if;
-    return 9; 
+    if bbl is null or bbl < 1000000000 or bbl >= 6000000000
+        then return 0; end if;  -- invalid
+    if bbl in (1000000000,2000000000,3000000000,4000000000,5000000000)
+        then return 2; end if;  -- degenerate
+    block := ((bbl % 1000000000)/10000)::integer;
+    lot := (bbl % 10000)::smallint;
+    if block in (0,99999) or lot in (0,9999)
+        then return 3; end if;  -- marginal
+    return 1;                   -- regular
 end
 $$ language plpgsql;
 
+
+--
 -- Returns a smallint signifying the structural cetegory for the given BIN:
+--
+--     { 0:invalid, 1:regular, 2:degenerate }
+--
+-- It will always return a number in the range 0-2. 
+--
 create or replace function public.qualify_bin (bin integer) 
 returns smallint AS $$
 begin
