@@ -1,4 +1,9 @@
-
+--
+-- In which we analyze and reconcile the BBL+ADR tables in the PAD database,
+-- culminating in very special table, "dcp_pad_outer", an outer join of the two. 
+-- Note that we're forced to suffer from the poorly name for the BBL table, 
+-- leading to constant confusion between the table name and the column name.
+--
 begin;
 
 drop table if exists push.dcp_pad_adr cascade; 
@@ -18,6 +23,7 @@ create index on push.dcp_pad_bbl(hi_bbl);
 create index on push.dcp_pad_bbl(bbl);
 create index on push.dcp_pad_bbl(bill_bbl);
 
+-- A counting table for (primary) BBLs in the BBL table. 
 drop table if exists push.dcp_pad_bbl_count cascade;
 create table push.dcp_pad_bbl_count as
 select distinct(x.bbl) from (
@@ -25,7 +31,9 @@ select distinct(x.bbl) from (
   select bill_bbl from push.dcp_pad_bbl where bill_bbl is not null 
 ) as x;
 
--- A unified view of all (primary) BBLs between BBL+ADR tables
+-- A unified view of all (primary) BBLs between BBL+ADR tables.
+-- That is, we only want "phyiscal" and "bank" BBLs, but not the (implied)
+-- condo unit BBLs given by the lo/hi ranges.
 drop table if exists push.dcp_pad_outer cascade;
 create table push.dcp_pad_outer as
 select 
