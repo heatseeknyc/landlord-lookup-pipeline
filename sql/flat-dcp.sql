@@ -68,5 +68,16 @@ create table flat.dcp_pad_bbl (
     interior char(1)
 );
 
+-- Finally - our magical condo map.
+-- Constraints are provided mainly for descriptive purposes (since we generate 
+-- the data ourselves, we don't expect it to be out of whack).
+drop table if exists flat.dcp_condo_map cascade;
+create table flat.dcp_condo_map (
+    bank bigint CHECK (is_condo_bbl(bank)),
+    unit bigint CHECK (is_regular_bbl(unit)),
+    UNIQUE(bank,unit),
+    UNIQUE(unit)
+);
+
 commit;
 

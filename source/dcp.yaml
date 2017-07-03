@@ -24,3 +24,9 @@
   label: 'Publicly-Accessible-Waterfront-Spaces-PAWS-'
   slug: '388s-pnvc'
 
+
+# Derived condo map
+- 
+  name: condo-map
+  phase: special
+
