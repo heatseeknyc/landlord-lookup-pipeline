@@ -25,13 +25,6 @@ select distinct(x.bbl) from (
   select bill_bbl from push.dcp_pad_bbl where bill_bbl is not null 
 ) as x;
 
+
 commit;
-
-/*
-drop table if exists push.dcp_wtf cascade;
-create table push.dcp_wtf as
-select 1 as k,bbl as bbl from push.dcp_pad_bbl union 
-select 2,bill_bbl from push.dcp_pad_bbl;
-*/
-
 
