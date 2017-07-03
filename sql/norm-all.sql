@@ -48,7 +48,7 @@ select bbl,docid from (
     select bbl,docid,count(*) from p1.acris_declare group by bbl,docid
 ) as x order by docid,bbl;
 
-create view norm.dcp_pad_bbl as
+create view norm.dcp_condo_spec as
 select lo_bbl, hi_bbl, bbl, bill_bbl, condoflag, condonum, coopnum
 from push.dcp_pad_bbl where is_condo_bbl(bill_bbl)
 order by bill_bbl, lo_bbl, bbl;
