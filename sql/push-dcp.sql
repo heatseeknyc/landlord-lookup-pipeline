@@ -46,5 +46,19 @@ from            push.dcp_pad_bbl_count as a
 full outer join push.dcp_pad_adr_count as b on a.bbl = b.bbl;
 create index on push.dcp_pad_outer(bbl);
 
+-- A counting tabe on (BBL,BIN), where both columns are non-null  As of 17b, 
+-- both colums are non-null, so no tuples are excluded by this restriction. 
+-- But we including the restriction anyway to avoid any potential confusion
+-- that may arise in future PAD releases.
+-- Yields 1157327 tuples.
+create table push.dcp_pad_keytup as
+select bbl, bin, count(*) as total 
+from push.dcp_pad_adr where bbl is not null and bin is not null
+group by bbl, bin;
+create index on push.dcp_pad_keytup(bbl);
+create index on push.dcp_pad_keytup(bin);
+create index on push.dcp_pad_keytup(bbl,bin);
+
+
 commit;
 
