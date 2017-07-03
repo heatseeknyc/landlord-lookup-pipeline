@@ -5,7 +5,7 @@ from collections import OrderedDict
 from etlapp.logging import log
 from nycprop.identity import bbl2qblock
 from etlapp.decorators import timedsingle
-from etlapp.util.io import read_recs
+from etlapp.util.io import read_recs, save_recs
 import etlapp.util.nycgeo as nycgeo
 import etlapp.source
 import etlapp.stage
@@ -20,23 +20,26 @@ def perform(posargs=None,options=None):
 
 def matchup():
     log.info("..")
-    infile_spec = etlapp.stage.mkpath('export','dcp','condo-spec')
-    if not os.path.exists(infile_spec):
-        raise ValueError("can't find infile '%s'" % infile_spec)
+    infile = etlapp.stage.mkpath('export','dcp','condo-spec')
+    if not os.path.exists(infile):
+        raise ValueError("can't find infile '%s'" % infile)
     log.info("file ok!")
-    recs = list(read_recs(infile_spec))
+    recs = list(read_recs(infile))
     log.info("that be %d recs" % len(recs))
     pairs = list(unroll(recs))
     distinct = sorted(set(pairs))
     log.info("yields %d pairs (%d distinct)" % (len(pairs),len(distinct)))
+    outfile = etlapp.stage.mkpath('special','dcp','condo-map',autoviv=True)
+    outrecs = ({'unit':unit,'bank':bank} for unit,bank in distinct)
+    save_recs(outfile,outrecs,header=('bank','unit'))
     log.info("done")
     return True
 
 def unroll(recs):
     for r in recs:
         lo,hi,bank = int(r['lo_bbl']),int(r['hi_bbl']),(r['bill_bbl'])
-        for condo in range(lo,hi+1):
-            yield condo,bank
+        for unit in range(lo,hi+1):
+            yield unit,bank
 
 
 
