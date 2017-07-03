@@ -20,7 +20,7 @@ def perform(posargs=None,options=None):
 
 def matchup():
     log.info("..")
-    infile_spec = etlapp.stage.export('dcp','condo-spec')
+    infile_spec = etlapp.stage.mkpath('export','dcp','condo-spec')
     if not os.path.exists(infile_spec):
         raise ValueError("can't find infile '%s'" % infile_spec)
     log.info("file ok!")
@@ -41,8 +41,8 @@ def unroll(recs):
 
 
 def match_olde():
-    infile_acris = etlapp.stage.export('acris','condo-maybe')
-    infile_pluto = etlapp.stage.export('pluto','condo-primary')
+    infile_acris = etlapp.stage.mkpath('export','acris','condo-maybe')
+    infile_pluto = etlapp.stage.mkpath('export','pluto','condo-primary')
     log.info("..")
     if not os.path.exists(infile_acris):
         raise ValueError("can't find infile '%s'" % infile_acris)

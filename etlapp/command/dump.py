@@ -44,7 +44,7 @@ def dump_source_named(prefix,name,force=False):
     # XXX at this point, we should be checking for relation existence as well.
     table = tablename('norm',prefix,name)
     log.info("table = '%s'" % table)
-    outfile = etlapp.stage.export(prefix,name,autoviv=True)
+    outfile = etlapp.stage.mkpath('export',prefix,name,autoviv=True)
     log.info("outfile = '%s'" % outfile)
     if not force and os.path.exists(outfile):
         message = "cowardly refusing to overwrite existing outfile '%s' without --force option"
