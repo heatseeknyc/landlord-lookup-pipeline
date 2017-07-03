@@ -137,10 +137,11 @@ $$ language plpgsql;
 create or replace function public.qualify_bin (bin integer) 
 returns smallint AS $$
 begin
-    if not is_valid_bin(bin) then return 0; end if;
-    if is_regular_bin(bin) then return 1; end if;
-    if is_degenerate_bin(bin) then return 2; end if;
-    return 9; 
+    if bin is null or bin < 1000000 or bin >= 6000000
+        then return 0; end if;  -- invalid
+    if bin in (1000000,2000000,3000000,4000000,5000000)
+        then return 2; end if;  -- degenerate
+    return 1;                   -- regular
 end
 $$ language plpgsql;
 
