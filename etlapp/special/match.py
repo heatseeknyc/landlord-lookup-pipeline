@@ -3,6 +3,7 @@ import copy
 from tabulate import tabulate
 from collections import OrderedDict
 from etlapp.logging import log
+from nycprop.identity import bbl2qblock
 from etlapp.decorators import timedsingle
 from etlapp.util.io import read_recs
 import etlapp.util.nycgeo as nycgeo
@@ -23,10 +24,21 @@ def matchup():
     if not os.path.exists(infile_spec):
         raise ValueError("can't find infile '%s'" % infile_spec)
     log.info("file ok!")
-    graph = list(read_recs(infile_spec))
-    log.info("that be %d recs" % len(graph))
+    recs = list(read_recs(infile_spec))
+    log.info("that be %d recs" % len(recs))
+    pairs = list(unroll(recs))
+    distinct = sorted(set(pairs))
+    log.info("yields %d pairs (%d distinct)" % (len(pairs),len(distinct)))
     log.info("done")
     return True
+
+def unroll(recs):
+    for r in recs:
+        lo,hi,bank = int(r['lo_bbl']),int(r['hi_bbl']),(r['bill_bbl'])
+        for condo in range(lo,hi+1):
+            yield condo,bank
+
+
 
 def match_olde():
     infile_acris = etlapp.stage.export('acris','condo-maybe')
