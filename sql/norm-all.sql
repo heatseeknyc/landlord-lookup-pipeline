@@ -52,6 +52,14 @@ select bbl,docid from (
 -- For every legitimate (that is "condo/bank") bill_bbl, we provide just the valid 
 -- pairs of (lo,hi) BBLs that are themselves not condo/bank BBLs (and not out of sequence).
 -- (Actually, a lo > hi case hasn't occured yet, but the check is there anyway just in case).
+--
+-- Also, we derive a 'depth' column reprenting the number of implied units in the given range.
+--
+-- Yields 247526 implied units across 7766 bank BBLs for version 17b. 
+-- Note that this "sum" implies the ranges are not overlapping, which hasn't been verified
+-- at this stage.  It's entirely possible that some ranges do overlap, so the real unit
+-- total will may be a bit lower, after cross-checking. 
+---
 create view norm.dcp_condo_spec as
 select lo_bbl, hi_bbl, bbl, bill_bbl, condoflag, condonum, coopnum,
     (1+(hi_bbl-lo_bbl))::integer as depth
