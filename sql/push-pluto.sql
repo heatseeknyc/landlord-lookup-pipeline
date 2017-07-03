@@ -44,6 +44,7 @@ from push.pluto_building group by bbl;
 
 -- A counting table by (BBL,BIN) with the restriction that both columns 
 -- are non-null.  Currently excludes the single tuple (NULL,0) in 16v2.
+-- Yields 1081156 tuples.
 create table push.pluto_keytup as
 select bbl, bin, count(*) as total 
 from push.pluto_building where bbl is not null and bin is not null
