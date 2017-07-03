@@ -35,6 +35,7 @@ create index on push.dcp_pad_bbl_count(bbl);
 -- A unified view of all (primary) BBLs between BBL+ADR tables.
 -- That is, we only want "phyiscal" and "bank" BBLs, but not the (implied)
 -- condo unit BBLs given by the lo/hi ranges.
+-- 878205 rows for version 17b.
 drop table if exists push.dcp_pad_outer cascade;
 create table push.dcp_pad_outer as
 select 
