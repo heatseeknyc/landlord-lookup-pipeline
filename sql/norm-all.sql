@@ -50,7 +50,7 @@ select bbl,docid from (
 
 create view norm.dcp_pad_bbl as
 select lo_bbl, hi_bbl, bbl, bill_bbl, condoflag, condonum, coopnum
-from push.dcp_pad_bbl order by bbl;
+from push.dcp_pad_bbl where is_condo_bbl(bill_bbl); 
 
 commit;
 
