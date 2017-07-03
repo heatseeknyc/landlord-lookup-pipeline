@@ -5,17 +5,17 @@ from etlapp.logging import log
 STAGE = 'stage'
 PHASERANK = OrderedDict([('special',4),('xtracted',3),('unpack',2),('incoming',1)])
 
-def dirpath(stage,branch,prefix):
-    j = PHASERANK.get(branch)
-    phasedir = "%d-%s" % (j,branch) if j is not None else branch
+def dirpath(stage,phase,prefix):
+    j = PHASERANK.get(phase)
+    phasedir = "%d-%s" % (j,phase) if j is not None else phase 
     return "%s/%s/%s" % (stage,phasedir,prefix)
 
-def filepath(stage,branch,prefix,name):
-    _dirpath = dirpath(stage,branch,prefix)
+def filepath(stage,phase,prefix,name):
+    _dirpath = dirpath(stage,phase,prefix)
     return "%s/%s.csv" % (_dirpath,name)
 
-def mkdir_branch(stage,branch,prefix,autoviv=False):
-    _dirpath = dirpath(stage,branch,prefix)
+def mkdir_phase(stage,phase,prefix,autoviv=False):
+    _dirpath = dirpath(stage,phase,prefix)
     if not os.path.exists(_dirpath):
         if autoviv:
             os.mkdir(_dirpath)
@@ -23,8 +23,8 @@ def mkdir_branch(stage,branch,prefix,autoviv=False):
             raise ValueError("invalid state -- can't find dirpath '%s'" % _dirpath)
     return _dirpath
 
-def mkpath(stage,branch,prefix,name,autoviv=False):
-    _dirpath = mkdir_branch(stage,branch,prefix,autoviv)
+def mkpath(stage,phase,prefix,name,autoviv=False):
+    _dirpath = mkdir_phase(stage,phase,prefix,autoviv)
     return "%s/%s.csv" % (_dirpath,name)
 
 def export(prefix,name,stage=STAGE,autoviv=False):
