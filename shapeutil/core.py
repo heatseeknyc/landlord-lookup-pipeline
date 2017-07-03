@@ -117,14 +117,18 @@ class ShapefileWrapper(object):
         for i in range(0,len(self)):
             yield self.bigrec(i,normal,projection)
 
-def _normstr(v):
+def _normstr(v,encoding=None):
     """
     Normalizes extracted strings.  Specifically, converts bytes objects to
-    str objects, and strips whitespace on all strings (regardless of origin 
+    str objects, and strips whitespace on all strings (regardless of origin
     type).
     """
     if isinstance(v,bytes):
-        return v.decode('utf-8').strip()
+        # return v.decode('utf-8').strip()
+        if encoding is not None:
+            return v.decode(encoding).strip()
+        else:
+            return str(v).strip()
     if isinstance(v,str):
         return v.strip()
     else:
