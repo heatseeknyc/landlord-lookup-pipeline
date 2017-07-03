@@ -92,6 +92,26 @@ begin
 end
 $$ language plpgsql;
 
+-- In which we return a smallint signifying which of the 4 main structural 
+-- categories describes this BBL.  Note that by definition, categories 0-3 are 
+-- mutually exclusive, and any integer (or NULL) input should call into one of 
+-- these ctegories; hence the "final" category (9) is logically unreachable,
+-- assuming each of the 4 determination functions are behaving correctly. 
+create or replace function public.qualify_bbl (bbl bigint) 
+returns smallint AS $$
+begin
+    if not is_valid_bbl(bbl) then return 0; end if;
+    if is_regular_bbl(bbl) then return 1; end if;
+    if is_degenerate_bbl(bbl) then return 2; end if;
+    if is_marginal_bbl(bbl) then return 3; end if;
+    return 9; 
+end
+$$ language plpgsql;
+
+
+
+
+
 -- DEPRECATED 
 /*
 create or replace function public.is_condo_secondary (bbl bigint) 
