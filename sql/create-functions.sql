@@ -52,9 +52,9 @@ end
 $$ language plpgsql;
 
 -- Finally, a BBL is said to be "regular" if it is valid but neither degenerate
--- nor marginal.  That is to say, it may be still be mistyped or otherwise not
--- describe a real taxlot, but at least it's not clearly erroneous (or otherwise
--- suggestive of as being "marked for deprecation.")
+-- nor marginal.  That is to say, it may or may not be in any of the city's databases 
+-- (or it might be in one more database, but its presence there is questionable), 
+-- but at least it's structurally valid and not "marked for deprecation".
 create or replace function public.is_regular_bbl (bbl bigint) 
 returns boolean AS $$
 begin
