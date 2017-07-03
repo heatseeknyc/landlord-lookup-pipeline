@@ -19,15 +19,12 @@ def perform(posargs=None,options=None):
 
 def matchup():
     log.info("..")
-    infile_graph = etlapp.stage.export('acris','condo-graph')
-    if not os.path.exists(infile_graph):
-        raise ValueError("can't find infile '%s'" % infile_graph)
+    infile_spec = etlapp.stage.export('dcp','condo-spec')
+    if not os.path.exists(infile_spec):
+        raise ValueError("can't find infile '%s'" % infile_spec)
     log.info("file ok!")
-    graph = list(read_recs(infile_graph))
+    graph = list(read_recs(infile_spec))
     log.info("that be %d recs" % len(graph))
-    # status,delta = match_streams(pluto,acris)
-    # _status = 'OK' if status else 'FAIL'
-    # log.info("status = %s in %.3f sec" % (_status,delta))
     log.info("done")
     return True
 
