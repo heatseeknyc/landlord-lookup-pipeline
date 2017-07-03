@@ -30,6 +30,7 @@ select distinct(x.bbl) from (
   select bbl as bbl from push.dcp_pad_bbl union 
   select bill_bbl from push.dcp_pad_bbl where bill_bbl is not null 
 ) as x;
+create index on push.dcp_pad_bbl_count(bbl);
 
 -- A unified view of all (primary) BBLs between BBL+ADR tables.
 -- That is, we only want "phyiscal" and "bank" BBLs, but not the (implied)
@@ -42,6 +43,7 @@ select
     b.bbl is not null as in_pad 
 from            push.dcp_pad_bbl_count as a
 full outer join push.dcp_pad_adr_count as b on a.bbl = b.bbl;
+create index on push.dcp_pad_outer(bbl);
 
 commit;
 
