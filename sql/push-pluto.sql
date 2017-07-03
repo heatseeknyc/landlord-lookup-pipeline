@@ -42,23 +42,8 @@ create materialized view push.pluto_building_count as
 select bbl, count(*) as total, count(distinct bin) as building
 from push.pluto_building group by bbl; 
 
-/*
-create materialized view push.pluto_building_kosher as
-select * from push.pluto_building where is_kosher_bin(bin);
-create index on push.pluto_building_kosher(bbl);
-create index on push.pluto_building_kosher(bin);
-create index on push.pluto_building_kosher(bbl,bin);
-*/
 
-
-
-/*
-create table push.pluto_building_canonical as
-select * from core.pluto_building_canonical;
-create index on push.pluto_building_canonical(bbl,bin);
-*/
-
--- Yes, these next two statements just copy existing tables from the 'flat' schema. 
+-- These next two statements just copy existing tables from the 'flat' schema. 
 -- But the tables are small, and it's convenient to have everything together here 
 -- in the 'push' schema.
 
