@@ -36,6 +36,12 @@ from omni.dcp_all as a
 full outer join push.acris_legal_count as b on a.bbl = b.bbl;
 create index on omni.taxlot_origin(bbl);
 
+
+-- Some 296 illegal BBLs in the combined stabilizatin list!
+create view omni.stable_orphan as
+select a.* from push.stable_combined as a
+left join omni.taxlot_origin as b on a.bbl = b.bbl where b.bbl is null;
+
 commit;
 
 
