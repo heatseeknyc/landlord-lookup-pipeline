@@ -43,6 +43,26 @@ create view omni.stable_orphan as
 select a.* from push.stable_combined as a
 left join omni.taxlot_origin as b on a.bbl = b.bbl where b.bbl is null;
 
+
+-- A unified view of (BBL,BIN) tuples, across ADR + Pluto buildings.
+-- If a (BBL,BIN) pair has any significance, theoretically it should be in here.
+-- Yields 1185955 rows for PAD 17b and Pluto 16v2.
+create table omni.building_origin as
+select
+    coalesce(a.bbl,b.bbl) as bbl,
+    coalesce(a.bin,b.bin) as bin,
+    a.bbl is not null as in_adr,   -- in push.dcp_pad_adr
+    b.bbl is not null as in_pluto, -- in push.pluto_building
+    qualify_bbl(coalesce(a.bbl,b.bbl)) as stat_bbl,
+    qualify_bin(coalesce(a.bin,b.bin)) as stat_bin,
+    a.total as total_adr,  -- count of distinct -features- (most likely); or possibly buildings
+    b.total as total_pluto  -- count of distinct doitt_id's (hence, buildings)
+from push.dcp_pad_keytup as a
+full outer join push.pluto_keytup as b on (a.bbl,a.bin) = (b.bbl,b.bin);
+create index on omni.building_origin(bbl);
+create index on omni.building_origin(bin);
+create index on omni.building_origin(bbl,bin);
+
 commit;
 
 
