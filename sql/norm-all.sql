@@ -48,9 +48,15 @@ select bbl,docid from (
     select bbl,docid,count(*) from p1.acris_declare group by bbl,docid
 ) as x order by docid,bbl;
 
+-- Now we derive the real, normalized range spec that PAD should have provided:
+-- For every legitimate (that is "condo/bank") bill_bbl, we provide just the valid 
+-- pairs of (lo,hi) BBLs that are themselves not condo/bank BBLs (and not out of sequence).
+-- (Actually, a lo > hi case hasn't occured yet, but the check is there anyway just in case).
 create view norm.dcp_condo_spec as
-select lo_bbl, hi_bbl, bbl, bill_bbl, condoflag, condonum, coopnum
-from push.dcp_pad_bbl where is_condo_bbl(bill_bbl)
+select lo_bbl, hi_bbl, bbl, bill_bbl, condoflag, condonum, coopnum,
+    (1+(hi_bbl-lo_bbl))::integer as depth
+from push.dcp_pad_bbl where is_condo_bbl(bill_bbl) and
+    not (is_condo_bbl(lo_bbl) or is_condo_bbl(hi_bbl)) and lo_bbl <= hi_bbl
 order by bill_bbl, lo_bbl, bbl;
 
 commit;
