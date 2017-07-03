@@ -92,11 +92,19 @@ begin
 end
 $$ language plpgsql;
 
--- In which we return a smallint signifying which of the 4 main structural 
--- categories describes this BBL.  Note that by definition, categories 0-3 are 
--- mutually exclusive, and any integer (or NULL) input should call into one of 
--- these ctegories; hence the "final" category (9) is logically unreachable,
--- assuming each of the 4 determination functions are behaving correctly. 
+
+-- The next two functions return a smallint signifying the strucrutal
+-- category of a BBL or BIN, respectively.
+--
+-- Note that the categories are mutually exclusive (and should cover all
+-- inputs, assuming their underlying deermination functions are working 
+-- propertly).  
+--
+-- But unfortunately these methods have been implemented (for now) with
+-- an optimization for clarify of expression, rather than speed (as it's
+-- easy to screw switches like these up).
+--
+-- Returns a smallint signifying the structural cetegory for the given BBL:
 create or replace function public.qualify_bbl (bbl bigint) 
 returns smallint AS $$
 begin
@@ -108,6 +116,16 @@ begin
 end
 $$ language plpgsql;
 
+-- Returns a smallint signifying the structural cetegory for the given BIN:
+create or replace function public.qualify_bin (bin integer) 
+returns smallint AS $$
+begin
+    if not is_valid_bin(bin) then return 0; end if;
+    if is_regular_bin(bin) then return 1; end if;
+    if is_degenerate_bin(bin) then return 2; end if;
+    return 9; 
+end
+$$ language plpgsql;
 
 
 
