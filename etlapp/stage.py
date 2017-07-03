@@ -20,7 +20,7 @@ def mkdir_branch(stage,branch,prefix,autoviv=False):
         if autoviv:
             os.mkdir(_dirpath)
         else:
-            raise ValueError("invalid state -- can't find dirpath '%s'" % dirpath)
+            raise ValueError("invalid state -- can't find dirpath '%s'" % _dirpath)
     return _dirpath
 
 def mkpath(stage,branch,prefix,name,autoviv=False):
