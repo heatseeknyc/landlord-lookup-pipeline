@@ -59,11 +59,23 @@ create table push.pluto_refdata_landuse as
 select * from flat.pluto_refdata_landuse;
 create index on push.pluto_refdata_landuse(tag);
 
+
+
+
+
+
+
+
+
+
+
+
 --
 -- Analytical views
 --
 
 
+-- DEPRECATED
 -- "Orphaned" buildings/lots with no BBL in Pluto
 drop materialized view if exists push.pluto_building_orphan cascade; 
 create materialized view push.pluto_building_orphan as
@@ -72,6 +84,7 @@ from      push.pluto_building as a
 left join push.pluto_taxlot         as b on a.bbl = b.bbl where b.bbl is null;
 create index on push.pluto_building_orphan(bbl);
 
+-- DEPRECATED
 drop materialized view if exists push.pluto_building_orphan_count cascade; 
 create materialized view push.pluto_building_orphan_count as
 select bbl, count(*) as total, count(distinct bin) as bin 
@@ -81,6 +94,7 @@ create index on push.pluto_building_orphan_count(bbl);
 
 
 
+-- DEPRECATED
 -- A pre-baked table of primary condo lots, with qualified block numbes slotted in.
 -- Yields 7440 rows in 16v2.
 create table push.pluto_condo as
@@ -88,15 +102,18 @@ select bbl, public.bbl2qblock(bbl) as qblock from flat.pluto_taxlot where public
 create index on push.pluto_condo(bbl);
 create index on push.pluto_condo(qblock);
 
+-- DEPRECATED
 create table push.pluto_coop as
 select bbl from push.pluto_taxlot where public.is_coop_bldg_class(bldg_class);
 create index on push.pluto_coop(bbl);
 
+-- DEPRECATED
 create table push.pluto_condo_qblock as
 select qblock,count(*) as total from push.pluto_condo group by qblock;
 create index on push.pluto_condo_qblock(qblock);
 
 
+-- DEPRECATED
 create view push.pluto_qblock_count as
 select 
    public.bbl2qblock(bbl) as qblock, 
@@ -104,6 +121,7 @@ select
 from push.pluto_taxlot 
 group by public.bbl2qblock(bbl);
 
+-- DEPRECATED
 -- Ranges for "regular" no-condo lots, i.e below the 7501 range 
 create view push.pluto_qblock_range as
 select 
@@ -114,10 +132,12 @@ from push.pluto_taxlot
 where public.bbl2lot(bbl) < 7500
 group by public.bbl2qblock(bbl);
 
+-- DEPRECATED
 -- Condos per qblock
 create view push.pluto_qblock_condo as
 select qblock,count(*) as total from push.pluto_condo group by qblock;
 
+-- DEPRECATED
 -- So-caled overflow lots with numbers above the condo range.
 create view push.pluto_qblock_overflow as
 select 
@@ -127,6 +147,7 @@ from push.pluto_taxlot
 where public.bbl2lot(bbl) > 7599
 group by public.bbl2qblock(bbl);
 
+-- DEPRECATED
 create table push.pluto_qblock_summary as
 select 
    a.qblock, 
