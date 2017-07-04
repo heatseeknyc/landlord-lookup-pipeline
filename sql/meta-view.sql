@@ -167,13 +167,13 @@ select
     (e.status or d.status is not null) as residential, 
     is_condo_bbl(a.bbl) as is_condo,
     f.bbl is not null as is_coop,
-    g.date_filed as acris_transfer_date,
-    g.docid as acris_transfer_docid,
-    g.count as acris_party_count,
-    g.amount as acris_amount, 
-    g.name  as acris_owner, 
-    g.address1 as acris_address1,
-    g.address2 as acris_address2
+    g.date_filed   as acris_transfer_date,
+    g.docid        as acris_transfer_docid,
+    g.count        as acris_party_count,
+    g.amount       as acris_amount, 
+    g.name         as acris_owner, 
+    g.address1     as acris_address1,
+    g.address2     as acris_address2
 from omni.taxlot_origin     as a
 left join push.pluto_taxlot as b on a.bbl = b.bbl
 left join meta.stabilized   as d on a.bbl = d.bbl
