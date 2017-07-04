@@ -108,7 +108,7 @@ $$ language plpgsql;
 --
 -- It will always return a number in the range 0-3. 
 --
-create or replace function public.qualify_bbl (bbl bigint) 
+create or replace function public.bbl2type (bbl bigint) 
 returns smallint AS $$
 declare
     block integer := 0;
@@ -134,7 +134,7 @@ $$ language plpgsql;
 --
 -- It will always return a number in the range 0-2. 
 --
-create or replace function public.qualify_bin (bin integer) 
+create or replace function public.bin2type (bin integer) 
 returns smallint AS $$
 begin
     if bin is null or bin < 1000000 or bin >= 6000000

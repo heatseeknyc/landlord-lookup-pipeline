@@ -31,7 +31,7 @@ select
     a.in_condo as in_pad_condo,
     a.bbl is not null as in_pad,
     b.bbl is not null as in_acris,
-    qualify_bbl(coalesce(a.bbl,b.bbl)) as qualify,
+    bbl2type(coalesce(a.bbl,b.bbl)) as bbltype 
     bbl2qblock(coalesce(a.bbl,b.bbl)) as qblock
 from omni.dcp_all as a
 full outer join push.acris_legal_count as b on a.bbl = b.bbl;
@@ -53,8 +53,8 @@ select
     coalesce(a.bin,b.bin) as bin,
     a.bbl is not null as in_adr,   -- in push.dcp_pad_adr
     b.bbl is not null as in_pluto, -- in push.pluto_building
-    qualify_bbl(coalesce(a.bbl,b.bbl)) as stat_bbl,
-    qualify_bin(coalesce(a.bin,b.bin)) as stat_bin,
+    bbl2type(coalesce(a.bbl,b.bbl)) as bbltype,
+    bin2type(coalesce(a.bin,b.bin)) as bintype,
     a.total as total_adr,  -- count of distinct -features- (most likely); or possibly buildings
     b.total as total_pluto  -- count of distinct doitt_id's (hence, buildings)
 from push.dcp_pad_keytup as a
