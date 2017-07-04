@@ -156,7 +156,7 @@ select
     b.address as pluto_address,
     b.owner_name as pluto_owner,
     d.status as stabilized,
-    e.status as residential,
+    (e.status or d.status is not null) as residential, 
     is_condo_bbl(a.bbl) as is_condo,
     f.bbl is not null as is_coop,
     g.date_filed as acris_purchase_date,
