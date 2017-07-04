@@ -65,7 +65,7 @@ select bbl from push.pluto_taxlot where units_res >= 6 and year_built <= 1974;
 --     of appearance is before 2015.  (Implicating being it likely was stabilized
 --     in the past, but may no longer have stabilized units).
 --
---     'possible' if neither of the above criteria are met, but the property meets 
+--     'possible' if neither of the above criteria are met, but the property meets
 --     generic criteria for stabilization (pre-1974, 6 or more units),
 --
 -- A couple of notes as to the above:
