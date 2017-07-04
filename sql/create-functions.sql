@@ -254,8 +254,17 @@ begin
 end
 $$ language plpgsql;
 
--- "regularity" is definied analogously for BINs, except that we're only 
--- concerned about all-zero BINs (and not with BINs containing all 9s).
+-- So-called "million" BINs with all zeros.
+create or replace function public.is_degenerate_bin (bin integer) 
+returns boolean AS $$
+begin
+    return 
+      bin is not null and 
+      bin in (1000000,2000000,3000000,4000000,5000000);
+end
+$$ language plpgsql;
+
+-- A BIN is "regular" if it is valid and not degenerate. 
 create or replace function public.is_regular_bin (bin integer) 
 returns boolean AS $$
 begin
