@@ -22,5 +22,9 @@ select * from push.pluto_building;
 create index on hard.pluto_building(bbl);
 create index on hard.pluto_building(doitt_id);
 
+create table hard.taxlot as
+select * from meta.taxlot;
+create index on hard.taxlot(bbl);
+
 commit;
 
