@@ -21,15 +21,6 @@ select bin, count(*) as total
 from core.pluto_building_ideal group by bin;
 */
 
-/*
-create table push.pluto_building as
-select 
-    a.*, 
-    coalesce(b.total,0) as depth_keytup, 
-    coalesce(c.total,0) as depth_bin
-from      core.pluto_building_ideal as a
-left join push.pluto_building_count_keytup as b on a.bbl = b.bbl and a.bin = b.bin
-left join push.pluto_building_count_bin    as c on a.bin = c.bin; */
 drop table if exists push.pluto_building cascade; 
 create table push.pluto_building as
 select * from  core.pluto_building;;
