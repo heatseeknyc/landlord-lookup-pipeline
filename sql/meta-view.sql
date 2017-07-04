@@ -70,17 +70,17 @@ select bbl from push.pluto_taxlot where units_res >= 6 and year_built <= 1974;
 --
 -- A couple of notes as to the above:
 --
---     - Due to the logic of how this table is constructed, every row will have
---       on of the above 3 values (i.e. there will be no rows with NULL status).
+--   - Due to the logic of how this table is constructed, every row will have
+--     on of the above 3 values (i.e. there will be no rows with NULL status).
 --
---     - So it shows up as NULL in a left join, that means the lot was most likely
---       never stabilized.
+--   - So it shows up as NULL in a left join, that means the lot was most likely
+--     never stabilized.
 --
---     -- Some of the above flags have different definitions in other rowsets.
---        For example, presence in the 'stable_likely' view (which the select for
---        this view pulls from) simply means that the tax lot meets pre-1974 criteria; 
---        whereas in this view it means that it meets those criteria, -and- is not 
---        otherwise 'confirmed' or 'disputed'.
+--   - Some of the above flags have different definitions in other rowsets.
+--     For example, presence in the 'stable_likely' view (which the select for
+--     this view pulls from) simply means that the tax lot meets pre-1974 criteria; 
+--     whereas in this view it means that it meets those criteria, -and- is not 
+--     otherwise 'confirmed' or 'disputed'.
 --
 create view meta.stabilized as
 select
