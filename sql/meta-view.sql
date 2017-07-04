@@ -151,6 +151,10 @@ drop view if exists meta.taxlot cascade;
 create view meta.taxlot as
 select 
     a.bbl, a.in_pad, a.in_acris, a.bbltype,
+    d.status as stabilized,
+    (e.status or d.status is not null) as residential, 
+    is_condo_bbl(a.bbl) as is_condo,
+    f.bbl is not null as is_coop,
     b.land_use           as pluto_land_use, 
     b.pluto_units_total  as pluto_units_total, 
     b.units_res          as pluto_units_res, 
@@ -163,10 +167,6 @@ select
     b.points             as pluto_points,
     b.address            as pluto_address,
     b.owner_name         as pluto_owner,
-    d.status as stabilized,
-    (e.status or d.status is not null) as residential, 
-    is_condo_bbl(a.bbl) as is_condo,
-    f.bbl is not null as is_coop,
     g.date_filed   as acris_transfer_date,
     g.docid        as acris_transfer_docid,
     g.count        as acris_party_count,
