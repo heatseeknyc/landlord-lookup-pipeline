@@ -20,6 +20,10 @@ In any case, in our data model such BINs are described as *degenerate*, and are 
 a *bintype* of 2.
 
 
+Weird Cases
+-----------
 
+Some weird cases of BINs or BBL/BIN pairings throughout the various datasets (or not-so 
+weird, really, because variants of these situations occur all the time). 
 
 
