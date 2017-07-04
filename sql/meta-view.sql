@@ -152,7 +152,9 @@ create view meta.taxlot as
 select 
     a.*,
     b.land_use, b.units_total, b.units_res, b.building_count, b.year_built, 
-    b.address, b.owner_name, b.lon_ctr, b.lat_ctr, b.radius, b.parts,
+    b.lon_ctr, b.lat_ctr, b.radius, b.parts,
+    b.address as pluto_address,
+    b.owner_name as pluto_owner,
     d.status as stable_status
 from omni.taxlot_origin     as a
 left join push.pluto_taxlot as b on a.bbl = b.bbl
