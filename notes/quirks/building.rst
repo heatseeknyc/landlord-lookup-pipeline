@@ -1,6 +1,11 @@
 
 Notes about BIN quirks across various data sources.
 
+Provenance
+----------
+
+In theory, BINs are assigned by the DCP's Geographic Support Services (GSS) unit.
+
 
 "Million" BINs
 --------------
