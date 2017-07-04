@@ -156,11 +156,14 @@ select
     b.address as pluto_address,
     b.owner_name as pluto_owner,
     d.status as stabilized,
-    e.status as residential 
+    e.status as residential,
+    is_condo_bbl(a.bbl) as is_condo,
+    f.bbl is not null as is_coop
 from omni.taxlot_origin     as a
 left join push.pluto_taxlot as b on a.bbl = b.bbl
 left join meta.stabilized   as d on a.bbl = d.bbl
-left join meta.residential  as e on a.bbl = e.bbl;
+left join meta.residential  as e on a.bbl = e.bbl
+left join push.dcp_coop     as f on a.bbl = f.bbl;
 
 
 
