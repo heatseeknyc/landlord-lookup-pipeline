@@ -27,3 +27,18 @@ Some weird cases of BINs or BBL/BIN pairings throughout the various datasets (or
 weird, really, because variants of these situations occur all the time). 
 
 
+
+*1013595*
+
+
+Associated with the "bank" BBL, 1007607501.
+
+
+  select * from omni.building_origin where bin = 1013595;
+      bbl     |   bin   | in_adr | in_pluto | stat_bbl | stat_bin | total_adr | total_pluto 
+  ------------+---------+--------+----------+----------+----------+-----------+-------------
+   1007600026 | 1013595 | f      | t        |        1 |        1 |           |           1
+   1007601001 | 1013595 | t      | f        |        1 |        1 |         2 |            
+  (2 rows)
+
+
