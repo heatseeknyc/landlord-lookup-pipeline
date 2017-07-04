@@ -150,7 +150,10 @@ left join meta.residential            as g on a.bbl = g.bbl;
 drop view if exists meta.taxlot cascade;
 create view meta.taxlot as
 select 
-    a.bbl, a.in_pad, a.in_acris, a.bbltype,
+    a.bbl, 
+    a.in_pad, 
+    a.in_acris, 
+    a.bbltype,
     d.status as stabilized,
     (e.status or d.status is not null) as residential, 
     is_condo_bbl(a.bbl) as is_condo,
