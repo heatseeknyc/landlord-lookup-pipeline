@@ -189,6 +189,22 @@ left join push.dcp_coop     as f on a.bbl = f.bbl
 left join p1.acris_owner_info as g on a.bbl = g.bbl;
 
 
+drop view if exists meta.building cascade;
+create view meta.building as
+select 
+    a.bbl, 
+    a.bin,
+    b.doitt_id,
+    b.lat_ctr,
+    b.lon_ctr,
+    b.radius,
+    b.parts,
+    a.in_adr,
+    a.in_pluto,
+    a.total_adr,
+    a.total_pluto
+from omni.building_origin     as a
+left join push.pluto_building as b on (a.bbl,a.bin) = (b.bbl,b.bin);
 
 
 
