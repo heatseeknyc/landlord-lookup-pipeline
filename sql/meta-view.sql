@@ -163,7 +163,7 @@ select
     b.land_use           as pluto_land_use, 
     b.bldg_class         as pluto_bldg_class,
     b.zone_dist1         as pluto_zone_dist1,
-    b.pluto_units_total  as pluto_units_total, 
+    b.units_total        as pluto_units_total, 
     b.units_res          as pluto_units_res, 
     b.building_count     as pluto_building_count,
     b.year_built         as pluto_year_built, 
