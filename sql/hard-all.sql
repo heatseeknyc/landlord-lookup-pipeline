@@ -31,5 +31,11 @@ drop table if exists hard.taxlot cascade;
 create table hard.taxlot as select * from meta.taxlot;
 create index on hard.taxlot(bbl);
 
+drop table if exists hard.building cascade;
+create table hard.building as select * from meta.building;
+create index on hard.building(bbl);
+create index on hard.building(bin);
+create index on hard.building(bbl,bin);
+
 commit;
 
