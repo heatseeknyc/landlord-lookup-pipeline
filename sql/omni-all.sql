@@ -4,12 +4,14 @@
 
 begin;
 
+drop table if exists omni.dcp_condo_map cascade; 
 create table omni.dcp_condo_map as
 select * from flat.dcp_condo_map;
 create index on omni.dcp_condo_map(bank);
 create index on omni.dcp_condo_map(unit);
 
 -- All lots in PAD (expressed or implied) = 1106866 rows.
+drop table if exists omni.dcp_all cascade; 
 create table omni.dcp_all as
 select 
     coalesce(a.bbl,b.unit) as bbl,
@@ -22,6 +24,7 @@ full outer join omni.dcp_condo_map as b on a.bbl = b.unit;
 create index on omni.dcp_all(bbl);
 
 -- A truly unified view of all BBLs in the ecosystem.
+drop table if exists omni.taxlot_origin cascade; 
 create table omni.taxlot_origin as
 select 
     coalesce(a.bbl,b.bbl) as bbl,
@@ -39,6 +42,7 @@ create index on omni.taxlot_origin(bbl);
 
 
 -- Some 296 illegal BBLs in the combined stabilizatin list!
+drop view if exists omni.stable_orphan cascade; 
 create view omni.stable_orphan as
 select a.* from push.stable_combined as a
 left join omni.taxlot_origin as b on a.bbl = b.bbl where b.bbl is null;
@@ -47,6 +51,7 @@ left join omni.taxlot_origin as b on a.bbl = b.bbl where b.bbl is null;
 -- A unified view of (BBL,BIN) tuples, across ADR + Pluto buildings.
 -- If a (BBL,BIN) pair has any significance, theoretically it should be in here.
 -- Yields 1185955 rows for PAD 17b and Pluto 16v2.
+drop table if exists omni.building_origin cascade; 
 create table omni.building_origin as
 select
     coalesce(a.bbl,b.bbl) as bbl,
