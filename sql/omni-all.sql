@@ -34,7 +34,7 @@ select
     a.in_condo as in_pad_condo,
     a.bbl is not null as in_pad,
     b.bbl is not null as in_acris,
-    bbl2type(coalesce(a.bbl,b.bbl)) as bbltype 
+    bbl2type(coalesce(a.bbl,b.bbl)) as bbltype,
     bbl2qblock(coalesce(a.bbl,b.bbl)) as qblock
 from omni.dcp_all as a
 full outer join push.acris_legal_count as b on a.bbl = b.bbl;
