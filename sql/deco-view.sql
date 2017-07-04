@@ -15,5 +15,12 @@ from hard.property_summary as a
 left join push.pluto_refdata_bldgclass as b on a.pluto_bldg_class = b.tag
 left join push.pluto_refdata_landuse as c on a.pluto_land_use = c.tag;
 
+create view deco.taxlot as
+select
+    a.*,
+    b.label as land_use_label
+from hard.taxlot as a
+left join push.pluto_refdata_landuse as b on a.land_use = b.tag;
+
 commit;
 
