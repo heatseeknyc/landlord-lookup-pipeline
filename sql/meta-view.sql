@@ -155,7 +155,7 @@ select
     b.lon_ctr, b.lat_ctr, b.radius, b.parts,
     b.address as pluto_address,
     b.owner_name as pluto_owner,
-    d.status as stable_status,
+    d.status as stabilized,
     e.status as residential 
 from omni.taxlot_origin     as a
 left join push.pluto_taxlot as b on a.bbl = b.bbl
