@@ -158,12 +158,20 @@ select
     d.status as stabilized,
     e.status as residential,
     is_condo_bbl(a.bbl) as is_condo,
-    f.bbl is not null as is_coop
+    f.bbl is not null as is_coop,
+    g.date_filed as acris_purchase_date,
+    g.count as acris_party_count,
+    g.docid as acris_docid,
+    g.amount as acris_amount, 
+    g.name  as acris_owner, 
+    g.address1 as acris_address1,
+    g.address2 as acris_address2
 from omni.taxlot_origin     as a
 left join push.pluto_taxlot as b on a.bbl = b.bbl
 left join meta.stabilized   as d on a.bbl = d.bbl
 left join meta.residential  as e on a.bbl = e.bbl
-left join push.dcp_coop     as f on a.bbl = f.bbl;
+left join push.dcp_coop     as f on a.bbl = f.bbl
+left join p1.acris_owner_info as g on a.bbl = g.bbl;
 
 
 

@@ -46,6 +46,14 @@ from            push.dcp_pad_bbl_count as a
 full outer join push.dcp_pad_adr_count as b on a.bbl = b.bbl;
 create index on push.dcp_pad_outer(bbl);
 
+-- A status table that tells us if the BBL represents a simple coop
+-- (and not a possibly erroneous condo/coop-hybrid), from the DCP's perspective.
+-- 7226 rows.
+drop table if exists push.dcp_coop as
+create table push.dcp_coop as
+select distinct(bbl) from push.dcp_pad_bbl where coopnum > 0 and not is_condo_bbl(bill_bbl);
+create index on push.dcp_coop(bbl);
+
 -- A counting tabe on (BBL,BIN), where both columns are non-null  As of 17b, 
 -- both colums are non-null, so no tuples are excluded by this restriction. 
 -- But we including the restriction anyway to avoid any potential confusion
