@@ -85,21 +85,19 @@ select bbl from push.pluto_taxlot where units_res >= 6 and year_built <= 1974;
 create view meta.stabilized as
 select
   coalesce(a.bbl,b.bbl) as bbl,
-  a.in_taxbill as taxbill_present,
-  a.year       as taxbill_lastyear, 
-  a.unitcount  as taxbill_unitcount, 
-  a.abatements as taxbill_abatements,
-  a.in_dhcr    as dhcr_present,
-  a.building_count as dhcr_bldg_count,
-  a.has_421a   as dhcr_421a, 
-  a.has_j51    as dhcr_j51,
-  a.special    as dhcr_special,
+  a.taxbill_lastyear,
+  a.taxbill_unitcount,
+  a.taxbill_abatements,
+  a.dhcr_bldg_count,
+  a.dhcr_421a,
+  a.dhcr_j51,
+  a.dhcr_special,
   case
-    when a.in_dhcr or a.year = 2015 then 'confirmed' 
-    when a.year < 2015 then 'disputed'
+    when a.dhcr_bldg_count > 0 or a.taxbill_lastyear = 2015 then 'confirmed'
+    when a.taxbill_lastyear < 2015 then 'disputed'
     when b.bbl is not null then 'likely'
   end as status
-from            push.stable_confirmed as a
+from            push.stable_combined  as a
 full outer join meta.stable_likely    as b on a.bbl = b.bbl; 
 
 --
