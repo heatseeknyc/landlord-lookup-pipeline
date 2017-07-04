@@ -6,11 +6,13 @@
 
 begin;
 
+/* 
 drop table if exists hard.property_summary cascade;
 create table hard.property_summary as
 select * from meta.property_summary;
 create index on hard.property_summary(bbl);
 create index on hard.property_summary(bbl,bin);
+*/
 
 drop table if exists hard.contact_info cascade;
 create table hard.contact_info as
