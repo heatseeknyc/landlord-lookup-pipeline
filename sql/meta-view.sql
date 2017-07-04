@@ -146,7 +146,9 @@ left join push.hpd_taxlot_summary     as e on a.bbl = e.bbl
 left join meta.dob_taxlot_summary     as f on a.bbl = f.bbl 
 left join meta.residential            as g on a.bbl = g.bbl;
 
+--
 -- Everything you really need to know about a given taxlot. 
+-- 
 drop view if exists meta.taxlot cascade;
 create view meta.taxlot as
 select 
