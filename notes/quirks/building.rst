@@ -31,14 +31,14 @@ weird, really, because variants of these situations occur all the time).
 *1013595*
 
 
-Associated with the "bank" BBL, 1007607501.
-
+Associated with a 20-unit condo at 15 West 36th, with a "bank" BBL = 1007607501, and
+underlying physical lot 1007600026. 
 
   select * from omni.building_origin where bin = 1013595;
-      bbl     |   bin   | in_adr | in_pluto | stat_bbl | stat_bin | total_adr | total_pluto 
-  ------------+---------+--------+----------+----------+----------+-----------+-------------
-   1007600026 | 1013595 | f      | t        |        1 |        1 |           |           1
-   1007601001 | 1013595 | t      | f        |        1 |        1 |         2 |            
-  (2 rows)
+      bbl     |   bin   | in_adr | in_pluto | bbltype | bintype | total_adr | total_pluto 
+  ------------+---------+--------+----------+---------+---------+-----------+-------------
+   1007600026 | 1013595 | f      | t        |       1 |       1 |           |           1
+   1007601001 | 1013595 | t      | f        |       1 |       1 |         2 |            
 
+The BBL 1007601001 describes unit 11a, so we aren't sure why its in the ADR table. 
 
