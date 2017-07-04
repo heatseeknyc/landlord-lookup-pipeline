@@ -151,9 +151,9 @@ drop view if exists meta.taxlot cascade;
 create view meta.taxlot as
 select 
     a.bbl, 
-    a.in_pad, 
-    a.in_acris, 
     a.bbltype,
+    a.in_acris, 
+    a.in_pad, 
     d.status as stabilized,
     (e.status or d.status is not null) as residential, 
     is_condo_bbl(a.bbl) as is_condo,
