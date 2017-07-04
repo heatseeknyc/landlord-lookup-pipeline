@@ -150,7 +150,7 @@ left join meta.residential            as g on a.bbl = g.bbl;
 drop view if exists meta.taxlot cascade;
 create view meta.taxlot as
 select 
-    a.bbl, a.in_pad, a.in_acris, a.qualify,
+    a.bbl, a.in_pad, a.in_acris, a.bbltype,
     b.land_use, b.units_total, b.units_res, b.building_count, b.year_built, 
     b.lon_ctr, b.lat_ctr, b.radius, b.parts, b.points,
     b.address as pluto_address,
