@@ -71,9 +71,12 @@ create index on push.pluto_refdata_landuse(tag);
 
 
 --
--- Analytical views
+-- Everything below here is DEPRECATED
 --
 
+--
+-- Analytical views
+--
 
 -- DEPRECATED
 -- "Orphaned" buildings/lots with no BBL in Pluto
