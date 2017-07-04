@@ -152,7 +152,7 @@ create view meta.taxlot as
 select 
     a.bbl, a.in_pad, a.in_acris, a.qualify,
     b.land_use, b.units_total, b.units_res, b.building_count, b.year_built, 
-    b.lon_ctr, b.lat_ctr, b.radius, b.parts,
+    b.lon_ctr, b.lat_ctr, b.radius, b.parts, b.points,
     b.address as pluto_address,
     b.owner_name as pluto_owner,
     d.status as stabilized,
