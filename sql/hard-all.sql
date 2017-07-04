@@ -28,8 +28,7 @@ create index on hard.pluto_building(bbl);
 create index on hard.pluto_building(doitt_id);
 
 drop table if exists hard.taxlot cascade;
-create table hard.taxlot as
-select * from meta.taxlot;
+create table hard.taxlot as select * from meta.taxlot;
 create index on hard.taxlot(bbl);
 
 commit;
