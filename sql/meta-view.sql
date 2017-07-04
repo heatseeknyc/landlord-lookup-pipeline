@@ -65,7 +65,7 @@ select bbl from push.pluto_taxlot where units_res >= 6 and year_built <= 1974;
 --     of appearance is before 2015.  (Implicating being it likely was stabilized
 --     in the past, but may no longer have stabilized units).
 --
---     'likely' if neither of the above criteria are met, but the property meets 
+--     'possible' if neither of the above criteria are met, but the property meets 
 --     generic criteria for stabilization (pre-1974, 6 or more units),
 --
 -- A couple of notes as to the above:
@@ -95,7 +95,7 @@ select
   case
     when a.dhcr_bldg_count > 0 or a.taxbill_lastyear = 2015 then 'confirmed'
     when a.taxbill_lastyear < 2015 then 'disputed'
-    when b.bbl is not null then 'likely'
+    when b.bbl is not null then 'possible'
   end as status
 from            push.stable_combined  as a
 full outer join meta.stable_likely    as b on a.bbl = b.bbl; 
@@ -152,9 +152,11 @@ create view meta.taxlot as
 select 
     a.*,
     b.land_use, b.units_total, b.units_res, b.building_count, b.year_built, 
-    b.address, b.owner_name, b.lon_ctr, b.lat_ctr, b.radius, b.parts
+    b.address, b.owner_name, b.lon_ctr, b.lat_ctr, b.radius, b.parts,
+    d.status as stable_status
 from omni.taxlot_origin     as a
-left join push.pluto_taxlot as b on a.bbl = b.bbl;
+left join push.pluto_taxlot as b on a.bbl = b.bbl
+left join meta.stabilized   as d on a.bbl = d.bbl;
 
 
 
