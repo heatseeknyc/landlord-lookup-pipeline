@@ -29,7 +29,8 @@ from flat.dcas_law48;
 create index on core.dcas_law48(bbl);
 
 create view core.dcas_law48_count as
-select bbl, count(*) from core.dcas_law48 group by bbl; 
+select bbl, count(*), max(created) as latest 
+from core.dcas_law48 group by bbl; 
 
 commit;
 
