@@ -1,0 +1,16 @@
+#
+# § 810 - DCAS
+#
+
+# The next two entries are for the ADR and BBL tables from the 
+# "Bytes of the Big Apple Property Address Directory" (PAD)
+-
+  name: ipis 
+  slug: 'n5mv-nfpy' 
+  label: 'IPIS-Integrated-Property-Information-System-'
+
+-
+  name: law48 
+  slug: '4e2n-s75z'
+  label: 'City-owned-and-Leased-Property-Local-Law-48-of-2011'
+
