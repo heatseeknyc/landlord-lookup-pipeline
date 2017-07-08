@@ -71,6 +71,20 @@ create index on omni.building_origin(bbl,bin);
 commit;
 
 
+--
+-- Newer stuff
+--
+
+begin;
+
+create view omni.dcas_law48_orphan as
+select a.* 
+from push.dcas_law48 as a
+left join hard.taxlot as b on a.bbl = b.bbl where b.bbl is null;
+
+commit;
+
+
 
 -- PAD outer, less bank BBLs and condo units = 851574 rows
 /*
