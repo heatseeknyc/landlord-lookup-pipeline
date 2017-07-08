@@ -42,3 +42,10 @@ There's also few outlier (high-numbered) lots:
 The first one appears to be a condo unit DCAS has sold to itself in the building it also owns.
 
 
+Missing
+-------
+
+It's apparently missing some city-owned properties:
+
+  1003750059 - NYCHA building at 250 Broadway
+
