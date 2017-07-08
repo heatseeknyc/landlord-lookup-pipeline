@@ -109,6 +109,7 @@ full outer join meta.stable_likely    as b on a.bbl = b.bbl;
 -- "LIMIT 1" in the select, because of course (for multi-building lots)
 -- all of the attributes will be redundant.
 --
+/*
 drop view if exists meta.property_summary cascade;
 create view meta.property_summary as
 select 
@@ -147,6 +148,7 @@ left join meta.stabilized             as d on a.bbl = d.bbl
 left join push.hpd_taxlot_summary     as e on a.bbl = e.bbl 
 left join meta.dob_taxlot_summary     as f on a.bbl = f.bbl 
 left join meta.residential            as g on a.bbl = g.bbl;
+*/
 
 --
 -- Everything you really need to know about a given taxlot. 
