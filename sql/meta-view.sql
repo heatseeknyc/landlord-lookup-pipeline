@@ -101,6 +101,8 @@ from            push.stable_combined  as a
 full outer join meta.stable_likely    as b on a.bbl = b.bbl; 
 
 --
+-- DEPRECATED
+--
 -- A crucial joining view that can be used to tell us everything we need
 -- to know about either a building (given a BBL,BIN pair) -or- a taxlot
 -- (if given just the BBL).  In the later case, you'll want to use a
