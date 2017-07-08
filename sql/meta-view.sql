@@ -93,9 +93,9 @@ select
   a.dhcr_j51,
   a.dhcr_special,
   case
-    when a.dhcr_bldg_count > 0 or a.taxbill_lastyear = 2015 then 'confirmed'
-    when a.taxbill_lastyear < 2015 then 'disputed'
-    when b.bbl is not null then 'possible'
+    when a.dhcr_bldg_count > 0 or a.taxbill_lastyear = 2015 then 1 -- confirmed
+    when a.taxbill_lastyear < 2015 then 2 -- disputed
+    when b.bbl is not null then 3 -- possible
   end as status
 from            push.stable_combined  as a
 full outer join meta.stable_likely    as b on a.bbl = b.bbl; 
