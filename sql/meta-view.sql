@@ -184,13 +184,18 @@ select
     g.amount       as acris_amount, 
     g.name         as acris_owner, 
     g.address1     as acris_address1,
-    g.address2     as acris_address2
+    g.address2     as acris_address2,
+    coalesce(e.contact,0)      as hpd_contact,
+    coalesce(e.complaint,0)    as hpd_complaint,
+    coalesce(e.violation,0)    as hpd_violation,
+    coalesce(e.legal,0)        as hpd_legal
 from omni.taxlot_origin     as a
 left join push.pluto_taxlot as b on a.bbl = b.bbl
 left join meta.stabilized   as d on a.bbl = d.bbl
 left join meta.residential  as e on a.bbl = e.bbl
 left join push.dcp_coop     as f on a.bbl = f.bbl
-left join p1.acris_owner_info as g on a.bbl = g.bbl;
+left join p1.acris_owner_info as g on a.bbl = g.bbl
+left join push.hpd_taxlot_summary as h on a.bbl = h.bbl;
 
 
 drop view if exists meta.building cascade;
