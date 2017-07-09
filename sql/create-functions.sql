@@ -372,6 +372,27 @@ begin
 end
 $$ language plpgsql;
 
+-- Ignoring country field for now.  And it definitely has some holes in terms of
+-- elegeantly patching up non-existant fields.  But should work about 95% of the time.
+create or replace function public.mkaddr_acris (
+  address1 text, address2 text, country text, city text, state text, postal text) 
+returns text as $$
+begin
+    address1 = coalesce(address1,'');
+    address2 = coalesce(address2,'');
+    country = coalesce(country,'');
+    city = coalesce(city,'');
+    state = coalesce(state,'');
+    postal = coalesce(postal,'');
+
+    if address1 != '' and address2 != '' then address1 = address1 || ', '; end if;
+    if city != '' then city = city || ', '; end if;
+    if state != '' then state = state || ' '; end if;
+
+    return address1||address2 ||' - '||city||state||postal;
+end
+$$ language plpgsql;
+
 
 --
 -- The next 3 functions are generally for scrubbing fixed-width fields.
