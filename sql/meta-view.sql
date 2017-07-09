@@ -170,6 +170,7 @@ select
     b.zone_dist1         as pluto_zone_dist1,
     b.units_total        as pluto_units_total, 
     b.units_res          as pluto_units_res, 
+    b.num_floor          as pluto_floors,
     b.year_built         as pluto_year_built, 
     b.lon_ctr            as pluto_lon_ctr, 
     b.lat_ctr            as pluto_lat_ctr, 
