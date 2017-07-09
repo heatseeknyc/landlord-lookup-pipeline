@@ -186,10 +186,10 @@ select
     g.name         as acris_owner, 
     mkaddr_acris(g.address1,g.address2,g.country,g.city,g.state::text,g.postal) 
                    as acris_address,
-    coalesce(e.contact,0)      as hpd_contact,
-    coalesce(e.complaint,0)    as hpd_complaint,
-    coalesce(e.violation,0)    as hpd_violation,
-    coalesce(e.legal,0)        as hpd_legal
+    coalesce(h.contact,0)      as hpd_contact,
+    coalesce(h.complaint,0)    as hpd_complaint,
+    coalesce(h.violation,0)    as hpd_violation,
+    coalesce(h.legal,0)        as hpd_legal
 from omni.taxlot_origin     as a
 left join push.pluto_taxlot as b on a.bbl = b.bbl
 left join meta.stabilized   as d on a.bbl = d.bbl
