@@ -186,5 +186,36 @@ select
 from            push.stable_combined  as a
 full outer join meta.stable_likely    as b on a.bbl = b.bbl; 
 
+
+-- 
+-- And our final, "origin" view for rent stabilization.
+-- In which the 'status' flag denotes both designation and provenance in a  
+-- meaningful way (with HPD taking precedence in some 67 rows, as of June 2017).
+--
+-- 62023 rows
+drop view if exists omni.stable_origin cascade;
+create view omni.stable_origin as
+select
+  coalesce(a.bbl,b.bbl) as bbl,
+  a.taxbill_lastyear,
+  a.taxbill_unitcount,
+  a.taxbill_abatements,
+  a.dhcr_bldg_count,
+  a.dhcr_421a,
+  a.dhcr_j51,
+  a.dhcr_special,
+  b.program as hpd_program,
+  case
+    when b.program = '7A' then 7
+    when b.program = 'M-L' then 8 
+    when b.program = 'NYCHA' then 9 
+    when b.program = 'LOFT LAW' then 10 
+    when b.program = 'OTHER' then 11 
+    else a.status
+  end as status
+from            omni.stable_classic     as a
+full outer join push.hpd_taxlot_program as b on a.bbl = b.bbl
+    where a.bbl is not null or b.program is not null;
+
 commit;
 
