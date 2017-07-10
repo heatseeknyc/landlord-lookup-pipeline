@@ -196,7 +196,7 @@ select
     coalesce(h.legal,0)        as hpd_legal
 from omni.taxlot_origin     as a
 left join push.pluto_taxlot as b on a.bbl = b.bbl
-left join meta.stabilized   as d on a.bbl = d.bbl
+left join omni.stable_origin as d on a.bbl = d.bbl
 left join meta.residential  as e on a.bbl = e.bbl
 left join push.dcp_coop     as f on a.bbl = f.bbl
 left join p1.acris_owner_info as g on a.bbl = g.bbl
