@@ -125,9 +125,66 @@ commit;
 
 begin;
 
+-- Buildings in Pluto that are "likely" to be stablized, according to EPTA criteria. 
+-- Will overlap very strongly with the DHCR/Taxbill lists, but also contain about 13k
+-- taxlots not in either of those result sets.
+-- 55382 rows
 drop view if exists omni.stable_likely cascade;
 create view omni.stable_likely as
 select bbl from push.pluto_taxlot where units_res >= 6 and year_built < 1974;
+
+--
+-- A combined view of stabilization across (DHCR, Taxbills, and "Pluto-likely"). 
+-- Which we call the "classic" view first because it represents our older (pre-HPD)  
+-- model for aggregation, and because (in theory) most of the markings in this 
+-- dataset are for "classic", pre-1974 buildings.
+--
+-- In any case it's just an outer join of those 3 sets (2 of which are already joined 
+-- in the "stable_combined" table), providing a crucial 'stable' flag defined as follows:
+--
+--    'confirmed' if at least one of the properties  on the lot is on the DHCR list, 
+--     the taxlot has non-zero unitcounts (in the taxbill scrapes) through 2015.
+--
+--    'disputed' if the lot has no buildings on the DHCR list, and its last year 
+--     of appearance is before 2015.  (Implicating being it likely was stabilized
+--     in the past, but may no longer have stabilized units).
+--
+--     'possible' if neither of the above criteria are met, but the property meets
+--     generic criteria for stabilization (pre-1974, 6 or more units),
+--
+-- A couple of notes as to the above:
+--
+--   - Due to the logic of how this table is constructed, every row will have
+--     on of the above 3 values (i.e. there will be no rows with NULL status).
+--
+--   - So it shows up as NULL in a left join, that means the lot was most likely
+--     never stabilized.
+--
+--   - Some of the above flags have different definitions in other rowsets.
+--     For example, presence in the 'stable_likely' view (which the select for
+--     this view pulls from) simply means that the tax lot meets pre-1974 criteria; 
+--     whereas in this view it means that it meets those criteria, -and- is not 
+--     otherwise 'confirmed' or 'disputed'.
+--
+-- 61415 rows
+drop view if exists omni.stable_classic cascade;
+create view omni.stable_classic as
+select
+  coalesce(a.bbl,b.bbl) as bbl,
+  a.taxbill_lastyear,
+  a.taxbill_unitcount,
+  a.taxbill_abatements,
+  a.dhcr_bldg_count,
+  a.dhcr_421a,
+  a.dhcr_j51,
+  a.dhcr_special,
+  case
+    when a.dhcr_bldg_count > 0 or a.taxbill_lastyear = 2015 then 1 -- confirmed
+    when a.taxbill_lastyear < 2015 then 2 -- disputed
+    when b.bbl is not null then 3 -- possible
+  end as status
+from            push.stable_combined  as a
+full outer join meta.stable_likely    as b on a.bbl = b.bbl; 
 
 commit;
 
