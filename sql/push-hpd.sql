@@ -10,11 +10,117 @@ begin;
 -- de-facto primary keys, and which (in principle) can be retrieved by
 -- joining on other tables.
 --
+
+
+-- Row counts for the June 2017 dataset.
+
+
+--
+-- Copy all rows, omitting columns which can be trivally slotted in from external 
+-- datasets (like 'censustract' as well as street address, but retaining foreign keys.
+-- 311065 rows
 drop table if exists push.hpd_building cascade;
 create table push.hpd_building as
-select id, bbl, bin, program, dob_class_id, legal_stories, legal_class_a, legal_class_b, lifecycle, status_id
-from core.hpd_building
-where public.is_regular_bbl(bbl) and public.is_valid_bin(bin);
+select id, bbl, bin, program, dob_class_id, legal_stories, legal_class_a, legal_class_b, lifecycle, status_id, registration_id
+from core.hpd_building;
+create index on push.hpd_building(bbl);
+
+--
+-- Next, we introduce a few restrictions.
+--
+
+-- First let's omit rows with invalid (or degenerate) BBLs and invalid BINs. 
+-- 305199 rows
+drop view if exists push.hpd_building_regular cascade;
+create view push.hpd_building_regular as
+select * from push.hpd_building
+where is_valid_bbl(bbl) and not is_degenerate(bbl) and is_valid_bin(bin);
+
+
+-- Then we restrict to what appear to be 'Active' records on currently existing buildings.
+-- 294048 rows
+drop view if exists push.hpd_building_active cascade;
+create view push.hpd_building_active as 
+select * from push.hpd_building_regular
+where status_id = 1 and lifecycle = 'Building';
+
+
+-- 292253 rows
+drop view if exists push.hpd_building_count cascade;
+create view push.hpd_building_count as 
+select bbl, bin, count(*) as total, max(id) as last_id
+from push.hpd_building_active group by bbl, bin;
+
+
+-- 292253 rows
+drop table if exists push.hpd_building_current cascade; 
+create table push.hpd_building_current as 
+select 
+   a.bbl, a.bin, b.id, b.program, 
+   b.dob_class_id, b.legal_stories, b.legal_class_a, b. legal_class_b
+from      push.hpd_building_count  as a
+left join push.hpd_building_active as b on (a.bbl,a.bin,a.last_id) = (b.bbl,b.bin,b.id);
+create index on push.hpd_building_current(bbl);
+create index on push.hpd_building_current(bbl,bin);
+
+
+-- 292253 rows
+drop view if exists push.hpd_building_program cascade;
+create view push.hpd_building_program as 
+select 
+    bbl, bin, id,
+    case
+        when program in ('NYCHA','7A','LOFT LAW','PVT') then program
+        when program ~ '^M-L' then 'M-L'
+        when program is not null then 'OTHER'
+    end as program
+from push.hpd_building_current;
+
+-- 280520 rows
+create view push.hpd_program_count as
+select bbl,count(distinct program) as count_program, count(distinct bin) as count_bin
+from push.hpd_building_program group by bbl;
+
+/*
+create view push.hpd_program_nice as
+select bbl,count(distinct program) as program, count(distinct bin) as bin, min(program) as prog1, max(program) as prog2 
+from push.hpd_building_program group by bbl;
+
+create view push.hpd_taxlot_program_dirty as
+select bbl,min(program) as program,count(distinct program) as count_program, count(distinct bin) as count_building
+from push.hpd_building_program group by bbl;
+*/
+
+-- BBLs with first identifiable, non-PVT progam (that is, registered in some 
+-- special program or another).  Thus far, any such BBL has only one non-special 
+-- program (so the 'first' operator acts on only one value); thus, 'count_program' 
+-- is thus far always equal to 1.  So if this presumed uniqueness ever changes  
+-- in the future, we'll be able to tell by checking the `count_program` value.
+--
+-- In any case what we end up with is a relation of BBL to `program` for all 
+-- taxlots that have are registered under a special program. 
+--
+-- 1736 rows
+create view push.hpd_taxlot_special as
+select bbl, first(program) as program, count(distinct program) as count_program, count(distinct bin) as count_building
+from push.hpd_building_program where program is not null and program != 'PVT'
+group by bbl;
+
+
+-- 280520 rows, of which 1736 have special programs.
+-- Note that the 'PVT' designation has been mapped to NULL.
+drop table if exists push.hpd_taxlot_program cascade; 
+create table push.hpd_taxlot_program as
+select a.bbl, b.program as program, a.count_program, a.count_bin 
+from      push.hpd_program_count as a 
+left join push.hpd_taxlot_special as b on a.bbl = b.bbl;
+create index on push.hpd_taxlot_program(bbl);
+
+
+
+
+
+
 create index on push.hpd_building(id);
 create index on push.hpd_building(bbl);
 create index on push.hpd_building(bin);

@@ -68,6 +68,11 @@ create index on omni.building_origin(bbl);
 create index on omni.building_origin(bin);
 create index on omni.building_origin(bbl,bin);
 
+drop table if exists omni.building_count cascade; 
+create table omni.building_count as
+select bbl,count(*) as total from omni.building_origin group by bbl;
+create index on omni.building_count(bbl);
+
 commit;
 
 
@@ -81,6 +86,34 @@ create view omni.dcas_law48_orphan as
 select a.* 
 from push.dcas_law48 as a
 left join hard.taxlot as b on a.bbl = b.bbl where b.bbl is null;
+
+
+--
+-- HPD v. PAD/Pluto, ACRIS
+-- 
+
+-- (BBL,BBN) pairs in HPD but not in PAD/Pluto 
+-- 7647 rows (across 6110 BBLs)
+create view omni.hpd_building_extra as
+select a.*
+from      push.hpd_building_program as a
+left join omni.building_origin      as b on (a.bbl,a.bin) = (b.bbl,b.bin) 
+    where b.bbl is null and b.bin is null;
+
+-- Restriction of BBLs in the above set to those not in PAD/PLuto,
+-- That is, lots under HPD jurisdiction but not in PAD/Pluto.
+-- 1748 rows
+create view omni.hpd_building_badlot as
+select a.bbl from
+(select distinct(bbl) from push.hpd_building_program) as a 
+left join omni.building_count as b on a.bbl = b.bbl where b.bbl is null;
+
+-- Finally, true stragglers in either PAD/Pluto nor ACRIS.
+-- 422 rows
+create view omni.hpd_building_stragglers as
+select a.bbl 
+from      omni.hpd_building_badlot as a
+left join push.acris_legal_count   as b on a.bbl = b.bbl where b.bbl is null;
 
 commit;
 
