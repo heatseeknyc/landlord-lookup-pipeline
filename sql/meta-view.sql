@@ -209,6 +209,7 @@ select
     b.lon_ctr,
     b.radius,
     b.parts,
+    b.points,
     a.in_adr,
     a.in_pluto,
     a.total_adr,
