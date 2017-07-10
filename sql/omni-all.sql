@@ -118,3 +118,16 @@ left join push.acris_legal_count   as b on a.bbl = b.bbl where b.bbl is null;
 commit;
 
 
+
+--
+-- Stabilization
+--
+
+begin;
+
+drop view if exists omni.stable_likely cascade;
+create view omni.stable_likely as
+select bbl from push.pluto_taxlot where units_res >= 6 and year_built < 1974;
+
+commit;
+
