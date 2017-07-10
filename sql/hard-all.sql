@@ -34,5 +34,10 @@ create table hard.pluto_refdata_landuse as
 select * from push.pluto_refdata_landuse;
 create index on hard.pluto_refdata_landuse(tag);
 
+-- And this one from the moni schema.
+drop table if exists hard.label_status cascade; 
+create table hard.label_status as select * from omni.label_status;
+create index on hard.label_status(status);
+
 commit;
 
