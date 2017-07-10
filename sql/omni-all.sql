@@ -118,9 +118,3 @@ left join push.acris_legal_count   as b on a.bbl = b.bbl where b.bbl is null;
 commit;
 
 
-
--- PAD outer, less bank BBLs and condo units = 851574 rows
-/*
-select count(*) 
-from push.dcp_pad_outer as a 
-left join omni.dcp_condo_map as b on a.bbl = b.unit where b.unit is null and not is_condo_bbl(a.bbl); */
