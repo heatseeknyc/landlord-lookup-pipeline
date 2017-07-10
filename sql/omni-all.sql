@@ -184,7 +184,7 @@ select
     when b.bbl is not null then 3 -- possible
   end as status
 from            push.stable_combined  as a
-full outer join meta.stable_likely    as b on a.bbl = b.bbl; 
+full outer join omni.stable_likely    as b on a.bbl = b.bbl; 
 
 
 -- 
