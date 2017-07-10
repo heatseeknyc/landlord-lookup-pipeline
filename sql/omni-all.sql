@@ -217,5 +217,20 @@ from            omni.stable_classic     as a
 full outer join push.hpd_taxlot_program as b on a.bbl = b.bbl
     where a.bbl is not null or b.program is not null;
 
+
+-- And a simple lookup table for the 'status' flag defined above.
+-- This is something of a DRY violation of course, and will have to be 
+-- maintained as our status designations inevitably change, moving foward.
+-- But is much simpler than attempting any kind of automatic derivation. 
+drop table if exists omni.label_status cascade;
+create table omni.label_status ( 
+    status integer,
+    label text
+);
+insert into omni.label_status (status, label) values 
+    (1,'confirmed'), (2,'disputed'), (3,'possible'), 
+    (7,'7A'), (8,'M-L'), (9,'NYCHA'), (10,'LOFT LAW'), (11,'OTHER');
+create index on omni.label_status(status);
+
 commit;
 
