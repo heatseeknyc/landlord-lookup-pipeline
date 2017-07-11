@@ -21,8 +21,8 @@ drop table if exists push.dob_permit_keytup cascade;
 create table push.dob_permit_keytup as
 select bbl, bin, count(*) as total, count(distinct job_id) as job_id
 from push.dob_permit group by bbl, bin;
-create index on push.dob_permit_count(bbl,bin);
-create index on push.dob_permit_count(bbl);
+create index on push.dob_permit_keytup(bbl,bin);
+create index on push.dob_permit_keytup(bbl);
 
 drop view if exists push.dob_permit_tidy cascade; 
 create view push.dob_permit_tidy as
