@@ -30,6 +30,7 @@ select
     job_id, 
     count(*) as total, 
     count(distinct(bbl,bin)) as keytup, 
+    count(distinct job_type) as job_type,
     count(distinct work_type) as work_type 
 from push.dob_permit group by job_id; 
 create index on push.dob_permit_jobid(job_id);
