@@ -18,7 +18,18 @@ job_id
 
 General properties:
  - in general they occur multiply (max = 50)
+
+In general they are many-to-1 with (BBL,BIN) pairs:
  - there can be up to the low hundreds (max 518) for a given BBL-BIN pair
+ - but in general there's at most one (BBL,BIN) pair for a job_id 
+ - Except for some 1825 Job IDs which have multiple (BBL,BIN) pairs 
+
+
+Stats
+
+   select count(distinct job_id) from push.dob_permit;
+   select count(*) from (select job_id,count(distinct(bbl,bin)) as total from push.dob_permit group by job_id) as x where total > 1;  1773
+   select count(*) from (select job_id,count(distinct(bbl,bin)) as total from push.dob_permit group by job_id) as x where total > 2;    52 
 
 
 SQL
