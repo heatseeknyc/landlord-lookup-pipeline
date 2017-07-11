@@ -14,7 +14,8 @@ select bin,count(*) as total from push.dob_permit group by bin;
 
 drop table if exists push.dob_permit_count cascade; 
 create table push.dob_permit_count as
-select bbl, bin, count(*) as total from push.dob_permit group by bbl, bin;
+select bbl, bin, count(*) as total
+from push.dob_permit group by bbl, bin;
 create index on push.dob_permit_count(bbl,bin);
 create index on push.dob_permit_count(bbl);
 
