@@ -26,7 +26,11 @@ create index on push.dob_permit_keytup(bbl);
 
 drop table if exists push.dob_permit_jobid cascade; 
 create table push.dob_permit_jobid as
-select job_id, count(*) as total, count(distinct(bbl,bin)) as keytup, count(distinct work_type) as work_type 
+select 
+    job_id, 
+    count(*) as total, 
+    count(distinct(bbl,bin)) as keytup, 
+    count(distinct work_type) as work_type 
 from push.dob_permit group by job_id; 
 create index on push.dob_permit_jobid(job_id);
 
