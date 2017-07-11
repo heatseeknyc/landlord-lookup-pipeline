@@ -11,6 +11,11 @@ drop view if exists push.dob_permit_count cascade;
 create view push.dob_permit_count as  
 select bin,count(*) as total from push.dob_permit group by bin;
 
+create table push.dob_permit_count as
+select bbl, bin, count(*) from push.dob_permit group by bbl, bin;
+create index on push.dob_permit_count(bbl,bin);
+create index on push.dob_permit_count(bbl);
+
 create table push.dob_violation as
 select * from core.dob_violation where 
     public.is_regular_bbl(bbl) and public.is_valid_bin(bin);
