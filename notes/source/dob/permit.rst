@@ -16,3 +16,13 @@ job_id
 
     min(job_id),max(job_id) = (100052194,540129582)
 
+General properties:
+ - in general they occur multiply (max = 50)
+ - there can be up to the low hundreds (max 518) for a given BBL-BIN pair
+
+
+SQL
+
+    select * from (
+        select job_id,count(distinct(bbl,bin)) as total from push.dob_permit group by job_id
+    ) as x order by total desc limit 20;
