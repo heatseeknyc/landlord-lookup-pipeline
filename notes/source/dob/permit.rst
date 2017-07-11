@@ -22,7 +22,8 @@ General properties:
 In general they are many-to-1 with (BBL,BIN) pairs:
  - there can be up to the low hundreds (max 518) for a given BBL-BIN pair
  - but in general there's at most one (BBL,BIN) pair for a job_id 
- - Except for some 1825 Job IDs which have multiple (BBL,BIN) pairs 
+ - Except for some 1825 anomolous Job IDs which have multiple (BBL,BIN) pairs.
+   These are apparently misassigned BINs (at a given lot) or occasionally mistyped BBLs (on a given BIN).
 
 
 Stats
@@ -37,3 +38,28 @@ SQL
     select * from (
         select job_id,count(distinct(bbl,bin)) as total from push.dob_permit group by job_id
     ) as x order by total desc limit 20;
+
+
+
+job_type
+--------
+
+  - Always unique to to a ``job_id``
+
+
+work_type
+---------
+
+   In general, many-to-1 on ``job_id`` (1-1 in about 60% of these cases, 2-1 in 20%, etc). 
+
+
+
+Weirdness
+---------
+
+As in other places throughout the system, permits don't always join on bank BBL, e.g.:
+ - 1006917502 = 501 West 19th St w/ physical bbl = 1006910029 
+
+
+
+
