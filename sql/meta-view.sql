@@ -165,7 +165,7 @@ select
     -- deprecated in favor of docid match, per below 
     a.in_acris, 
     a.in_pad, 
-    coalsece(e.status or d.status is not null,false) as residential, 
+    coalesce(e.status or d.status is not null,false) as residential,
     d.status as stabilized,
     is_condo_bbl(a.bbl) as is_condo,
     f.bbl is not null as is_coop,
