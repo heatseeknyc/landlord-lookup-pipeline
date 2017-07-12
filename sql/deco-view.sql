@@ -20,8 +20,8 @@ drop view if exists deco.taxlot cascade;
 create view deco.taxlot as
 select
     a.*,
-    coalesce(b.label,"no description available") as pluto_land_use_label,
-    coalesce(c.label,"no description available") as pluto_bldg_class_label
+    coalesce(b.label,'no description available') as pluto_land_use_label,
+    coalesce(c.label,'no description available') as pluto_bldg_class_label
 from hard.taxlot as a
 left join hard.pluto_refdata_landuse   as b on a.pluto_land_use = b.tag
 left join hard.pluto_refdata_bldgclass as c on a.pluto_bldg_class = c.tag;
