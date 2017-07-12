@@ -5,7 +5,7 @@ select * from core.pluto_taxlot_remix;
 create index on push.pluto_taxlot(bbl);
 
 create view push.pluto_taxlot_tidy as
-select bbl, address, owner_name, bldg_class, land_use, year_built, units_total, units_res, num_floors, num_bldgs, building_count
+select bbl, address, owner_name, bldg_class, land_use, year_built, units_total, units_res, num_floors, num_bldgs, bldg_count
 from push.pluto_taxlot;
 
 -- Records the "depth" of multiple matches on (bbl,bin) where the total is > 1 

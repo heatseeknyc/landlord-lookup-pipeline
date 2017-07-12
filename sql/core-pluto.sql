@@ -88,7 +88,7 @@ create index on core.pluto_building_orphan_count(bbl);
 -- for vacant lots) then we assign a building count of zero.
 drop view if exists core.pluto_taxlot_remix cascade; 
 create view core.pluto_taxlot_remix as
-select a.*, coalesce(b.total,0) as building_count
+select a.*, coalesce(b.total,0) as bldg_count
 from core.pluto_taxlot as a 
 left join core.pluto_building_count as b on b.bbl = a.bbl;
 
