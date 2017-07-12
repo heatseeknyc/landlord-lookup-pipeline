@@ -39,7 +39,7 @@ drop view if exists push.dob_permit_tidy cascade;
 create view push.dob_permit_tidy as
 select 
     bbl, bin, 
-    job_id, permit_sequence_idas seq_id, job_doc_id as doc_id, 
+    job_id, permit_sequence_id as seq_id, job_doc_id as doc_id,
     job_type, work_type, permit_status, filing_status, permit_type as permtype, permit_subtype as subtype,
     filing_date, start_date
 from push.dob_permit;
