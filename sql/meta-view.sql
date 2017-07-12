@@ -162,6 +162,7 @@ create view meta.taxlot as
 select 
     a.bbl, 
     a.bbltype,
+    -- deprecated in favor of docid match, per below 
     a.in_acris, 
     a.in_pad, 
     (e.status or d.status is not null) as residential, 
@@ -183,13 +184,17 @@ select
     b.points             as pluto_points,
     b.address            as pluto_address,
     b.owner_name         as pluto_owner,
+    -- note that prsence of a transfer docid is what signifies whether we 
+    -- have an acris match on this record or not.
     g.date_filed   as acris_transfer_date,
     g.docid        as acris_transfer_docid,
     g.count        as acris_party_count,
     g.amount       as acris_amount, 
     g.name         as acris_owner, 
-    mkaddr_acris(g.address1,g.address2,g.country,g.city,g.state::text,g.postal) 
-                   as acris_address,
+    case
+        when g.docid is not null then mkaddr_acris(g.address1,g.address2,g.country,g.city,g.state::text,g.postal) 
+        else null
+    end as acris_address,
     coalesce(h.contact,0)      as hpd_contact,
     coalesce(h.complaint,0)    as hpd_complaint,
     coalesce(h.violation,0)    as hpd_violation,
