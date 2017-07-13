@@ -39,7 +39,7 @@ def incoming(prefix,name,stage=STAGE,autoviv=False):
 def latest(prefix,name,stage=STAGE):
     for phase in PHASERANK.keys():
         _filepath = filepath(phase,prefix,name,stage)
-        print("%s.%s:%s -> %s" % (prefix,name,phase,_filepath))
+        # print("%s.%s:%s -> %s" % (prefix,name,phase,_filepath))
         if os.path.exists(_filepath):
             return _filepath
     return None
