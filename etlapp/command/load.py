@@ -43,13 +43,20 @@ def load_source_named(prefix,name):
     infile = etlapp.stage.latest(prefix,name)
     log.info("infile = '%s'" % infile)
     assert_loadable(prefix,name,infile)
-    if not etlapp.source.getval(prefix,name,'active'):
+    if not permit_loadable(prefix,name):
         raise ValueError("source inactive by configuration")
     table = tablename('flat',prefix,name)
     log.info("table = '%s'" % table)
     psql = make_copy_command(table,infile)
     log.debug("psql = [%s]" % psql)
     return dopsql(psql,etlapp.pgconf)
+
+def permit_loadable(prefix,name):
+    """A simpe abstracted perms check which allows us to override config settings 
+    for certain special sources."""
+    if prefix == 'temp':
+        return True
+    return etlapp.source.getval(prefix,name,'active')
 
 def assert_loadable(prefix,name,infile):
     if infile is None:
