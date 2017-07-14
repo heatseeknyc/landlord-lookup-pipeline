@@ -191,6 +191,7 @@ select
     g.count        as acris_party_count,
     g.amount       as acris_amount, 
     g.name         as acris_owner, 
+    j.bank         as condo_parent,
     case
         when g.docid is not null then mkaddr_acris(g.address1,g.address2,g.country,g.city,g.state::text,g.postal) 
         else null
@@ -205,7 +206,9 @@ left join omni.stable_origin as d on a.bbl = d.bbl
 left join meta.residential  as e on a.bbl = e.bbl
 left join push.dcp_coop     as f on a.bbl = f.bbl
 left join p1.acris_owner_info as g on a.bbl = g.bbl
-left join push.hpd_taxlot_summary as h on a.bbl = h.bbl;
+left join push.hpd_taxlot_summary as h on a.bbl = h.bbl
+left join omni.dcp_condo_map as j on a.bbl = j.unit;
+
 
 
 drop view if exists meta.building cascade;
