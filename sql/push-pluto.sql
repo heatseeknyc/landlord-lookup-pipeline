@@ -1,9 +1,11 @@
 begin;
 
+drop table if exists push.pluto_taxlot cascade; 
 create table push.pluto_taxlot as
 select * from core.pluto_taxlot_remix;
 create index on push.pluto_taxlot(bbl);
 
+drop view if exists push.pluto_taxlot_tidy cascade; 
 create view push.pluto_taxlot_tidy as
 select bbl, address, owner_name, bldg_class, land_use, year_built, units_total, units_res, num_floors, num_bldgs, bldg_count
 from push.pluto_taxlot;
@@ -36,6 +38,7 @@ from push.pluto_building group by bbl;
 -- A counting table by (BBL,BIN) with the restriction that both columns 
 -- are non-null.  Currently excludes the single tuple (NULL,0) in 16v2.
 -- Yields 1081156 tuples.
+drop table if exists push.pluto_keytup cascade; 
 create table push.pluto_keytup as
 select bbl, bin, count(*) as total 
 from push.pluto_building where bbl is not null and bin is not null
