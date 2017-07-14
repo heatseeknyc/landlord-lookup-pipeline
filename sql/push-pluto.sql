@@ -10,18 +10,6 @@ create view push.pluto_taxlot_tidy as
 select bbl, address, owner_name, bldg_class, land_use, year_built, units_total, units_res, num_floors, num_bldgs, bldg_count
 from push.pluto_taxlot;
 
--- Records the "depth" of multiple matches on (bbl,bin) where the total is > 1 
-/*
-drop view if exists push.pluto_building_count_keytup cascade; 
-create view push.pluto_building_count_keytup as
-select bbl, bin, count(*) as total 
-from core.pluto_building_ideal group by bbl, bin;
-
-drop view if exists push.pluto_building_count_bin cascade; 
-create view push.pluto_building_count_bin as
-select bin, count(*) as total 
-from core.pluto_building_ideal group by bin;
-*/
 
 drop table if exists push.pluto_building cascade; 
 create table push.pluto_building as
