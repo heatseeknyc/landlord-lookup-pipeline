@@ -38,5 +38,30 @@ select
 from core.dcas_law48_count as a
 left join core.dcas_law48  as b on (a.bbl,a.latest) = (b.bbl,b.created);
 
+drop view if exists core.dcas_ipis cascade;
+create view core.dcas_ipis as 
+select
+    bbl, 
+    parcel_name,
+    parcel_address,
+    juris,
+    agency,
+    -- jurisdiction_description text,
+    rpad,
+    -- rpad_description text,
+    waterfront as water,
+    irregular as irreg, 
+    owned_leased as owntype,
+    num_bld as bldg_count, 
+    floors, 
+    pr_zone as zone_pr,
+    ov_zone as zone_ov,
+    sd_zone as zone_sd,
+    case when urban_renewal_site = 'Y' then true else false end as renewal
+    -- primary_use,
+    -- final_commitment,
+    -- agreeement,
+from flat.dcas_ipis;
+
 commit;
 
