@@ -192,6 +192,7 @@ select
     g.amount       as acris_amount, 
     g.name         as acris_owner, 
     j.bank         as condo_parent,
+    is_condo_bbl(a.bbl) as condo_is_bank,
     case
         when g.docid is not null then mkaddr_acris(g.address1,g.address2,g.country,g.city,g.state::text,g.postal) 
         else null
