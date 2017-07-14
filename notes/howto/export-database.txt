@@ -2,7 +2,7 @@
 To export from database 'nyc1':
 
   sudo su postgres
-  pg_dump -n hard -U postgres nyc1 > /var/tmp/pgdump-hard-YYYYMMDD.sql
+  pg_dump -n '(hard|deco)' -U postgres nyc1 > /var/tmp/pgdump-hard-YYYYMMDD.sql
   gzip -9 /var/tmp/pgdump-hard-YYYYMMDD.sql
 
 To import into another database 'nyc2' (on the same host):
