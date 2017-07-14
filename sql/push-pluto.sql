@@ -50,15 +50,7 @@ create table push.pluto_refdata_landuse as
 select * from flat.pluto_refdata_landuse;
 create index on push.pluto_refdata_landuse(tag);
 
-
-
-
-
-
-
-
-
-
+commit;
 
 
 --
@@ -157,5 +149,4 @@ left join push.pluto_qblock_overflow as d on a.qblock = d.qblock;
 create index on push.pluto_qblock_summary(qblock);
 */
 
-commit;
 
