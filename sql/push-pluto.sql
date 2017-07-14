@@ -54,11 +54,7 @@ commit;
 
 
 --
--- Everything below here is DEPRECATED
---
-
---
--- Analytical views
+-- Deprecated City 
 --
 
 /*
@@ -78,9 +74,6 @@ select bbl, count(*) as total, count(distinct bin) as bin
 from push.pluto_building_orphan group by bbl;
 create index on push.pluto_building_orphan_count(bbl);
 
-
-
-
 -- DEPRECATED
 -- A pre-baked table of primary condo lots, with qualified block numbes slotted in.
 -- Yields 7440 rows in 16v2.
@@ -98,7 +91,6 @@ create index on push.pluto_coop(bbl);
 create table push.pluto_condo_qblock as
 select qblock,count(*) as total from push.pluto_condo group by qblock;
 create index on push.pluto_condo_qblock(qblock);
-
 
 -- DEPRECATED
 create view push.pluto_qblock_count as
