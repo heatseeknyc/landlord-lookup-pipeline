@@ -69,6 +69,7 @@ create index on push.pluto_refdata_landuse(tag);
 -- Analytical views
 --
 
+/*
 -- DEPRECATED
 -- "Orphaned" buildings/lots with no BBL in Pluto
 drop materialized view if exists push.pluto_building_orphan cascade; 
@@ -154,6 +155,7 @@ left join push.pluto_qblock_range    as b on a.qblock = b.qblock
 left join push.pluto_qblock_condo    as c on a.qblock = c.qblock 
 left join push.pluto_qblock_overflow as d on a.qblock = d.qblock;
 create index on push.pluto_qblock_summary(qblock);
+*/
 
 commit;
 
