@@ -194,7 +194,7 @@ select
     case
         when g.docid is not null then mkaddr_acris(g.address1,g.address2,g.country,g.city,g.state::text,g.postal) 
         else null
-    end as acris_address,
+    end            as acris_address,
     j.bank              as condo_parent,
     is_condo_bbl(a.bbl) as condo_is_bank,
     coalesce(h.contact,0)      as hpd_contact,
