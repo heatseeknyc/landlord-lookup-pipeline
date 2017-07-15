@@ -75,7 +75,7 @@ create index on push.acris_party_count(docid);
 create index on push.acris_party_count(docid,party_type);
 
 --
--- Finally, purge the counting table we no longer need. 
+-- Purge the counting table we no longer need. 
 --
 drop table if exists push.acris_master_docid_count cascade; 
 
