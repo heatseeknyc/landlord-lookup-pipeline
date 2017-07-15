@@ -1,16 +1,6 @@
 
 begin;
 
--- 
--- Omit rows with invalid BBLs + BINs.  In general, these create 
--- havoc for our joins and checksums (and in theory, we will never
--- be able to match on these keys, anyway).  
---
--- We also omit columns which are also (in principle) dependent on our
--- de-facto primary keys, and which (in principle) can be retrieved by
--- joining on other tables.
---
-
 
 -- Row counts for the June 2017 dataset.
 
