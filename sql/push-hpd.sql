@@ -17,6 +17,12 @@ create index on push.hpd_building(id);
 create index on push.hpd_building(bbl);
 create index on push.hpd_building(bin);
 
+--
+-- The first of several counting tables/views.  In this transaction at least,
+-- all tables/views ending with "_count" are by BBL.  There's only one counting 
+-- table that aggregates on (BBL,BIN), but it has a different suffix.
+--
+
 drop table if exists push.hpd_building_count cascade;
 create table push.hpd_building_count as 
 select bbl, count(*) as total from push.hpd_building group by bbl;
