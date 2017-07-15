@@ -23,7 +23,14 @@ drop table if exists push.hpd_building cascade;
 create table push.hpd_building as
 select id, bbl, bin, program, dob_class_id, legal_stories, legal_class_a, legal_class_b, lifecycle, status_id, registration_id
 from core.hpd_building;
+create index on push.hpd_building(id);
 create index on push.hpd_building(bbl);
+create index on push.hpd_building(bin);
+
+drop table if exists push.hpd_building_count cascade;
+create table push.hpd_building_count as 
+select bbl,count(*) as total from push.hpd_building group by bbl;
+create index on push.hpd_building_count(bbl);
 
 --
 -- Next, we introduce a few restrictions.
@@ -45,20 +52,24 @@ select * from push.hpd_building_regular
 where status_id = 1 and lifecycle = 'Building';
 
 
+-- And an index of distinct, active buildings, a small percentage of which will have
+-- multiple records per (BBL,BIN) pair.  We elect to take the more "recent" one (going by id)
+-- as the "more active" one.
 -- 292253 rows
-drop view if exists push.hpd_building_count cascade;
-create view push.hpd_building_count as 
+drop view if exists push.hpd_building_distinct cascade;
+create view push.hpd_building_distinct as 
 select bbl, bin, count(*) as total, max(id) as last_id
 from push.hpd_building_active group by bbl, bin;
 
 
+-- Now we slot in all the other fields for that (BBL,BIN,id) tuple.
 -- 292253 rows
 drop table if exists push.hpd_building_current cascade; 
 create table push.hpd_building_current as 
 select 
    a.bbl, a.bin, b.id, b.program, 
    b.dob_class_id, b.legal_stories, b.legal_class_a, b. legal_class_b
-from      push.hpd_building_count  as a
+from      push.hpd_building_distinct  as a
 left join push.hpd_building_active as b on (a.bbl,a.bin,a.last_id) = (b.bbl,b.bin,b.id);
 create index on push.hpd_building_current(bbl);
 create index on push.hpd_building_current(bbl,bin);
@@ -120,13 +131,6 @@ create index on push.hpd_taxlot_program(bbl);
 
 
 
-
-create index on push.hpd_building(id);
-create index on push.hpd_building(bbl);
-create index on push.hpd_building(bin);
-drop view if exists push.hpd_building_count cascade;
-create view push.hpd_building_count as 
-select bbl,count(*) as total from push.hpd_building group by bbl;
 
 drop table if exists push.hpd_registration cascade;
 create table push.hpd_registration as
