@@ -88,16 +88,6 @@ create view push.hpd_program_count as
 select bbl, count(distinct program) as count_program, count(distinct bin) as count_bin
 from push.hpd_building_program group by bbl;
 
-/*
-create view push.hpd_program_nice as
-select bbl,count(distinct program) as program, count(distinct bin) as bin, min(program) as prog1, max(program) as prog2 
-from push.hpd_building_program group by bbl;
-
-create view push.hpd_taxlot_program_dirty as
-select bbl,min(program) as program,count(distinct program) as count_program, count(distinct bin) as count_building
-from push.hpd_building_program group by bbl;
-*/
-
 -- BBLs with first identifiable, non-PVT progam (that is, registered in some 
 -- special program or another).  Thus far, any such BBL has only one non-special 
 -- program (so the 'first' operator acts on only one value); thus, 'count_program' 
@@ -122,10 +112,6 @@ select a.bbl, b.program as program, a.count_program, a.count_bin
 from      push.hpd_program_count as a 
 left join push.hpd_taxlot_special as b on a.bbl = b.bbl;
 create index on push.hpd_taxlot_program(bbl);
-
-
-
-
 
 
 drop table if exists push.hpd_registration cascade;
