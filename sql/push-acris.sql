@@ -67,6 +67,13 @@ select * from core.acris_party;
 create index on push.acris_party(docid);
 create index on push.acris_party(docid,party_type);
 
+drop table if exists push.acris_party_count cascade;
+create table push.acris_party_count as
+select docid, party_type, count(*) as total
+from push.acris_party group by docid, party_type;
+create index on push.acris_party_count(docid);
+create index on push.acris_party_count(docid,party_type);
+
 --
 -- Finally, purge the counting table we no longer need. 
 --
