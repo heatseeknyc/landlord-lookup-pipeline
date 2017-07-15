@@ -19,7 +19,7 @@ create index on push.hpd_building(bin);
 
 drop table if exists push.hpd_building_count cascade;
 create table push.hpd_building_count as 
-select bbl,count(*) as total from push.hpd_building group by bbl;
+select bbl, count(*) as total from push.hpd_building group by bbl;
 create index on push.hpd_building_count(bbl);
 
 --
@@ -79,7 +79,7 @@ from push.hpd_building_current;
 
 -- 280520 rows
 create view push.hpd_program_count as
-select bbl,count(distinct program) as count_program, count(distinct bin) as count_bin
+select bbl, count(distinct program) as count_program, count(distinct bin) as count_bin
 from push.hpd_building_program group by bbl;
 
 /*
@@ -155,7 +155,7 @@ create index on push.hpd_legal(bbl);
 create index on push.hpd_legal(building_id);
 drop view if exists push.hpd_legal_count cascade;
 create view push.hpd_legal_count as 
-select bbl,count(*) as total from push.hpd_legal group by bbl;
+select bbl, count(*) as total from push.hpd_legal group by bbl;
 
 drop table if exists push.hpd_complaint cascade;
 create table push.hpd_complaint as
@@ -184,7 +184,7 @@ create index on push.hpd_violation(registration_id);
 create index on push.hpd_violation(bbl);
 drop view if exists push.hpd_violation_count cascade;
 create view push.hpd_violation_count as 
-select bbl,count(*) as total from push.hpd_violation group by bbl;
+select bbl, count(*) as total from push.hpd_violation group by bbl;
 
 drop table if exists push.hpd_taxlot_summary cascade;
 create table push.hpd_taxlot_summary as
