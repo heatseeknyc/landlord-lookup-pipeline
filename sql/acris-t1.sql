@@ -11,7 +11,7 @@ drop view if exists t1.acris_history cascade;
 create view t1.acris_history as
 select 
    a.bbl, a.docid, a.easement, a.partial, a.rights_air, a.rights_sub, a.proptype, a.unit,
-   b.doctag,b.doctype,b.amount,b.percentage,b.date_filed,b.date_modified,
+   b.doctag, b.doctype, b.amount, b.percentage, b.date_filed, b.date_modified,
    b.docid is not null as in_master
 from push.acris_legal as a 
 left join push.acris_master as b on a.docid = b.docid;
