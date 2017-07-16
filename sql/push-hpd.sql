@@ -178,20 +178,37 @@ drop view if exists push.hpd_violation_count cascade;
 create view push.hpd_violation_count as 
 select bbl, count(*) as total from push.hpd_violation group by bbl;
 
+--
+-- A bit slow performance-wise, but this accomplishes, DWIM-fashion,
+-- a full outer join on 5 tables in about the simplest way possible, 
+-- syntax-wise.
+--
+drop table if exists push.hpd_taxlot cascade; 
+create table push.hpd_taxlot as
+select distinct bbl from (
+    select distinct bbl from push.hpd_building_count union
+    select distinct bbl from push.hpd_contact_count union
+    select distinct bbl from push.hpd_complaint_count union
+    select distinct bbl from push.hpd_violation_count union
+    select distinct bbl from push.hpd_legal_count 
+) as a;
+create index on push.hpd_taxlot(bbl);
+
 drop table if exists push.hpd_taxlot_summary cascade;
 create table push.hpd_taxlot_summary as
 select
-  coalesce(a.bbl,b.bbl,c.bbl,d.bbl,e.bbl) as bbl,
+  t.bbl,
   a.total as building,
   b.total as contact,
   c.total as complaint,
   d.total as violation,
   e.total as legal
-from            push.hpd_building_count  as a
-full outer join push.hpd_contact_count   as b on a.bbl = b.bbl
-full outer join push.hpd_complaint_count as c on a.bbl = c.bbl
-full outer join push.hpd_violation_count as d on a.bbl = d.bbl
-full outer join push.hpd_legal_count     as e on a.bbl = e.bbl;
+from      push.hpd_taxlot as t 
+left join push.hpd_building_count  as a on t.bbl = a.bbl
+left join push.hpd_contact_count   as b on t.bbl = b.bbl
+left join push.hpd_complaint_count as c on t.bbl = c.bbl
+left join push.hpd_violation_count as d on t.bbl = d.bbl
+left join push.hpd_legal_count     as e on t.bbl = e.bbl;
 create index on push.hpd_taxlot_summary(bbl);
 
 --
