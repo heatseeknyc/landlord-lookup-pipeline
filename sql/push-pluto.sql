@@ -10,7 +10,7 @@ create view push.pluto_taxlot_tidy as
 select 
     bbl, address, owner_name, 
     bldg_class as class, land_use as land, year_built as year, 
-    units_total as utotal, units_res as ures, num_floors as numfl, 
+    units_total as utot, units_res as ures, num_floors as numfl, 
     bldg_count, bbl2qblock(bbl) as qblock
 from push.pluto_taxlot;
 
