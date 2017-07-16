@@ -16,13 +16,6 @@ select
 from push.acris_legal as a 
 left join push.acris_master as b on a.docid = b.docid;
 
-/*
-drop view if exists t1.acris_history_tidy cascade; 
-create view t1.acris_history_tidy as
-select bbl,docid,partial,easement,rights_air,rights_sub,proptype,unit,doctag,doctype,amount,percentage,date_filed,date_modified
-from t1.acris_history where in_master;
-*/
-
 -- 
 -- A view of our history table, minus the "junk" rows above, and with a somewhat
 -- tidier set of columns.
