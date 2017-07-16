@@ -68,7 +68,8 @@ create index on push.acris_party(docid);
 create index on push.acris_party(docid,party_type);
 
 -- A crucial table telling us the number of parties of a given transaction and party_type.
--- Also slow to derive, unfortunately.
+-- Also slow to derive (about 5 min), unfortunately.
+-- 27,684,101 rows
 drop table if exists push.acris_party_count cascade;
 create table push.acris_party_count as
 select docid, party_type, count(*) as total
