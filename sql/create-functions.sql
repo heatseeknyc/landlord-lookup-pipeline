@@ -8,6 +8,23 @@ begin;
 -- Functions related to BBLs
 --
 
+--
+-- A useful, but somewhat risky "spaceship" operator, a la <=> in Perl.
+--
+-- Risky in that your inputs better be of compatible types, otherwise it will 
+-- blow up!  And in that you can easily confuse NULL status for equality!
+--
+create or replace function public.cmp (x anyelement, y anyelement)
+returns integer AS $$
+begin
+    if x = y then return 0; end if;
+    if x < y then return -1; end if;
+    if x > y then return +1; end if;
+    return null; 
+end
+$$ language plpgsql;
+
+
 -- We call a BBL "valid" if it is at least structurally valid, 
 -- that is, integer and not completely out of range.
 create or replace function public.is_valid_bbl (bbl bigint) 
