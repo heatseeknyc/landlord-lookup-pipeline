@@ -13,6 +13,6 @@ def delim_term(c):
 
 def make_csv_args(c):
     delimstr = '' if c == ',' else "DELIMETER %s, " % delim_term(c)
-    return '('+delimstr+'FORMAT CSV, HEADER TRUE)' 
+    return '('+delimstr+'FORMAT CSV, HEADER TRUE)'
 
 
