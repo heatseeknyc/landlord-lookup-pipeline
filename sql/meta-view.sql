@@ -162,7 +162,7 @@ create view meta.taxlot as
 select 
     a.bbl, 
     a.bbltype,
-    a.in_pad, 
+    a.in_pad_meta as in_pad,
     coalesce(e.status or d.status is not null,false) as residential,
     d.status as stabilized,
     is_condo_bbl(a.bbl) as is_condo,
