@@ -33,8 +33,8 @@ select
     a.in_pad_bbl, 
     a.in_pad_adr, 
     a.in_outer as in_pad_outer,
-    a.is_unit  as is_unit,
     a.bbl is not null as in_pad_meta,
+    a.is_unit  as is_unit,
     b.bbl is not null as in_acris,
     bbl2type(coalesce(a.bbl,b.bbl)) as bbltype,
     bbl2qblock(coalesce(a.bbl,b.bbl)) as qblock
