@@ -80,14 +80,9 @@ create table omni.building_count as
 select bbl,count(*) as total from omni.building_origin group by bbl;
 create index on omni.building_count(bbl);
 
-commit;
-
-
 --
 -- Newer stuff
 --
-
-begin;
 
 create view omni.dcas_law48_orphan as
 select a.* 
@@ -122,7 +117,6 @@ select a.bbl
 from      omni.hpd_building_badlot as a
 left join push.acris_legal_count   as b on a.bbl = b.bbl where b.bbl is null;
 
-commit;
 
 
 
@@ -130,13 +124,11 @@ commit;
 -- Stabilization
 --
 
-begin;
-
 -- Buildings in Pluto that are "likely" to be stablized, according to EPTA criteria. 
 -- Will overlap very strongly with the DHCR/Taxbill lists, but also contain about 13k
 -- taxlots not in either of those result sets.
 -- 55382 rows
-drop view if exists omni.stable_likely cascade;
+-- drop view if exists omni.stable_likely cascade;
 create view omni.stable_likely as
 select bbl from push.pluto_taxlot where units_res >= 6 and year_built < 1974;
 
@@ -174,7 +166,7 @@ select bbl from push.pluto_taxlot where units_res >= 6 and year_built < 1974;
 --     otherwise 'confirmed' or 'disputed'.
 --
 -- 61415 rows
-drop view if exists omni.stable_classic cascade;
+-- drop view if exists omni.stable_classic cascade;
 create view omni.stable_classic as
 select
   coalesce(a.bbl,b.bbl) as bbl,
@@ -200,7 +192,7 @@ full outer join omni.stable_likely    as b on a.bbl = b.bbl;
 -- meaningful way (with HPD taking precedence in some 67 rows, as of June 2017).
 --
 -- 62023 rows
-drop view if exists omni.stable_origin cascade;
+-- drop view if exists omni.stable_origin cascade;
 create view omni.stable_origin as
 select
   coalesce(a.bbl,b.bbl) as bbl,
@@ -229,7 +221,7 @@ full outer join push.hpd_taxlot_program as b on a.bbl = b.bbl
 -- This is something of a DRY violation of course, and will have to be 
 -- maintained as our status designations inevitably change, moving foward.
 -- But is much simpler than attempting any kind of automatic derivation. 
-drop table if exists omni.label_status cascade;
+-- drop table if exists omni.label_status cascade;
 create table omni.label_status ( 
     status integer,
     label text
