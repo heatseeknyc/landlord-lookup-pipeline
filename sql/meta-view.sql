@@ -168,6 +168,10 @@ select
     coalesce(e.status or d.status is not null,false) 
                          as is_resi,
     d.status             as stable_code,
+    case when d.dhcr_bldg_count > 0 then 1 else null end 
+                         as stable_dhcr_ok,
+    d.taxbill_lastyear   as stable_taxbill_lastyear, 
+    d.taxbill_unitcount  as stable_taxbill_unitcount, 
     b.land_use           as pluto_land_use, 
     b.bldg_class         as pluto_bldg_class,
     b.bldg_count         as pluto_bldg_count, 
