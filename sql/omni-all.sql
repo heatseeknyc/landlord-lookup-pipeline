@@ -10,9 +10,10 @@ select * from flat.dcp_condo_map;
 create index on omni.dcp_condo_map(bank);
 create index on omni.dcp_condo_map(unit);
 
--- All lots in PAD (expressed or implied) = 1106866 rows.
-drop table if exists omni.dcp_all cascade; 
-create table omni.dcp_all as
+-- Our "meta" registry of all BBLs in PAD/Pluto - both base lots + condo units.
+-- 1106866 rows
+drop table if exists omni.dcp_pad_meta cascade; 
+create table omni.dcp_pad_meta as
 select 
     coalesce(a.bbl,b.unit) as bbl,
     a.in_bbl as in_pad_bbl,
@@ -21,7 +22,7 @@ select
     b.unit is not null as is_unit, 
 from push.dcp_pad_outer as a
 full outer join omni.dcp_condo_map as b on a.bbl = b.unit; 
-create index on omni.dcp_all(bbl);
+create index on omni.dcp_pad_meta(bbl);
 
 -- A unified view of all "resonably legit" BBLs in the system.
 -- Includes all BBLs from PAD/Pluto, and all "regular" BBLs from ACRIS.
@@ -33,11 +34,11 @@ select
     a.in_pad_adr, 
     a.in_outer as in_pad_outer,
     a.is_unit  as is_unit,
-    a.bbl is not null as in_pad,
+    a.bbl is not null as in_pad_meta,
     b.bbl is not null as in_acris,
     bbl2type(coalesce(a.bbl,b.bbl)) as bbltype,
     bbl2qblock(coalesce(a.bbl,b.bbl)) as qblock
-from omni.dcp_all as a
+from omni.dcp_pad_meta as a
 full outer join p2.acris_history_count as b on a.bbl = b.bbl;
 create index on omni.taxlot_origin(bbl);
 
