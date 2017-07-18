@@ -167,7 +167,7 @@ select
     is_condo_bbl(a.bbl)  as is_bank,
     coalesce(e.status or d.status is not null,false) 
                          as is_resi,
-    d.status             as stable_class,
+    d.status             as stable_code,
     b.land_use           as pluto_land_use, 
     b.bldg_class         as pluto_bldg_class,
     b.bldg_count         as pluto_bldg_count, 
@@ -188,7 +188,7 @@ select
     g.date_filed         as acris_transfer_date,
     g.docid              as acris_transfer_docid,
     g.buyers             as acris_buyers,
-    g.class              as acris_class, 
+    g.class              as acris_code, 
     g.whole              as acris_whole, 
     g.amount             as acris_amount, 
     g.name               as acris_owner_name, 
