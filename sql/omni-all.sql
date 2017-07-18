@@ -84,10 +84,13 @@ create index on omni.building_count(bbl);
 -- Newer stuff
 --
 
+/*
+-- DEPRECATED
 create view omni.dcas_law48_orphan as
 select a.* 
 from push.dcas_law48 as a
 left join hard.taxlot as b on a.bbl = b.bbl where b.bbl is null;
+*/
 
 
 --
