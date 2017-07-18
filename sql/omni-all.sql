@@ -23,7 +23,8 @@ from push.dcp_pad_outer as a
 full outer join omni.dcp_condo_map as b on a.bbl = b.unit; 
 create index on omni.dcp_all(bbl);
 
--- A truly unified view of all BBLs in the ecosystem.
+-- A unified view of all "resonably legit" BBLs in the system.
+-- Includes all BBLs from PAD/Pluto, and all "regular" BBLs from ACRIS.
 drop table if exists omni.taxlot_origin cascade; 
 create table omni.taxlot_origin as
 select 
@@ -37,7 +38,7 @@ select
     bbl2type(coalesce(a.bbl,b.bbl)) as bbltype,
     bbl2qblock(coalesce(a.bbl,b.bbl)) as qblock
 from omni.dcp_all as a
-full outer join push.acris_legal_count as b on a.bbl = b.bbl;
+full outer join p2.acris_history_count as b on a.bbl = b.bbl;
 create index on omni.taxlot_origin(bbl);
 
 
