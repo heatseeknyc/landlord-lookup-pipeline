@@ -38,7 +38,7 @@ select
     -- in theory a bit redundant but a bit clearer to access if you just want to
     -- know is fhis is a condo unit or not.
     a.is_unit  as is_unit, 
-    b.bbl is not null as in_acris,
+    b.total as acris_count, 
     bbl2type(coalesce(a.bbl,b.bbl)) as bbltype,
     bbl2qblock(coalesce(a.bbl,b.bbl)) as qblock
 from omni.dcp_pad_meta as a
