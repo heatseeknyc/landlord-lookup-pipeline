@@ -1,8 +1,9 @@
 
 begin;
 
-drop table if exists flat.acris_control cascade; 
-drop table if exists flat.acris_master cascade; 
+drop table if exists flat.acris_refdata_control cascade; 
+drop table if exists flat.acris_refdata_docfam cascade;
+drop table if exists flat.acris_master cascade;
 drop table if exists flat.acris_legal cascade; 
 drop table if exists flat.acris_party cascade; 
 
@@ -15,6 +16,16 @@ create table flat.acris_refdata_control (
     ptype2 text,
     ptype3 text
 );
+
+-- Mapping of a doctype to an internal doctype "family", different from the doctag.
+-- With current assignations:
+--    1 = conveyance, 2 = condo declaration
+create table flat.acris_refdata_docfam (
+    doctype text not null,
+    family smallint not null,
+    UNIQUE(doctype)
+);
+
 
 create table flat.acris_master (
     docid char(16) not null,
@@ -76,5 +87,3 @@ create table flat.acris_remark (
 );
 
 commit;
-
-
