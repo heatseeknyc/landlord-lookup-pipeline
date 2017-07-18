@@ -183,7 +183,7 @@ select
     b.points             as pluto_points,
     b.address            as pluto_address,
     b.owner_name         as pluto_owner,
-    -- note that prsence of a transfer docid is what signifies whether we 
+    -- Note that prsence of a transfer docid is what signifies whether we 
     -- have an acris match on this record or not.
     g.date_filed         as acris_transfer_date,
     g.docid              as acris_transfer_docid,
