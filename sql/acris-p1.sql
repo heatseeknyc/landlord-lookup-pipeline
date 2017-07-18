@@ -10,7 +10,7 @@ begin;
 drop schema if exists p1 cascade;
 create schema p1;
 
--- 18055244 rows in t min 
+-- 18055244 rows in about 5 min 
 drop table if exists p1.acris_history cascade;
 create table p1.acris_history as
 select a.*, b.family as docfam, public.bbl2qblock(bbl) as qblock 
