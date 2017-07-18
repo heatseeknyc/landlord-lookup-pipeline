@@ -193,6 +193,9 @@ select
     g.amount             as acris_amount, 
     g.name               as acris_owner_name, 
     g.address            as acris_owner_address,
+    -- Placeholder column for number of declaration records 
+    case when is_condo_bbl(a.bbl) then 1 else null end 
+                         as condo_declare, 
     j.bank               as condo_parent,
     coalesce(h.contact,0)      as hpd_contact,
     coalesce(h.complaint,0)    as hpd_complaint,
