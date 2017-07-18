@@ -25,9 +25,12 @@ left join push.acris_master as b on a.docid = b.docid;
 -- used by ACRIS as "buckets" to hold deprecated transactions (as in, "we aren't sure
 -- about this BBL or transaction set, so let's put it to the side for now.")  
 -- 
--- In any case they most likely aren't meainngful, and would never show up in
--- property searches anyway, so we exclude them here.  About 2000+ rows are affected 
--- by the "in_master" and "is_regular_bbl" criteria taken together.
+-- In any case none of these marginal BBLs appear in PAD (as of June 2017), so most 
+-- likely aren't meainingful (and would never show up in property searches anyway), 
+-- so we exclude them here.  
+--
+-- About 2000+ rows are affected -- by the "in_master" and "is_regular_bbl" criteria 
+-- taken together.
 --
 create view t1.acris_history_tidy as
 select
