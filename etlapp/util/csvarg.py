@@ -9,10 +9,19 @@ def is_valid_delim(c):
 def delim_term(c):
     if not is_valid_delim(c):
         raise ValueError("invalid delimiter [%s]" % c)
-    return '\\"'+c+'\\"'
+    return dquote(x)
+
+def dquote(x):
+    return '\\"'+x+'\\"'
+
+def squote(x):
+    return "'%s'" % x
+
 
 def make_csv_args(c):
     delimstr = '' if c == ',' else "DELIMETER %s, " % delim_term(c)
-    return '('+delimstr+'FORMAT CSV, HEADER TRUE)'
+    quoteterm = ", QUOTE %s" % squote('\\"')
+    return '('+delimstr+'FORMAT CSV, HEADER TRUE'+quoteterm+')'
+    # return '('+delimstr+'FORMAT CSV, HEADER TRUE)'
 
 

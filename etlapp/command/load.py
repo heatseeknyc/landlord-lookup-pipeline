@@ -52,9 +52,9 @@ def load_source_named(prefix,name):
     return dopsql(psql,etlapp.pgconf)
 
 def permit_loadable(prefix,name):
-    """A simpe abstracted perms check which allows us to override config settings 
+    """A simpe abstracted perms check which allows us to override config settings
     for certain special sources."""
-    if prefix == 'temp':
+    if prefix in ('temp','norm'):
         return True
     return etlapp.source.getval(prefix,name,'active')
 
