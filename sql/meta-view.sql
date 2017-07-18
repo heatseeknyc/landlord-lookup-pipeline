@@ -163,10 +163,10 @@ select
     a.bbl, 
     a.bbltype,
     a.in_pad_meta as in_pad,
+    f.bbl is not null    as is_coop,
+    is_condo_bbl(a.bbl)  as is_bank,
     coalesce(e.status or d.status is not null,false) 
                          as is_resi,
-    is_condo_bbl(a.bbl)  as is_bank,
-    f.bbl is not null    as is_coop,
     d.status             as stable_class,
     b.land_use           as pluto_land_use, 
     b.bldg_class         as pluto_bldg_class,
