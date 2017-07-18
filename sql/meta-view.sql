@@ -188,13 +188,16 @@ select
     -- have an acris match on this record or not.
     g.date_filed   as acris_transfer_date,
     g.docid        as acris_transfer_docid,
-    g.count        as acris_party_count,
+    g.buyers       as acris_buyers,
+    g.class        as acris_class, 
+    g.whole        as acris_whole, 
     g.amount       as acris_amount, 
-    g.name         as acris_owner, 
-    case
-        when g.docid is not null then mkaddr_acris(g.address1,g.address2,g.country,g.city,g.state::text,g.postal) 
-        else null
-    end            as acris_address,
+    g.name         as acris_owner_name, 
+    g.address      as acris_owner_address,
+    -- case
+    --    when g.docid is not null then mkaddr_acris(g.address1,g.address2,g.country,g.city,g.state::text,g.postal) 
+    --    else null
+    -- end            as acris_address,
     is_condo_bbl(a.bbl) as condo_is_bank,
     j.bank              as condo_parent,
     coalesce(h.contact,0)      as hpd_contact,
@@ -206,7 +209,7 @@ left join push.pluto_taxlot as b on a.bbl = b.bbl
 left join omni.stable_origin as d on a.bbl = d.bbl
 left join meta.residential  as e on a.bbl = e.bbl
 left join push.dcp_coop     as f on a.bbl = f.bbl
-left join p1.acris_owner_info as g on a.bbl = g.bbl
+left join p2.acris_owner    as g on a.bbl = g.bbl
 left join push.hpd_taxlot_summary as h on a.bbl = h.bbl
 left join omni.dcp_condo_map as j on a.bbl = j.unit;
 
