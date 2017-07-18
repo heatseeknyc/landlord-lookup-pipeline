@@ -77,7 +77,16 @@ create index on p2.last_deed(docid);
 create index on p2.last_deed(bbl);
 
 --
--- A couple of notes:
+-- A summary of what we know about the ownership for every property in ACRIS. 
+--
+--    'class' is the most important:
+--       0 - no coneyances at all
+--       1 - has a uniqely identifiable last conveyance (the "vanilla" case) 
+--       2 - "multi-per-day" last conveyance (ambiguous)
+--       3 - has UIL conveyance, but is a partial sale 
+--
+--    'whole' is 0,1,2 for "unknown", "partial" or "total" sale 
+--       (default interpretation of whole = 0 is "presumably total")
 --
 --   - "deed_count" refers to the number of conveyance-like transactions on the 
 --     last date (for that bbl) such transactions occcured.
@@ -85,7 +94,7 @@ create index on p2.last_deed(bbl);
 --   - the "buyers" and "part" fields are only available when there's an LUIT, that is, 
 --     when deed_count = 1.
 --
--- 1152338 rows
+-- 1152338 rows = one for every (legit) BBL in ACRIS. 
 --
 create table p2.convey_origin as
 select
