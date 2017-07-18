@@ -165,7 +165,7 @@ select
     a.in_pad_meta as in_pad,
     coalesce(e.status or d.status is not null,false) as residential,
     d.status as stabilized,
-    is_condo_bbl(a.bbl) as is_condo,
+    is_condo_bbl(a.bbl) as is_bank,
     f.bbl is not null as is_coop,
     b.land_use           as pluto_land_use, 
     b.bldg_class         as pluto_bldg_class,
@@ -196,7 +196,7 @@ select
     --    when g.docid is not null then mkaddr_acris(g.address1,g.address2,g.country,g.city,g.state::text,g.postal) 
     --    else null
     -- end            as acris_address,
-    is_condo_bbl(a.bbl) as condo_is_bank,
+    -- is_condo_bbl(a.bbl) as condo_is_bank,
     j.bank              as condo_parent,
     coalesce(h.contact,0)      as hpd_contact,
     coalesce(h.complaint,0)    as hpd_complaint,
