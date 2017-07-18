@@ -19,7 +19,7 @@ select
     a.in_bbl as in_pad_bbl,
     a.in_adr as in_pad_adr,
     a.bbl is not null as in_outer,
-    b.unit is not null as is_unit, 
+    b.unit is not null as is_unit
 from push.dcp_pad_outer as a
 full outer join omni.dcp_condo_map as b on a.bbl = b.unit; 
 create index on omni.dcp_pad_meta(bbl);
