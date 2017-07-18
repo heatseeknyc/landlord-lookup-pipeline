@@ -193,11 +193,6 @@ select
     g.amount       as acris_amount, 
     g.name         as acris_owner_name, 
     g.address      as acris_owner_address,
-    -- case
-    --    when g.docid is not null then mkaddr_acris(g.address1,g.address2,g.country,g.city,g.state::text,g.postal) 
-    --    else null
-    -- end            as acris_address,
-    -- is_condo_bbl(a.bbl) as condo_is_bank,
     j.bank              as condo_parent,
     coalesce(h.contact,0)      as hpd_contact,
     coalesce(h.complaint,0)    as hpd_complaint,
