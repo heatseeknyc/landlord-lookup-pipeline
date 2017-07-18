@@ -34,7 +34,10 @@ select
     a.in_pad_adr, 
     a.in_outer as in_pad_outer,
     a.bbl is not null as in_pad_meta,
-    a.is_unit  as is_unit,
+    -- the "is_unit" column is equivalent to "in_pad_meta and not in_pad_outer".
+    -- in theory a bit redundant but a bit clearer to access if you just want to
+    -- know is fhis is a condo unit or not.
+    a.is_unit  as is_unit, 
     b.bbl is not null as in_acris,
     bbl2type(coalesce(a.bbl,b.bbl)) as bbltype,
     bbl2qblock(coalesce(a.bbl,b.bbl)) as qblock
