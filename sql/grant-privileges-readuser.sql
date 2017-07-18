@@ -1,5 +1,5 @@
 --
--- Finally, grant access to our readuser on the hard schema.
+-- Finally, grant access to our readuser on the 'hard' and 'deco' schemas.
 --
 
 begin;
