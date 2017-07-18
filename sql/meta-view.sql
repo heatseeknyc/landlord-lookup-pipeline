@@ -167,8 +167,7 @@ select
     is_condo_bbl(a.bbl)  as is_bank,
     coalesce(e.status or d.status is not null,false) 
                          as is_resi,
-    -- Should be 'class', but unfortunately that's reserved in JS.
-    d.status             as stable_klass,
+    d.status             as stable_class,
     b.land_use           as pluto_land_use, 
     b.bldg_class         as pluto_bldg_class,
     b.bldg_count         as pluto_bldg_count, 
