@@ -18,7 +18,7 @@ select
     a.in_bbl as in_pad_bbl,
     a.in_adr as in_pad_adr,
     a.bbl is not null as in_outer,
-    b.unit is not null as in_condo 
+    b.unit is not null as is_unit, 
 from push.dcp_pad_outer as a
 full outer join omni.dcp_condo_map as b on a.bbl = b.unit; 
 create index on omni.dcp_all(bbl);
@@ -32,7 +32,7 @@ select
     a.in_pad_bbl, 
     a.in_pad_adr, 
     a.in_outer as in_pad_outer,
-    a.in_condo as in_pad_condo,
+    a.is_unit  as is_unit,
     a.bbl is not null as in_pad,
     b.bbl is not null as in_acris,
     bbl2type(coalesce(a.bbl,b.bbl)) as bbltype,
