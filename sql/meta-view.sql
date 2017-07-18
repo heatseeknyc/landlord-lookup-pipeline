@@ -162,8 +162,6 @@ create view meta.taxlot as
 select 
     a.bbl, 
     a.bbltype,
-    -- deprecated in favor of docid match, per below 
-    a.in_acris, 
     a.in_pad, 
     coalesce(e.status or d.status is not null,false) as residential,
     d.status as stabilized,
