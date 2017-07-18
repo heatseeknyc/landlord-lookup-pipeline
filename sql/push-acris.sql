@@ -71,12 +71,34 @@ create index on push.acris_party(docid,party_type);
 -- 27,684,101 rows - 5 min  
 drop table if exists push.acris_party_count cascade;
 create table push.acris_party_count as
-select 
-    docid, party_type, count(*) as total, 
-    first(name) as name, first(address) as address
+select docid, party_type, count(*) as total
 from push.acris_party group by docid, party_type;
 create index on push.acris_party_count(docid);
 create index on push.acris_party_count(docid,party_type);
+
+/*
+create table push.acris_party_single as
+select
+    a.docid, a.party_type,
+    name, address1, address2, country, city, state, postal
+from push.acris_party_count as a
+left join push.acris_party  as b on (a.docid,a.party_type) = (b.docid,b.party_type)
+where a.total = 1;
+create index on push.acris_party_single(docid,party_type);
+*/
+
+-- A nifty view showing name+address for single-party transactions only,
+-- where these are known.  Note that it gets a crucial lift from the index 
+-- on 'acris_party_count' - if that index drops, then select times on this
+-- view will grind form to a hald.
+create view push.acris_party_single as
+select
+    a.docid, a.party_type,
+    name, address1, address2, country, city, state, postal
+from push.acris_party_count as a
+left join push.acris_party  as b on (a.docid,a.party_type) = (b.docid,b.party_type)
+where a.total = 1;
+
 
 --
 -- Purge the counting table we no longer need. 

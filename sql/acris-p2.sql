@@ -129,7 +129,7 @@ select
     end as address
 from p2.convey_origin             as a
 left join push.acris_master       as b on a.docid = b.docid
-left join push.acris_party_s1ngle as c on (a.docid,2) = (c.docid,c.party_type);
+left join push.acris_party_single as c on (a.docid,2) = (c.docid,c.party_type);
 
 commit;
 
