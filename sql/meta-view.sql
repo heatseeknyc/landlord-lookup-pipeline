@@ -167,7 +167,7 @@ select
                          as is_resi,
     is_condo_bbl(a.bbl)  as is_bank,
     f.bbl is not null    as is_coop,
-    d.status as stabilized,
+    d.status             as stable_class,
     b.land_use           as pluto_land_use, 
     b.bldg_class         as pluto_bldg_class,
     b.bldg_count         as pluto_bldg_count, 
