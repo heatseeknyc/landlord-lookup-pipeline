@@ -163,7 +163,8 @@ select
     a.bbl, 
     a.bbltype,
     a.in_pad_meta as in_pad,
-    coalesce(e.status or d.status is not null,false) as residential,
+    coalesce(e.status or d.status is not null,false) 
+                         as is_resi,
     d.status as stabilized,
     is_condo_bbl(a.bbl)  as is_bank,
     f.bbl is not null    as is_coop,
