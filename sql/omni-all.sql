@@ -44,7 +44,7 @@ select
     bbl2type(coalesce(a.bbl,b.bbl)) as bbltype,
     bbl2qblock(coalesce(a.bbl,b.bbl)) as qblock
 from omni.dcp_pad_meta as a
-full outer join p2.acris_history_count as b on a.bbl = b.bbl;
+full outer join p1.acris_history_count as b on a.bbl = b.bbl;
 create index on omni.taxlot_origin(bbl);
 
 
