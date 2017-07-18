@@ -4,7 +4,9 @@
 
 begin;
 
-drop table if exists omni.dcp_condo_map cascade; 
+drop schema if exists omni cascade;
+create schema omni;
+
 create table omni.dcp_condo_map as
 select * from flat.dcp_condo_map;
 create index on omni.dcp_condo_map(bank);
@@ -12,7 +14,7 @@ create index on omni.dcp_condo_map(unit);
 
 -- Our "meta" registry of all BBLs in PAD/Pluto - both base lots + condo units.
 -- 1106866 rows
-drop table if exists omni.dcp_pad_meta cascade; 
+-- drop table if exists omni.dcp_pad_meta cascade; 
 create table omni.dcp_pad_meta as
 select 
     coalesce(a.bbl,b.unit) as bbl,
@@ -26,7 +28,7 @@ create index on omni.dcp_pad_meta(bbl);
 
 -- A unified view of all "resonably legit" BBLs in the system.
 -- Includes all BBLs from PAD/Pluto, and all "regular" BBLs from ACRIS.
-drop table if exists omni.taxlot_origin cascade; 
+-- drop table if exists omni.taxlot_origin cascade; 
 create table omni.taxlot_origin as
 select 
     coalesce(a.bbl,b.bbl) as bbl,
@@ -47,7 +49,7 @@ create index on omni.taxlot_origin(bbl);
 
 
 -- Some 296 illegal BBLs in the combined stabilizatin list!
-drop view if exists omni.stable_orphan cascade; 
+-- drop view if exists omni.stable_orphan cascade; 
 create view omni.stable_orphan as
 select a.* from push.stable_combined as a
 left join omni.taxlot_origin as b on a.bbl = b.bbl where b.bbl is null;
@@ -56,7 +58,7 @@ left join omni.taxlot_origin as b on a.bbl = b.bbl where b.bbl is null;
 -- A unified view of (BBL,BIN) tuples, across ADR + Pluto buildings.
 -- If a (BBL,BIN) pair has any significance, theoretically it should be in here.
 -- Yields 1185955 rows for PAD 17b and Pluto 16v2.
-drop table if exists omni.building_origin cascade; 
+-- drop table if exists omni.building_origin cascade; 
 create table omni.building_origin as
 select
     coalesce(a.bbl,b.bbl) as bbl,
@@ -73,7 +75,7 @@ create index on omni.building_origin(bbl);
 create index on omni.building_origin(bin);
 create index on omni.building_origin(bbl,bin);
 
-drop table if exists omni.building_count cascade; 
+-- drop table if exists omni.building_count cascade; 
 create table omni.building_count as
 select bbl,count(*) as total from omni.building_origin group by bbl;
 create index on omni.building_count(bbl);
