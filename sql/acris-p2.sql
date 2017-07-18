@@ -31,7 +31,6 @@ from      p2.last_convey_date as a
 left join p1.acris_history    as b on (a.bbl,a.date_filed) = (b.bbl,b.date_filed)
 where b.docfam = 1;
 create index on p2.deed_blok(bbl);
--- where is_conveyance(b.doctype);
 
 
 --
