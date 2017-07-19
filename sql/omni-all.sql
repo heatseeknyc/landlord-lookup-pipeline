@@ -239,12 +239,14 @@ create index on omni.label_status(status);
 -- Some analytic views
 --
 
--- Stuff that's in PAD, but is neither in Pluto, nor a condo unit 
+-- Stuff that's in PAD, but is neither in Pluto, nor a condo unit.
+-- While we're at it, we also slot in the ACRIS history count (if any).
 -- 3050 rows for PAD 17b + Pluto 16v2
 create view omni.pad_minus_pluto as
-select a.* 
+select a.*, c.total as acris_history
 from omni.dcp_pad_meta as a 
 left join push.pluto_taxlot as b on a.bbl = b.bbl 
+left join p1.acris_history_count as c on a.bbl = c.bbl 
 where b.bbl is null and not is_unit;
 
 
