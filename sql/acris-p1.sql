@@ -72,6 +72,15 @@ create index on p1.doctype_survey(doctype);
 create index on p1.doctype_survey(doctag);
 create index on p1.doctype_survey(docfam);
 
+-- A nifty view of BBLs that cross-relate via a shared docid.
+-- In essence, the tuples (basebbl,bbl) from the edge list for a big  
+-- bipartit graph.  We don't know how big exactly, but queries on this 
+-- rowset can blow up very quickly, so be careful.
+create view p1.acris_xlegal as
+select a.bbl as basebbl, b.*
+from      p1.acris_history as a
+left join p1.acris_history as b on a.docid = b.docid;
+
 commit;
 
 
