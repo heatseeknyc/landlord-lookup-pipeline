@@ -28,5 +28,21 @@ from hard.taxlot as a
 left join hard.pluto_refdata_landuse   as b on a.pluto_land_use = b.tag
 left join hard.pluto_refdata_bldgclass as c on a.pluto_bldg_class = c.tag;
 
+
+-- Just enough into to the display the "base lot" for a condo unit. 
+create view deco.baselot as
+select
+    bbl,
+    pluto_address,
+    pluto_points,
+    pluto_parts,
+    pluto_lon_ctr,
+    pluto_lat_ctr,
+    pluto_radius,
+    pluto_year_built,
+    pluto_units_res,
+    pluto_bldg_count
+from hard.taxlot as a;
+
 commit;
 
