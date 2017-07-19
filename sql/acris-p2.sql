@@ -101,7 +101,9 @@ create index on p2.last_deed(bbl);
 -- drop table if exists p2.convey_origin cascade; 
 create table p2.convey_origin as
 select
-    a.bbl, c.date_filed, c.doctype, c.docfam,
+    a.bbl, 
+    c.date_filed, 
+    c.doctype, c.docfam,
     coalesce(b.total,0) as deed_count, 
     c.buyers, c.whole, c.docid,
     case
