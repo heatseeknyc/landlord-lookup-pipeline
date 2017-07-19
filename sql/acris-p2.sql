@@ -16,10 +16,10 @@ create schema p2;
 
 -- Date of last known conveyance (or group of conveyances) for a given lot. 
 -- 993274 rows
--- drop view if exists p2.last_convey_date cascade; 
-create view p2.last_convey_date as
+create table p2.last_convey_date as
 select bbl, max(date_filed) as date_filed
 from p1.acris_history where docfam = 1 group by bbl;
+create index on p2.last_convey_date(bbl);
 
 -- For every property, provides a subset of acris_history restrected to proper  
 -- conveyances  occuring on the last identifiable transfer date.  Usually it's just
@@ -102,9 +102,9 @@ create index on p2.last_deed(bbl);
 create table p2.convey_origin as
 select
     a.bbl, 
-    c.date_filed, 
-    c.doctype, c.docfam,
-    coalesce(b.total,0) as deed_count, 
+    d.date_filed,                       -- we always know last conveyance date 
+    c.doctype, c.docfam,                -- other columns, including docid, can only be determined 
+    coalesce(b.total,0) as deed_count,  -- for vanilla or partial transactions
     c.buyers, c.whole, c.docid,
     case
         when b.total is null then 0  -- no deeds at all for this lot 
@@ -114,7 +114,8 @@ select
     end as class
 from p1.acris_history_count     as a
 left join p2.deed_count         as b on a.bbl = b.bbl
-left join p2.last_deed          as c on a.bbl = c.bbl;
+left join p2.last_deed          as c on a.bbl = c.bbl
+left join p2.last_convey_date   as d on a.bbl = d.bbl;
 create index on p2.convey_origin(bbl);
 
 
