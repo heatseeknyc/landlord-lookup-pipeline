@@ -243,10 +243,14 @@ create index on omni.label_status(status);
 -- While we're at it, we also slot in the ACRIS history count (if any).
 -- 3050 rows for PAD 17b + Pluto 16v2
 create view omni.pad_minus_pluto as
-select a.*, c.total as acris_history
-from omni.dcp_pad_meta as a 
-left join push.pluto_taxlot as b on a.bbl = b.bbl 
+select 
+   a.*, 
+   c.total as acris_history,
+   d.bin, d.lhnd, d.hhnd, d.sclgc, d.stname 
+from omni.dcp_pad_meta           as a 
+left join push.pluto_taxlot      as b on a.bbl = b.bbl 
 left join p1.acris_history_count as c on a.bbl = c.bbl 
+left join push.dcp_pad_adr       as d on a.bbl = d.bbl
 where b.bbl is null and not is_unit;
 
 
