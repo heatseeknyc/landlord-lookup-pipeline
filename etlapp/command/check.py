@@ -11,7 +11,7 @@ import etlapp
 def check_source_named(prefix,name):
     log.debug("source = '%s'.'%s'" % (prefix,name))
     infile = etlapp.stage.latest(prefix,name)
-    return Infile is not None
+    return infile is not None
 
 
 def perform(posargs=None,options=None):
