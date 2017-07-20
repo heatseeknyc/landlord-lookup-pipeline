@@ -44,7 +44,8 @@ select
   b.building        as hpd_building_count,
   a.bbl is not null as in_pluto,
   b.bbl is not null as in_hpd,
-  a.units_res > 0 or a.condo_number > 0 or b.bbl is not null
+  -- a.units_res > 0 or a.condo_number > 0 or b.bbl is not null
+  a.units_res > 0 or b.bbl is not null
        as status 
 from push.pluto_taxlot as a
 full outer join push.hpd_taxlot_summary as b on b.bbl = a.bbl;
