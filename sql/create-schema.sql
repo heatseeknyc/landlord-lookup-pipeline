@@ -5,8 +5,8 @@ begin;
 drop schema if exists flat cascade; create schema flat; 
 drop schema if exists core cascade; create schema core; 
 drop schema if exists push cascade; create schema push; 
-drop schema if exists meta cascade; create schema meta; 
 drop schema if exists meta cascade; create schema omni; 
+drop schema if exists meta cascade; create schema meta; 
 
 -- Output schema.  These are the only ones that get exported to
 -- the gateway, and the only ones to which the 'readuser' has access.
