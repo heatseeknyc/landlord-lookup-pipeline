@@ -67,6 +67,9 @@ from push.dcp_pad_bbl where is_condo_bbl(bill_bbl) and
     not (is_condo_bbl(lo_bbl) or is_condo_bbl(hi_bbl)) and lo_bbl <= hi_bbl
 order by bill_bbl, lo_bbl, bbl;
 
+create view norm.cypress_owner as
+select * from temp.cypress_owner order by class, buyers, bbl;
+
 commit;
 
 
