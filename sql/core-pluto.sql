@@ -46,42 +46,11 @@ select * from flat.pluto_building; /*
 where is_valid_bbl(bbl) and is_valid_bin(bin);
 */
 
--- An identity table restricted to regular BBLs (drops 143 outlier rows across 57 BBLs)
--- Our final 'push.pluto_building' will be 1-1 with this rowset.
-/*
-drop materialized view if exists core.pluto_building_ideal cascade; 
-create materialized view core.pluto_building_ideal as
-select bbl, bin, doitt_id
-from core.pluto_building where is_regular_bbl(bbl);
-create index on core.pluto_building_ideal(bbl);
-create index on core.pluto_building_ideal(bin);
-*/
-
 drop materialized view if exists core.pluto_building_count cascade; 
 create materialized view core.pluto_building_count as 
 select bbl, count(*) as total, count(distinct BIN) as bin
 from core.pluto_building group by bbl;
 create index on core.pluto_building_count(bbl);
-
--- Finds "orphaned" buildings in the buildings list but not in pluto.
-/*
-drop materialized view if exists core.pluto_building_orphan cascade; 
-create materialized view core.pluto_building_orphan as
-select a.bbl, a.bin, a.doitt_id
-from      core.pluto_building_ideal as a
-left join push.pluto_taxlot         as b on a.bbl = b.bbl where b.bbl is null;
-create index on core.pluto_building_orphan(bbl);
-
-drop materialized view if exists core.pluto_building_orphan_count cascade; 
-create materialized view core.pluto_building_orphan_count as
-select bbl, count(*) as total, count(distinct bin) as bin
-    from core.pluto_building_orphan group by bbl;
-create index on core.pluto_building_orphan_count(bbl);
-*/
-
--- Gives us the "physical" building count per BBL, ie the number
--- of building shapefiles for each lot - as the NumBldgs column is 
--- known to be sometimes noisy.
 
 -- An extension of our MapPluto set to include the above column.
 -- If there's no BBL in the building set (which happens frequently,
