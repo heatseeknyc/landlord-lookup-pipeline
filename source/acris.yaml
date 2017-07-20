@@ -26,6 +26,7 @@
  name:  refdata-proptype 
  label: 'ACRIS-Property-Types-Codes'
  slug:  '94g4-w6xz'
+ active: false
 
 -
  name:  refdata-docfam
