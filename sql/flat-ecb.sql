@@ -74,3 +74,4 @@ create table flat.ecb_violation (
     CERTIFICATION_STATUS text
 );
 
+commit;
