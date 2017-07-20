@@ -7,6 +7,8 @@ DEFAULTS = {'active':True}
 def splitpath(srcpath):
     if isinstance(srcpath,str):
         terms = srcpath.split('.')
+        if len(terms) == 1:
+            return terms[0],None
         if len(terms) == 2:
             return tuple(terms)
     raise ValueError("invalid source path [%s]" % srcpath)
