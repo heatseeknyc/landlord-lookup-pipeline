@@ -37,7 +37,7 @@ create index on push.hpd_building_count(bbl);
 drop view if exists push.hpd_building_regular cascade;
 create view push.hpd_building_regular as
 select * from push.hpd_building
-where is_valid_bbl(bbl) and not is_degenerate(bbl) and is_valid_bin(bin);
+where is_valid_bbl(bbl) and not is_degenerate_bbl(bbl) and is_valid_bin(bin);
 
 
 -- Then we restrict to what appear to be 'Active' records on currently existing buildings.
