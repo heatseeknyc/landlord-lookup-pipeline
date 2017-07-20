@@ -60,7 +60,10 @@ create table flat.stable_wrongly_assigned (
     remarks text not null
 );
 
+commit;
+
 -- Deprecated
+/*
 create table flat.stable_joined (
     bbl bigint not null CHECK (bbl >= 1000000000 and bbl < 6000000000),
     year smallint not null, 
@@ -70,7 +73,6 @@ create table flat.stable_joined (
     abatements text,
     UNIQUE (bbl, year)
 );
+*/
 
--- JK's 'joined-crosstab.csv', as-is.  Note that we'll only be needing the 
-commit;
 
