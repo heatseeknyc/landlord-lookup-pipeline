@@ -54,11 +54,5 @@ create table push.pluto_refdata_landuse as
 select * from flat.pluto_refdata_landuse;
 create index on push.pluto_refdata_landuse(tag);
 
-drop table if exists push.pluto_refdata_control cascade;
-create table push.pluto_refdata_control as
-select * from flat.pluto_refdata_control;
-create index on push.pluto_refdata_landuse(tag);
-
 commit;
-
 
