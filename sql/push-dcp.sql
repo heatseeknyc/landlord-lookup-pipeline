@@ -49,7 +49,7 @@ create index on push.dcp_pad_outer(bbl);
 -- A status table that tells us if the BBL represents a simple coop
 -- (and not a possibly erroneous condo/coop-hybrid), from the DCP's perspective.
 -- 7226 rows.
-drop table if exists push.dcp_coop cascade; 
+drop table if exists push.dcp_coop cascade;
 create table push.dcp_coop as
 select distinct(bbl) from push.dcp_pad_bbl where coopnum > 0 and not is_condo_bbl(bill_bbl);
 create index on push.dcp_coop(bbl);
@@ -59,7 +59,8 @@ create index on push.dcp_coop(bbl);
 -- But we including the restriction anyway to avoid any potential confusion
 -- that may arise in future PAD releases.
 -- Yields 1157327 tuples.
-create table push.dcp_pad_keytup cascade; 
+drop table if exists push.dcp_pad_keytup cascade;
+create table push.dcp_pad_keytup as
 select bbl, bin, count(*) as total 
 from push.dcp_pad_adr where bbl is not null and bin is not null
 group by bbl, bin;
