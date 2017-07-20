@@ -15,6 +15,7 @@ drop schema if exists deco cascade; create schema deco;
 
 -- Special scheme, used for exports or ad-hoc imports 
 drop schema if exists norm cascade; create schema norm;
+drop schema if exists norm cascade; create schema temp;
 
 commit;
 
