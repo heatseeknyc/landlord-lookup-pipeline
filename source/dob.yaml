@@ -20,5 +20,6 @@
   name:  stalled 
   label: DOB-Stalled-Construction-Sites
   slug:  'xxxx-yyyy' # a broken placeholder for now
+  active: false
 
 

@@ -23,6 +23,7 @@
   name: paws
   label: 'Publicly-Accessible-Waterfront-Spaces-PAWS-'
   slug: '388s-pnvc'
+  active: false
 
 
 # Derived condo map
