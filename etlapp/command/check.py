@@ -17,7 +17,7 @@ def check_source_named(prefix,name):
 def perform(posargs=None,options=None):
     log.debug("posargs=%s, options=%s" % (posargs,options))
     path = uniqarg(posargs)
-    exec_any(check_source_named,path)
+    return exec_any(check_source_named,path)
 
 def exec_any(handler,srcarg,strict=True):
     if '.' in srcarg:
