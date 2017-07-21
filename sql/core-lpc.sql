@@ -2,7 +2,7 @@
 begin;
 
 -- Selects fields of interests (renaming a few), and discards about 
--- 100 degenerate BBLs, and 14 null/invalid BBLs (mid-2017).
+-- 100 rows with degenerate BBLs, and 14 with null/invalid BBLs (mid-2017).
 -- 47390 rows
 drop view if exists core.lpc_indiv cascade;
 create view core.lpc_indiv as 
@@ -42,15 +42,20 @@ select a.bbl, a.bin, total, names, b.lmk_name, b.pluto_addr
 from core.lpc_indiv_count as a
 left join core.lpc_indiv  as b on (a.bbl,a.bin) = (a.bbl,b.bin);
 
-commit;
+-- 3007 rows, some 326 with lmk_name ~ '\)$';  
+drop view if exists core.lpc_clean cascade;
+create view core.lpc_clean as
+select * from core.lpc_indiv where lmk_name !~ '^.*District'  and lmk_name !~ '^\d';
 
-/*
+-- 2164 rows
 drop view if exists core.lpc_clean_count cascade;
 create view core.lpc_clean_count as
 select bbl, bin, count(*) as total, count(distinct lmk_name) as names
-from core.lpc_indiv where lmk_name !~ '^.*District' 
-group by bbl, bin;
+from core.lpc_clean group by bbl, bin;
 
+commit;
+
+/*
 drop view if exists core.lpc_clean_block cascade;
 create view core.lpc_clean_block as 
 select a.bbl, a.bin, total, names, b.lmk_name, b.pluto_addr
