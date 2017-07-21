@@ -83,11 +83,25 @@ select
     b.points             as pluto_points,
     b.address            as pluto_address,
     b.owner_name         as pluto_owner,
-    -- Note that prsence of a transfer docid is what signifies whether we 
-    -- have an acris match on this record or not.
-    g.last_transfer      as acris_effdate,
+    --
+    -- Note about ACRIS columns:
+    --
+    --    - The 'docid' corresponds to the ACRIS record that was identified as 
+    --      determining ownership.  Typically (about 90% of the time), this is a 
+    --      deed transfer, but it could be a court order (CTOR), or a mortgage
+    --      record, etc.
+    --    - The 'doctype' is the corresponding doctype for that record, which
+    --      specifies the type of "action" or "status update" that was found. 
+    --    - The 'effdate' is simply the filing date for that record, which we
+    --      call here the "effective date".
+    --    - The 'mindate' is the date of the earliest ACRIS record of any kind 
+    --      for this lot (which can be useful for when we have to say things like
+    --      "no records before date X were found for this lot").
+    --    - The remaining columns are as defined in the 'transfer_origin table. 
+    --
     g.docid              as acris_docid,
     g.doctype            as acris_doctype,
+    g.last_transfer      as acris_effdate,
     g.mindate            as acris_mindate,
     g.buyers             as acris_buyers,
     g.class              as acris_code, 
