@@ -85,8 +85,10 @@ select
     b.owner_name         as pluto_owner,
     -- Note that prsence of a transfer docid is what signifies whether we 
     -- have an acris match on this record or not.
-    g.date_filed         as acris_transfer_date,
+    g.last_transfer      as acris_transfer_date,
     g.docid              as acris_transfer_docid,
+    g.doctype            as acris_doctype,
+    g.mindate            as acris_mindate,
     g.buyers             as acris_buyers,
     g.class              as acris_code, 
     g.whole              as acris_whole, 
