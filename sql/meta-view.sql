@@ -103,12 +103,12 @@ select
     g.doctype            as acris_doctype,
     g.last_transfer      as acris_effdate,
     g.mindate            as acris_mindate,
-    g.buyers             as acris_buyers,
+    g.buyers             as acris_party2_count,
     g.class              as acris_code, 
     g.whole              as acris_whole, 
     g.amount             as acris_amount, 
-    g.name               as acris_owner_name, 
-    g.address            as acris_owner_address,
+    g.name               as acris_party2_name, 
+    g.address            as acris_party2_address,
     -- Placeholder column for number of declaration records 
     case when is_condo_bbl(a.bbl) then 1 else null end 
                          as condo_declare, 
