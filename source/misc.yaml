@@ -10,3 +10,11 @@
  name:  nycha 
  label: 'NYCHA-Projects-Partial-List'
 
+-
+ name: dev-ent
+ label: Developer Entity
+
+-
+ name: dev-rel
+ label: Developer by Taxlot 
+

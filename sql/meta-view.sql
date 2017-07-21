@@ -277,5 +277,12 @@ select
 from push.hpd_registration    as a
 left join meta.contact_simple as b on b.registration_id = a.id;
 
+
+drop view if exists meta.developer cascade;
+create view meta.developer as
+select a.bbl, a.devid, b.name
+from      push.misc_dev_rel  as a
+left join push.misc_dev_ent  as b on a.devid = b.id;
+
 commit;
 
