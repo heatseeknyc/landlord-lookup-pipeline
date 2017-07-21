@@ -50,55 +50,6 @@ select
 from push.pluto_taxlot as a
 full outer join push.hpd_taxlot_summary as b on b.bbl = a.bbl;
 
---
--- DEPRECATED
---
--- A crucial joining view that can be used to tell us everything we need
--- to know about either a building (given a BBL,BIN pair) -or- a taxlot
--- (if given just the BBL).  In the later case, you'll want to use a
--- "LIMIT 1" in the select, because of course (for multi-building lots)
--- all of the attributes will be redundant.
---
-/*
-drop view if exists meta.property_summary cascade;
-create view meta.property_summary as
-select 
-  a.bbl, b.bin, b.doitt_id, 
-  a.land_use                 as pluto_land_use,
-  a.bldg_class               as pluto_bldg_class,
-  a.condo_number             as pluto_condo_number,
-  a.units_total              as pluto_units_total,
-  a.units_res                as pluto_units_res,
-  a.building_count           as pluto_bldg_count,
-  a.address                  as pluto_address,
-  public.bbl2boroname(a.bbl) as pluto_borough,
-  a.lon_ctr                  as pluto_lon_ctr,
-  a.lat_ctr                  as pluto_lat_ctr,
-  a.radius                   as pluto_radius,
-  a.points                   as pluto_points,
-  a.parts                    as pluto_parts,
-  c.lon_ctr                  as building_lon_ctr,
-  c.lat_ctr                  as building_lat_ctr,
-  c.radius                   as building_radius,
-  c.points                   as building_points,
-  c.parts                    as building_parts,
-  d.status                   as stable_status,
-  coalesce(e.contact,0)      as hpd_contact_count,
-  coalesce(e.complaint,0)    as hpd_complaint_count,
-  coalesce(e.violation,0)    as hpd_violation_count,
-  coalesce(e.legal,0)        as hpd_legal_count,
-  coalesce(f.permit,0)       as dob_permit_count,
-  coalesce(f.complaint,0)    as dob_complaint_count,
-  coalesce(f.violation,0)    as dob_violation_count,
-  g.status                   as residential_likely
-from      push.pluto_taxlot           as a 
-left join push.pluto_building_canonical as b on a.bbl = b.bbl
-left join push.pluto_building         as c on b.bbl = c.bbl and b.doitt_id = c.doitt_id
-left join meta.stabilized             as d on a.bbl = d.bbl
-left join push.hpd_taxlot_summary     as e on a.bbl = e.bbl 
-left join meta.dob_taxlot_summary     as f on a.bbl = f.bbl 
-left join meta.residential            as g on a.bbl = g.bbl;
-*/
 
 --
 -- Everything you really need to know about a given taxlot. 
@@ -228,4 +179,54 @@ from      push.misc_dev_rel  as a
 left join push.misc_dev_ent  as b on a.devid = b.id;
 
 commit;
+
+--
+-- DEPRECATED
+--
+-- A crucial joining view that can be used to tell us everything we need
+-- to know about either a building (given a BBL,BIN pair) -or- a taxlot
+-- (if given just the BBL).  In the later case, you'll want to use a
+-- "LIMIT 1" in the select, because of course (for multi-building lots)
+-- all of the attributes will be redundant.
+--
+/*
+drop view if exists meta.property_summary cascade;
+create view meta.property_summary as
+select 
+  a.bbl, b.bin, b.doitt_id, 
+  a.land_use                 as pluto_land_use,
+  a.bldg_class               as pluto_bldg_class,
+  a.condo_number             as pluto_condo_number,
+  a.units_total              as pluto_units_total,
+  a.units_res                as pluto_units_res,
+  a.building_count           as pluto_bldg_count,
+  a.address                  as pluto_address,
+  public.bbl2boroname(a.bbl) as pluto_borough,
+  a.lon_ctr                  as pluto_lon_ctr,
+  a.lat_ctr                  as pluto_lat_ctr,
+  a.radius                   as pluto_radius,
+  a.points                   as pluto_points,
+  a.parts                    as pluto_parts,
+  c.lon_ctr                  as building_lon_ctr,
+  c.lat_ctr                  as building_lat_ctr,
+  c.radius                   as building_radius,
+  c.points                   as building_points,
+  c.parts                    as building_parts,
+  d.status                   as stable_status,
+  coalesce(e.contact,0)      as hpd_contact_count,
+  coalesce(e.complaint,0)    as hpd_complaint_count,
+  coalesce(e.violation,0)    as hpd_violation_count,
+  coalesce(e.legal,0)        as hpd_legal_count,
+  coalesce(f.permit,0)       as dob_permit_count,
+  coalesce(f.complaint,0)    as dob_complaint_count,
+  coalesce(f.violation,0)    as dob_violation_count,
+  g.status                   as residential_likely
+from      push.pluto_taxlot           as a 
+left join push.pluto_building_canonical as b on a.bbl = b.bbl
+left join push.pluto_building         as c on b.bbl = c.bbl and b.doitt_id = c.doitt_id
+left join meta.stabilized             as d on a.bbl = d.bbl
+left join push.hpd_taxlot_summary     as e on a.bbl = e.bbl 
+left join meta.dob_taxlot_summary     as f on a.bbl = f.bbl 
+left join meta.residential            as g on a.bbl = g.bbl;
+*/
 
