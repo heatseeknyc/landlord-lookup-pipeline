@@ -19,6 +19,7 @@ left join core.acris_refdata_docfam as b on a.doctype = b.doctype;
 create index on p1.acris_history(bbl);
 create index on p1.acris_history(docid);
 create index on p1.acris_history(doctype);
+create index on p1.acris_history(doctag);
 
 -- 1152338 rows
 drop table if exists p1.acris_history_count cascade; 
