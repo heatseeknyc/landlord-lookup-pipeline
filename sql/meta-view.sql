@@ -103,10 +103,10 @@ select
     g.doctype            as acris_doctype,
     g.last_transfer      as acris_effdate,
     g.mindate            as acris_mindate,
-    g.buyers             as acris_party2_count,
     g.class              as acris_code, 
     g.whole              as acris_whole, 
     g.amount             as acris_amount, 
+    g.buyers             as acris_party2_count,
     g.name               as acris_party2_name, 
     g.address            as acris_party2_address,
     -- Placeholder column for number of declaration records 
