@@ -14,23 +14,25 @@ create schema p2;
 -- select count(*) from p1.acris_history;            18055244
 
 
+/*
 -- Date of last known conveyance (or group of conveyances) for a given lot. 
 -- 993274 rows
 create table p2.last_convey_date as
 select bbl, max(date_filed) as date_filed
 from p1.acris_history where docfam = 1 group by bbl;
 create index on p2.last_convey_date(bbl);
+*/
 
 -- For every property, provides a subset of acris_history restrected to proper  
 -- conveyances  occuring on the last identifiable transfer date.  Usually it's just
 -- one per BBL, but sometimes its many-to-1 on a BBL.
 --
--- 1027650 rows
+-- 1028427 rows
 -- drop table if exists p2.deed_blok cascade; 
 create table p2.deed_blok as
 select b.* 
-from      p2.last_convey_date as a
-left join p1.acris_history    as b on (a.bbl,a.date_filed) = (b.bbl,b.date_filed)
+from      p1.acris_history_profile as a
+left join p1.acris_history         as b on (a.bbl,a.last_transfer) = (b.bbl,b.date_filed)
 where b.docfam = 1;
 create index on p2.deed_blok(bbl);
 
@@ -60,7 +62,7 @@ create index on p2.deed_count(bbl);
 -- In other words, a list of LUITs for a given lot (with buyer counts),
 -- for lots where these can be identified. 
 --
--- 964736 rows 
+-- 994073 
 -- drop table if exists p2.last_deed cascade; 
 create table p2.last_deed as
 select 
@@ -96,13 +98,13 @@ create index on p2.last_deed(bbl);
 --   - the "buyers" and "part" fields are only available when there's an LUIT, that is, 
 --     when deed_count = 1.
 --
--- 1152338 rows = one for every (legit) BBL in ACRIS. 
---
+-- 1154260 rows = one for every (legit) BBL in ACRIS. 
 -- drop table if exists p2.convey_origin cascade; 
 create table p2.convey_origin as
 select
     a.bbl, 
-    d.date_filed,                       -- we always know last conveyance date 
+    a.last_transfer,                    -- date of last known transfer (possibly null)
+    a.mindate,                          -- earlist data in chronology for this property 
     c.doctype, c.docfam,                -- other columns, including docid, can only be determined 
     coalesce(b.total,0) as deed_count,  -- for vanilla or partial transactions
     c.buyers, c.whole, c.docid,
@@ -111,11 +113,11 @@ select
         when b.total > 1 then 3      -- has deeds, but last deed not uniquely identifiable (no LUIT)
         when c.whole = 1 then 2      -- has LUIT, but for a partial sale
         else 1                       -- vanilla case - LUIT for presumed total sale
-    end as class
-from p1.acris_history_count     as a
+    end as class,
+    a.qblock
+from p1.acris_history_profile   as a
 left join p2.deed_count         as b on a.bbl = b.bbl
-left join p2.last_deed          as c on a.bbl = c.bbl
-left join p2.last_convey_date   as d on a.bbl = d.bbl;
+left join p2.last_deed          as c on a.bbl = c.bbl;
 create index on p2.convey_origin(bbl);
 
 

@@ -7,6 +7,7 @@ begin;
 drop schema if exists omni cascade;
 create schema omni;
 
+-- 247526 rows
 create table omni.dcp_condo_map as
 select * from flat.dcp_condo_map;
 create index on omni.dcp_condo_map(bank);
@@ -29,6 +30,7 @@ create index on omni.dcp_pad_meta(bbl);
 -- A unified view of all "resonably legit" BBLs in the system.
 -- Includes all BBLs from PAD/Pluto, and all "regular" BBLs from ACRIS.
 -- drop table if exists omni.taxlot_origin cascade; 
+-- 1238985 rows
 create table omni.taxlot_origin as
 select 
     coalesce(a.bbl,b.bbl) as bbl,
@@ -44,7 +46,7 @@ select
     bbl2type(coalesce(a.bbl,b.bbl)) as bbltype,
     bbl2qblock(coalesce(a.bbl,b.bbl)) as qblock
 from omni.dcp_pad_meta as a
-full outer join p1.acris_history_count as b on a.bbl = b.bbl;
+full outer join p1.acris_history_profile as b on a.bbl = b.bbl;
 create index on omni.taxlot_origin(bbl);
 
 
@@ -249,7 +251,7 @@ select
    d.bin, d.lhnd, d.hhnd, d.sclgc, d.stname 
 from omni.dcp_pad_meta           as a 
 left join push.pluto_taxlot      as b on a.bbl = b.bbl 
-left join p1.acris_history_count as c on a.bbl = c.bbl 
+left join p1.acris_history_profile as c on a.bbl = c.bbl 
 left join push.dcp_pad_adr       as d on a.bbl = d.bbl
 where b.bbl is null and not is_unit;
 
