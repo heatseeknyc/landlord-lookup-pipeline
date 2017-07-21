@@ -31,3 +31,8 @@
   name: condo-map
   phase: special
 
+- 
+  name: zoning 
+  label: 'NYC-Zoning-Tax-Lot-Database'
+  slug: 'fdkv-4t4z'
+
