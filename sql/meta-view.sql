@@ -166,9 +166,8 @@ select
     a.in_pad_meta as in_pad,
     f.bbl is not null    as is_coop,
     is_condo_bbl(a.bbl)  as is_bank,
-    -- coalesce(e.status or d.status is not null,false) 
-    --                     as is_resi,
-    e.status is not null as is_resi,
+    coalesce(e.status,false) 
+                         as is_resi,
     d.status             as stable_code,
     case when d.dhcr_bldg_count > 0 then 1 else null end 
                          as stable_dhcr_ok,
