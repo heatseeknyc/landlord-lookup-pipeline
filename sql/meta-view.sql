@@ -30,10 +30,21 @@ select
     sum(complaint) as complaint
 from meta.dob_building_summary where in_pluto group by bbl;
 
+--
 -- A magical view which (portends to) tell us whether a given property 
--- is residential or not (via the derived 'status' flag).  There's still
--- some room for improvement with this determination, but it's probably
--- good enough for now.
+-- at least appears to be residential, according to Pluto and HPD records.
+--
+-- There's still some noise level here: even though a HPD says there are
+-- building registrations for that lot; they might very well have been recently 
+-- demollished; and Pluto 16v2 is by now starting to get "stale" generally. 
+--
+-- In particular, it does not crossref teh stabilizatoin lists, which for 
+-- on which there's apparently a small number of lots (around 300+) that
+-- claim stabilized units, but don't fall in thse categories for whatever
+-- reason.  -- But it's probably a good enough indicator as not. 
+--
+-- Finaly determination provided via the 'status' flag.
+--  
 drop view if exists meta.residential cascade;
 create view meta.residential as
 select
@@ -62,7 +73,7 @@ select
     a.in_pad_meta as in_pad,
     f.bbl is not null        as is_coop,
     is_condo_bbl(a.bbl)      as is_bank,
-    coalesce(e.status,false) as is_resi,
+    coalesce(e.status,d.status,false) as is_resi,
     d.status             as stable_code,
     case when d.dhcr_bldg_count > 0 then 1 else null end 
                          as stable_dhcr_ok,
