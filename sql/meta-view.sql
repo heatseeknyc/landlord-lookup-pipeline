@@ -50,12 +50,6 @@ select
 from push.pluto_taxlot as a
 full outer join push.hpd_taxlot_summary as b on b.bbl = a.bbl;
 
-/*
-drop view if exists meta.stable_likely cascade;
-create view meta.stable_likely as
-select bbl from push.pluto_taxlot where units_res >= 6 and year_built < 1974;
-*/
-
 --
 -- A comprehensive view on rent sabilization status by taxlot.  
 --
