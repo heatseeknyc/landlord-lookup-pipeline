@@ -81,15 +81,6 @@ select
     substr(name,1,35) as name, substr(address1,1,35) as address1
 from p1.party_history_wide;
 
-/*
-create view p1.party_first as
-    select a.docid, b.party_type, first(b.name), first(b.address)
-from p1.acris_history      as a
-left join push.acris_party as b on a.docid = b.docid;
-group by docid, party_type;
-*/
-
-
 create view p1.doctype_count as
 select 
     doctag, doctype, count(distinct bbl) as taxlot,
