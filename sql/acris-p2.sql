@@ -50,7 +50,11 @@ select bbl, count(*) as total from p2.deed_blok group by bbl;
 create index on p2.deed_count(bbl);
 
 -- Effectively "acris_history" restricted to the to the LUIT (last uniquely 
--- identifiable transfer) for that lot, when this transfer is identifiable. 
+-- identifiable transfer) for that lot, when this transfer is identifiable,
+-- *AND* where there is a "Party 2" available.  (This comes into play for a
+-- small set of transaction types -- CTOR, for one -- which normally have
+-- parties 1+2, but sometiems only Party 1.  So this criteria means that 
+-- for the time being, we simply drop those cases with only Party 1).
 --
 -- While we're at it, we slot in the number of parties on the buying side, and an
 -- integer code (0,1,2) indicating whether this is a total sale (2), a partial sale (1), 
