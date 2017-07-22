@@ -3,9 +3,11 @@
 -- with appropriate keys indexed (and just those columns indexed that 
 -- we'll do ordered searches on).
 --
+-- Row counts are for July 2017.
 
 begin;
 
+-- 644,971 rows
 drop table if exists hard.contact_info cascade;
 create table hard.contact_info as
 select * from meta.contact_info;
@@ -13,10 +15,12 @@ create index on hard.contact_info(contact_id);
 create index on hard.contact_info(bbl);
 create index on hard.contact_info(bbl,bin);
 
+-- 1,238,985 rows
 drop table if exists hard.taxlot cascade;
 create table hard.taxlot as select * from meta.taxlot;
 create index on hard.taxlot(bbl);
 
+-- 1,186,668 rows
 drop table if exists hard.building cascade;
 create table hard.building as select * from meta.building;
 create index on hard.building(bbl);
