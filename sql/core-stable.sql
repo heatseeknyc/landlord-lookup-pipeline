@@ -64,7 +64,9 @@ select
   a.special    as dhcr_special,
   b.year       as taxbill_lastyear, -- non-NULL iff row exists in taxbills
   b.unitcount  as taxbill_unitcount, 
-  b.abatements as taxbill_abatements
+  b.abatements as taxbill_abatements,
+  -- Our best determination as to whether a has recently stabilized units.
+  b.year >= 2016 or a.count > 0 as status
 from       core.stable_dhcr2015_grouped as a
 full outer join core.stable_joined_lastyear as b on a.bbl = b.bbl; 
 
