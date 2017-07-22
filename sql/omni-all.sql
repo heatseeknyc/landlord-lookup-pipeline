@@ -183,9 +183,8 @@ select
   a.dhcr_j51,
   a.dhcr_special,
   case
-    when a.dhcr_bldg_count > 0 or a.taxbill_lastyear = 2015 then 1 -- confirmed
-    when a.taxbill_lastyear < 2015 then 2 -- disputed
-    when b.bbl is not null then 3 -- possible
+    when a.status then 1          -- confirmed in either DHCR/DOF >= 2015 
+    when b.bbl is not null then 3 -- possible due to building characteristics
   end as status
 from            push.stable_combined  as a
 full outer join omni.stable_likely    as b on a.bbl = b.bbl; 
@@ -221,7 +220,6 @@ from            omni.stable_classic     as a
 full outer join push.hpd_taxlot_program as b on a.bbl = b.bbl
     where a.bbl is not null or b.program is not null;
 
-
 -- And a simple lookup table for the 'status' flag defined above.
 -- This is something of a DRY violation of course, and will have to be 
 -- maintained as our status designations inevitably change, moving foward.
@@ -255,6 +253,32 @@ left join p1.acris_history_profile as c on a.bbl = c.bbl
 left join push.dcp_pad_adr       as d on a.bbl = d.bbl
 where b.bbl is null and not is_unit;
 
+--
+-- Holistic Sales + Transfers
+--
+
+create view omni.transfer_origin as
+select
+    coalesce(a.bbl,b.bbl) as bbl,
+    a.docid, a.doctype, a.docfam,
+    a.buyers, a.whole, a.class,
+    a.mindate as transfer_mindate,
+    b.taxclass_atsale as taxclass,
+    b.sale_date, b.sale_price,
+    a.last_transfer,
+    c.amount, c.percentage as percent
+from       p2.convey_origin      as a
+full outer join push.dof_rolling as b on a.bbl = b.bbl
+left join push.acris_master      as c on a.docid = c.docid;
+
+create table omni.comps as
+select * from omni.transfer_origin where last_transfer > '2016-07-01' or sale_date is not null;
+create index on omni.comps(bbl);
+
+drop view if exists omni.comps_tidy cascade;
+create view omni.comps_tidy as
+select bbl, doctype, class, taxclass, sale_date, sale_price, last_transfer, amount, percent, docid
+from omni.comps;
 
 commit;
 
