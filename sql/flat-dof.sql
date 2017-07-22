@@ -23,7 +23,7 @@ create table flat.dof_rolling (
     taxclass_atsale char(2),
     bldgclass_atsale char(2),
     sale_price float,
-    sale_date date
+    sale_date date not null
 );
 
 commit;
