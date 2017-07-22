@@ -108,7 +108,7 @@ select
     --    - The 'mindate' is the date of the earliest ACRIS record of any kind 
     --      for this lot (which can be useful for when we have to say things like
     --      "no records before date X were found for this lot").
-    --    - The remaining columns are as defined in the 'transfer_origin table. 
+    --    - The remaining columns are as defined in the 'convey_origin table. 
     --
     g.docid              as acris_docid,
     g.doctype            as acris_doctype,
