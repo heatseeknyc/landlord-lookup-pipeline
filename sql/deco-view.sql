@@ -33,6 +33,7 @@ left join hard.pluto_refdata_bldgclass as c on a.pluto_bldg_class = c.tag;
 create view deco.baselot as
 select
     bbl,
+    is_resi,
     pluto_address,
     pluto_points,
     pluto_parts,
