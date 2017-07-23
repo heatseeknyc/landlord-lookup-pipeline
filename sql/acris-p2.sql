@@ -14,15 +14,6 @@ create schema p2;
 -- select count(*) from p1.acris_history;            18055244
 
 
-/*
--- Date of last known conveyance (or group of conveyances) for a given lot. 
--- 993274 rows
-create table p2.last_convey_date as
-select bbl, max(date_filed) as date_filed
-from p1.acris_history where docfam = 1 group by bbl;
-create index on p2.last_convey_date(bbl);
-*/
-
 -- For every property, provides a subset of acris_history restrected to proper  
 -- conveyances  occuring on the last identifiable transfer date.  Usually it's just
 -- one per BBL, but sometimes its many-to-1 on a BBL.
@@ -33,9 +24,9 @@ create table p2.deed_blok as
 select b.* 
 from      p1.acris_history_profile as a
 left join p1.acris_history         as b on (a.bbl,a.last_transfer) = (b.bbl,b.date_filed)
-where b.docfam = 1;
+left join push.acris_party_count   as c on b.docid = c.docid
+where b.docfam = 1 and c.party_type = 2;
 create index on p2.deed_blok(bbl);
-
 
 --
 -- A count of distinct DEED/CORRD transactions on the last transfer date for a given 
