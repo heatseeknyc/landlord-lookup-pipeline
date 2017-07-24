@@ -24,16 +24,19 @@ The current portal is an aggregation of some 25+ datasets from the NYC data ecos
 
 Currently the portal updates monthly, around the time the monthly-updating datasets (ACRIS, DOB, HPD) get released (typically between the 10th and 15th of the month).  Other datasets (like PAD, Pluto, DCP zoning, and the rent stabilization lists) are released much more irregularly, and incorporate those updates as they become available. 
 
-Navigation
-----------
-The top-level dir (once cloned) is intended as the location from which the actual data loading scripts can be run.
+
+What you'll find here
+---------------------
+
+There isn't much in the way of documentation (that would be useful to outsiders), at present.  But just to provide a quick overview of what's in here, the top-level dir -- which, once cloned, is intended as the location from which the actual data loading scripts can be run -- looks about like this:
 
 - ``stage/`` is the directory where raw incoming files (i.e. downloads from external portals) first hit the ground, are unpacked and (if needed) transformed into a state where they can be loaded into the SQL database.  We call this process "stating", and it's described in the `Data Stating <notes/Data-Staging.rst>`_ note. 
 - ``sql/`` contains the bulk of the database setup + internal transformation.  These are usually run with wrapper ``bin/dopg.pl``.
+- ``etlapp/`` is the ETL framework as such.  Still in early stages of development. 
 - ``bin/`` contains various shell wrappers (most important being ``bin/import-rawdata.sh``).
-- ``extract/`` and ``shapeutil/``  provide supporting Python code (to be run with the ``-m`` flag).
 - ``config/`` - postgres-specific configuration. 
 - ``notes/`` - further documentation. 
+- ``extract/`` and ``shapeutil/``  provide supporting Python code (to be run with the ``-m`` flag).
 
 
 Related Repos
