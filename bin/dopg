@@ -1,0 +1,13 @@
+#!/bin/bash -ue
+#
+# A simple wrapper for the Python script, below.
+# Which in turn simply passes credentials + current databse name to psql. 
+# Then you just do
+#
+#      dopg path-to-script.sql
+#
+# To run your SQL script.  
+# It's a bit brittle at present, but works for the intended use case, provided
+# you run it from the standard working directory (i.e. the directory above this one).
+#
+exec bin/runpg.py -f $@
