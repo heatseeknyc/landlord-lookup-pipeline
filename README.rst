@@ -32,11 +32,11 @@ There isn't much in the way of documentation (that would be useful to outsiders)
 
 - ``stage/`` is the directory where raw incoming files (i.e. downloads from external portals) first hit the ground, are unpacked and (if needed) transformed into a state where they can be loaded into the SQL database.  We call this process "stating", and it's described in the `Data Stating <notes/Data-Staging.rst>`_ note. 
 - ``sql/`` contains the bulk of the database setup + internal transformation.  These are usually run with wrapper ``bin/dopg.pl``.
-- ``etlapp/`` is the ETL framework as such.  Still in early stages of development. 
+- ``etlapp/`` is the ETL framework as such.  Provides a simple CLI for automating most of the steps in the ETL process.  Still in early stages of development. 
 - ``bin/`` contains various shell wrappers (most important being ``bin/import-rawdata.sh``).
 - ``config/`` - postgres-specific configuration. 
 - ``notes/`` - further documentation. 
-- ``extract/`` and ``shapeutil/``  provide supporting Python code (to be run with the ``-m`` flag).
+- ``extract/`` and ``shapeutil/``  are some earlier versions of the extraction-specific code (for shapefiles, etc).  
 
 
 Related Repos
