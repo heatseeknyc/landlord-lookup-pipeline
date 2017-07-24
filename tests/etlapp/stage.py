@@ -1,7 +1,7 @@
 """
 OK, so it's not really a test - more like a demo.
 Being as it's hard to construct unit tests when a real, populated staging
-directory is need to do meaningful tests on.
+directory is needed to do meaningful tests on.
 
 But at least it's something.
 """
