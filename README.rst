@@ -4,7 +4,7 @@ This is one of 3 project repos for the HeatSeek Landlord Lookup portal, currentl
 
 This repo provides the data pipeline for the working portal -- that is, code to cleanse, extract, and load raw datasets from the NYC data ecosystem into a PostgreSQL database that the web portal can run off of (and on which some elementary analysis of the datasets can be performed).  
 
-The basic idea is that a static image of the database can be built on one machine (e.g. perhaps your laptop) and then either shipped to another host to be deployed behind a webserver (or perhaps for analysis).  But you don't need to go through the trouble of setting up the actual web portal (or any of its dependencies) just to build the database.   
+The basic idea is that a static image of the database can be built on one machine (e.g. perhaps your laptop) and then either shipped to another host to be deployed behind a webserver (or perhaps for analysis).  But you don't need to go through the trouble of setting up the actual web portal (or any of its dependencies) just to build the database -- and conversely, you can (is you know SQL, and don't mind working with Postgres) use the backend database for analytics, without messing with the frontend portal. 
 
 If you'd like to build or replicate the pipeline yourself, or are curious about the data 
 sources used, have a look at the `Getting Started <notes/Getting-Started.rst>`_ guide.
@@ -12,15 +12,17 @@ sources used, have a look at the `Getting Started <notes/Getting-Started.rst>`_ 
 Sources
 -------
 
-The current portal is basically a "join" of the following datasets, all reasonably well-known in the NYC data ecosystem: 
+The current portal is an aggregation of some 25+ datasets from the NYC data ecosystem, some well-know, others not so well-known.  We'd like to do a better job at describing these, but in "order of appearance", is it were, the casting call goes like this: 
 
-- Quaterly taxbill scrapes provided by John Krauss (http://taxbills.nyc/)
-- HPD Registration Contacts 
-- DHCR rent stablization status flags, obtained via FOIA requests. 
-- MAPPluto (16v2) attributes and shapefiles. 
-- DoITT building footprints
+- PAD v17b + Pluto 16v2
+- ACRIS (master, legal, parties)
+- DOB/ECB (complaints, violations)
+- HPD (registration, complaints, violations, special programs)
+- Quaterly DOF taxbill scrapes provided by John Krauss (http://taxbills.nyc/)
+- DHCR rent stabilization list (2015) 
+- Various other datasets from DCP, DCAS, LPC, etc. 
 
-As per these descriptions, most of these datasets change relatively slowly - and in fact the portal is updated is updated only on a sporadic basis (every half-year or so).  If the portal attracts further interest we may pick up the pace a bit. 
+Currently the portal updates monthly, around the time the monthly-updating datasets (ACRIS, DOB, HPD) get released (typically between the 10th and 15th of the month).  Other datasets (like PAD, Pluto, DCP zoning, and the rent stabilization lists) are released much more irregularly, and incorporate those updates as they become available. 
 
 Navigation
 ----------
