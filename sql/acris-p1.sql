@@ -42,7 +42,7 @@ select
     qblock, bbl, 
     count(*) as total, 
     count(distinct docid) as docid_count, 
-    max(date_filed) as mindate,
+    min(date_filed) as mindate,
     max(date_filed) as maxdate
 from p1.acris_history group by qblock, bbl;
 create index on p1.acris_history_count(bbl);
