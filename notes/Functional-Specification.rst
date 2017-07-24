@@ -1,6 +1,12 @@
+A lightweight functional specification, as such. 
 
-As such.
-Version 001
+While not overly detailed, we do try to keep it up-to-date with the actual available feature sets in the running portal. 
+In particular:
+- If a feature is listed here, it really SHOULD be implemented in the portal by now (or there should be immiment plans to do so) 
+- Conversely, if some major feature exists in the portal here, it should at least be mentioned here.
+
+So while the app + spec might be off on minor points of detail -- in terms of the big picture and major bullet points, 
+they should be not just roughly, but strongly in synch.
 
 
 Datasets
