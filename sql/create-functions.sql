@@ -314,6 +314,26 @@ begin
 end
 $$ language plpgsql;
 
+-- Similar to the above, but verifies that we're in the format 'MMxDDxYYYY', 
+-- where x is an arbitary separator char.  (Yes, this not quite congruent ,
+-- as a use case, because of the separator.  But that's OK, because most 
+-- likely if you're using MMDDYYYY, you'll be using a separator).
+-- Has similar caveats as the above function.
+create or replace function public.is_valid_mmddyyyy (datestr text) 
+returns boolean AS $$
+begin
+    return 
+        datestr is not null and
+        datestr ~ '^(0\d|1[012])\D[0123]\d\D(19|20)\d\d$' and
+        datestr !~ '^...3[2-9]' and 
+        datestr !~ '^02.3' and 
+        datestr !~ '^04.31' and 
+        datestr !~ '^06.31' and 
+        datestr !~ '^09.31' and 
+        datestr !~ '^11.31';
+end
+$$ language plpgsql;
+
 create or replace function public.boroname2boroid (boro_name text) 
 returns smallint AS $$
 declare
