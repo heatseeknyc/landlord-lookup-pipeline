@@ -29,9 +29,10 @@ create table flat.misc_dev_ent (
 
 create table flat.misc_dev_rel (
     bbl bigint CHECK (bbl >= 1000000000 and bbl < 6000000000),
+    bin integer CHECK (bin >= 1000000 and bin < 6000000),
     devid integer primary key,
     remark text,
-    UNIQUE (bbl, devid)
+    UNIQUE (bbl, bin, devid)
 );
 
 commit;
