@@ -306,7 +306,7 @@ returns boolean AS $$
 begin
     return 
         datestr is not null and
-        datestr ~ '^(18|20)(0[1-9]|1[012])[0123]\d$' and
+        datestr ~ '^(18|19|20)(0[1-9]|1[012])[0123]\d$' and
         datestr !~ '3[2-9]$' and 
         datestr !~ '023\d$' and 
         datestr !~ '0431$' and 
@@ -326,7 +326,7 @@ returns boolean AS $$
 begin
     return 
         datestr is not null and
-        datestr ~ '^(0[1-9]|1[012])\D[0123]\d\D(18|20)\d\d$' and
+        datestr ~ '^(0[1-9]|1[012])\D[0123]\d\D(18|19|20)\d\d$' and
         datestr !~ '^..3[2-9]' and 
         datestr !~ '^02.3' and 
         datestr !~ '^04.31' and 
