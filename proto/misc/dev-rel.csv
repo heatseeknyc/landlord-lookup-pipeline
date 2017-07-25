@@ -1,13 +1,13 @@
-bbl,devid,remarks
-1008510001,20001,Flatiron building
-1001010002,20001,New York Times Building - 41 Park Row
-1012747504,20001,Plaza Hotel - 768 Fifth Ave
-1010157501,20001,New York Times Annex - 229 West 43rd Street
-1012570001,20002,NYPL Main Branch
-1010180020,20002,Lunt-Fontaine Theatre - 205 West 46th
-1013850001,20002,Henry Frick Clay House - 1 East 70th
-1014970071,20002,William Star Miller House - 1048 Fifth Avenue
-1000130027,20002,Cunard Building - 25 Broadway
-1000220013,20002,Standard Oil Building - 26 Broadway
-1012040029,20003,The El Dorado - 300 Central Park West
-1005440071,20004,Merchant's House - 29 East 4th
+bbl,bin,devid,remarks
+1008510001,,20001,Flatiron building
+1001010002,,20001,New York Times Building - 41 Park Row
+1012747504,,20001,Plaza Hotel - 768 Fifth Ave
+1010157501,,20001,New York Times Annex - 229 West 43rd Street
+1012570001,,20002,NYPL Main Branch
+1010180020,,20002,Lunt-Fontaine Theatre - 205 West 46th
+1013850001,,20002,Henry Frick Clay House - 1 East 70th
+1014970071,,20002,William Star Miller House - 1048 Fifth Avenue
+1000130027,,20002,Cunard Building - 25 Broadway
+1000220013,,20002,Standard Oil Building - 26 Broadway
+1012040029,,20003,The El Dorado - 300 Central Park West
+1005440071,,20004,Merchant's House - 29 East 4th
