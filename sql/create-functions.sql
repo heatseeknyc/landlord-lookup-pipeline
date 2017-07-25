@@ -298,14 +298,16 @@ $$ language plpgsql;
 -- 
 
 -- A simple filter to determine whether we've been given a valid
--- YYYYMMDD string.  Not bullet proof by any means, but will at least
--- catch certain invalid cases we've seen so far. 
+-- YYYYMMDD string.  Unfortunately not quite bulletproof:  while it
+-- will catch almost all invalid date strings, it won't detect
+-- "rogue leap year" dates, that is, 02/29 dates on a non leap-year.
 create or replace function public.is_valid_yyyymmdd (datestr text) 
 returns boolean AS $$
 begin
     return 
         datestr is not null and
-        datestr ~ '^(19|20)(0\d|1[012])[0123]\d$' and
+        datestr ~ '^(18|20)(0[1-9]|1[012])[0123]\d$' and
+        datestr !~ '3[2-9]$' and 
         datestr !~ '023\d$' and 
         datestr !~ '0431$' and 
         datestr !~ '0631$' and 
@@ -324,8 +326,8 @@ returns boolean AS $$
 begin
     return 
         datestr is not null and
-        datestr ~ '^(0\d|1[012])\D[0123]\d\D(19|20)\d\d$' and
-        datestr !~ '^...3[2-9]' and 
+        datestr ~ '^(0[1-9]|1[012])\D[0123]\d\D(18|20)\d\d$' and
+        datestr !~ '^..3[2-9]' and 
         datestr !~ '^02.3' and 
         datestr !~ '^04.31' and 
         datestr !~ '^06.31' and 
