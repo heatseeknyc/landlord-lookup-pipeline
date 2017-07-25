@@ -114,6 +114,10 @@ left join push.hpd_taxlot_special as b on a.bbl = b.bbl;
 create index on push.hpd_taxlot_program(bbl);
 
 
+--
+-- Registration 
+--
+
 drop table if exists push.hpd_registration cascade;
 create table push.hpd_registration as
 select id, bbl, building_id, bin, last_date, end_date 
@@ -136,6 +140,11 @@ select a.bbl, count(*) as total
 from      push.hpd_registration as a
 left join push.hpd_contact      as b on a.id = b.registration_id
 group by a.bbl;
+
+
+--
+-- Legal
+--
 
 drop table if exists push.hpd_legal cascade;
 create table push.hpd_legal as
