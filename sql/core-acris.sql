@@ -35,12 +35,14 @@ create view core.acris_master as
 select
   a.docid, a.crfn, a.boro, b.doctag, a.doctype, a.amount, a.percentage, a.reel_year, a.reel_number, a.reel_page,
   case when
-      public.is_valid_yyyymmdd(a.date_document) then a.date_document::date else NULL
+      public.is_valid_mmddyyyy(a.date_document) then a.date_document::date else NULL
   end as date_document,
   a.date_filed, a.date_modified, a.date_valid_thru
 from flat.acris_master               as a
 left join core.acris_refdata_control as b on a.doctype = b.doctype; 
 
+-- Merges (boro, block, lot) into an integer bbl, and passes all other columns as-is
+-- except for 'rectype' which is always 'L' in the flat file.
 drop view if exists core.acris_legal cascade; 
 create view core.acris_legal as 
 select 
