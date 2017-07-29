@@ -27,7 +27,7 @@ where b.docid is null;
 -- A tidier view of the master table, restricted to essential columns 
 drop view if exists push.acris_master_tidy cascade; 
 create view push.acris_master_tidy as  
-select docid,doctag,doctype,amount,percentage,date_filed,date_modified 
+select docid, doctag, doctype, amount, percentage, date_filed, date_modified 
 from push.acris_master_clean;
 
 --
