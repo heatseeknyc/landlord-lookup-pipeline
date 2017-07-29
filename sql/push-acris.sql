@@ -28,10 +28,11 @@ where b.docid is null;
 drop view if exists push.acris_master_tidy cascade; 
 create view push.acris_master_tidy as  
 select 
-    docid, doctag, doctype, amount, percentage, 
+    docid, doctag, a.doctype, b.family as docfam, amount, percentage, 
     date_filed as filedate, 
     date_document as docdate
-from push.acris_master_clean;
+from push.acris_master_clean
+left join core.acris_refdata_docfam on a.doctype = b.doctype;
 
 --
 -- Now we can select into our tables of direct interest. 
