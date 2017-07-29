@@ -32,8 +32,8 @@ select
     amount, percentage, 
     date_filed as filedate, 
     date_document as docdate
-from push.acris_master_clean
-left join core.acris_refdata_docfam on a.doctype = b.doctype;
+from push.acris_master_clean        as a
+left join core.acris_refdata_docfam as b on a.doctype = b.doctype;
 
 --
 -- Now we can select into our tables of direct interest. 
