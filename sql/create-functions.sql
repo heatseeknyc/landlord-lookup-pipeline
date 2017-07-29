@@ -411,6 +411,14 @@ begin
 end
 $$ language plpgsql;
 
+create or replace function public.mkflags_acris (
+    partial char(1), easement boolean, rights_air boolean, rights_sub boolean)
+returns char(7) as $$
+begin
+    return partial::text ||'-'|| easement::integer::text ||'-'|| rights_air::integer::text ||'-'|| rights_sub::integer::text;
+end
+$$ language plpgsql;
+
 -- Ignoring country field for now.  And it definitely has some holes in terms of
 -- elegeantly patching up non-existant fields.  But should work about 95% of the time.
 create or replace function public.mkaddr_acris (
