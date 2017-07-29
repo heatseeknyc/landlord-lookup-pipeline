@@ -13,7 +13,7 @@ begin;
 -- and should make the de-duping select in the next view go much faster.
 drop table if exists push.acris_master_docid_count cascade; 
 create table push.acris_master_docid_count as  
-select docid,count(*) as total from core.acris_master group by docid having count(*) > 1;
+select docid, count(*) as total from core.acris_master group by docid having count(*) > 1;
 create index on push.acris_master_docid_count(docid);
 
 -- A deduping view based on presence (or lack thereof) in the above table.
