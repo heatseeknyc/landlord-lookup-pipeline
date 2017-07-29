@@ -30,8 +30,8 @@ create view push.acris_master_tidy as
 select 
     docid, doctag, a.doctype, b.family as docfam, 
     amount, percentage, 
-    date_filed as filedate, 
-    date_document as docdate
+    date_document as docdate,
+    date_filed as filedate
 from push.acris_master_clean        as a
 left join core.acris_refdata_docfam as b on a.doctype = b.doctype;
 
