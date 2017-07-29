@@ -41,13 +41,17 @@ select
 from flat.acris_master               as a
 left join core.acris_refdata_control as b on a.doctype = b.doctype; 
 
--- Merges (boro, block, lot) into an integer bbl, and passes all other columns as-is
+-- An "information-preserving" mapping of the original flatfile columns as follows: 
+--  - Merges (boro, block, lot) into an integer bbl, 
+--  - Merges 4 "easement/rights" booleans into a single string (char(7)) 
+-- passes all other columns as-is
 -- except for 'rectype' which is always 'L' in the flat file.
 drop view if exists core.acris_legal cascade; 
 create view core.acris_legal as 
 select 
-  docid, public.make_bbl(boro,block,lot) as bbl, easement, partial, rights_air, rights_sub, proptype,
-  street_name, street_number, unit, date_valid_thru 
+  docid, public.make_bbl(boro,block,lot) as bbl, unit, proptype, 
+  mkflags_acris(easement, partial, rights_air, rights_sub) as flags,
+  street_name, street_number, date_valid_thru 
 from flat.acris_legal;
 
 drop view if exists core.acris_party cascade; 
