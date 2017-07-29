@@ -46,8 +46,8 @@ create index on push.acris_master(docid);
 create index on push.acris_master(doctype);
 create index on push.acris_master(doctag);
 create index on push.acris_master(docfam);
-create index on push.acris_master(docid,doctag);
 create index on push.acris_master(docid,doctype);
+create index on push.acris_master(docid,doctag);
 create index on push.acris_master(docid,docfam);
 
 drop table if exists push.acris_deeds cascade;
