@@ -2,6 +2,10 @@
 # A list of dicts representing a map between local data source names 
 # and URLs to fetch them from at the NYC Open Data Portal.
 #
+-
+ name:  affordable
+ label: Affordable-Housing
+ slug: 'x9h2-i4fk'
 
 - 
  name:  building
@@ -34,7 +38,7 @@
  slug:  '59kj-x8nc'
 
 -
- name:  affordable
+ name:  affordable-element
  label: HPD-Rent-Affordability-Element
  slug:  'azxq-2skx'
  active: false
