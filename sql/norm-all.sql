@@ -14,21 +14,8 @@ begin;
 drop schema if exists norm cascade; 
 create schema norm;
 
-/*
-create view norm.acris_control as select * from flat.acris_control;
-create view norm.acris_condo_maybe as 
-select bbl, history_count, docid_count
-from p1.acris_condo_maybe order by bbl;
-*/
-
 create view norm.pluto_condo_primary as
 select * from push.pluto_taxlot_tidy where is_condo_bbl(bbl) order by bbl;
-
-/*
-create view norm.acris_declare as
-select * from p1.acris_history where doctype = 'DECL' order by bbl, date_filed desc;
-*/
-
 
 --
 -- Rent stabilization exports
@@ -45,13 +32,6 @@ order by bbl;
 create view norm.stable_combined_withorphans as
 select * from push.stable_combined
 order by bbl; 
-
-/*
-create view norm.acris_condo_graph as
-select bbl,docid from (
-    select bbl,docid,count(*) from p1.acris_declare group by bbl,docid
-) as x order by docid,bbl;
-*/
 
 -- Now we derive the real, normalized range spec that PAD should have provided:
 -- For every legitimate (that is "condo/bank") bill_bbl, we provide just the valid 
@@ -72,12 +52,5 @@ from push.dcp_pad_bbl where is_condo_bbl(bill_bbl) and
     not (is_condo_bbl(lo_bbl) or is_condo_bbl(hi_bbl)) and lo_bbl <= hi_bbl
 order by bill_bbl, lo_bbl, bbl;
 
-/*
-create view norm.cypress_owner as
-select * from temp.cypress_owner order by class, buyers, bbl;
-*/
-
 commit;
-
-
 
