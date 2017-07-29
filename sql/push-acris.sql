@@ -29,7 +29,7 @@ drop view if exists push.acris_master_tidy cascade;
 create view push.acris_master_tidy as  
 select 
     docid, doctag, a.doctype, b.family as docfam, 
-    amount, percentage, 
+    amount, percentage as percent,
     date_document as docdate,
     date_filed as filedate
 from push.acris_master_clean        as a
