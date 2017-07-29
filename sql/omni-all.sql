@@ -280,5 +280,35 @@ create view omni.comps_tidy as
 select bbl, doctype, class, taxclass, sale_date, sale_price, last_transfer, amount, percent, docid
 from omni.comps;
 
+--
+-- Coop stats 
+--
+
+-- Stats from July 2017
+-- 14289 rows; 13399 in acris; 7226 in pad; 890 in (pad-acris)
+create view omni.coop_outer as
+select 
+    coalesce(a.bbl,b.bbl) as bbl,
+    a.bbl is not null as in_acris, -- in ACRIS and has at least one coop-ish rec
+    b.bbl is not null as in_pad,   -- in PAD and marked as a coop
+    a.docid, a.total
+from p0.acris_coop as a
+full outer join push.dcp_coop as b on a.bbl = b.bbl;
+
+-- The above BBL set, with Pluto details slotted in.
+create view omni.coopism as
+select 
+    a.bbl,
+    a.in_pad as pad,
+    a.in_acris as acris,
+    b.address, b.owner_name, 
+    b.bldg_class, b.land_use as land, 
+    b.bldg_count as bldgs, 
+    b.units_res as uresi,
+    b.units_total as utotal,
+    a.docid, a.total
+from      omni.coop_outer   as a 
+left join push.pluto_taxlot as b on a.bbl = b.bbl;
+
 commit;
 
