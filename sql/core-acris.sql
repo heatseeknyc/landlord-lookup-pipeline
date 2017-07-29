@@ -51,7 +51,8 @@ create view core.acris_legal as
 select 
   docid, public.make_bbl(boro,block,lot) as bbl, unit, proptype, 
   mkflags_acris(easement, partial, rights_air, rights_sub) as flags,
-  street_name, street_number, date_valid_thru 
+  street_name, street_number, 
+  date_valid_thru 
 from flat.acris_legal;
 
 drop view if exists core.acris_party cascade; 
