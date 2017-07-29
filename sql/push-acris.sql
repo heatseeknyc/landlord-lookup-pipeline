@@ -43,8 +43,12 @@ drop table if exists push.acris_master cascade;
 create table push.acris_master as
 select * from push.acris_master_tidy;
 create index on push.acris_master(docid);
+create index on push.acris_master(doctype);
+create index on push.acris_master(doctag);
+create index on push.acris_master(docfam);
 create index on push.acris_master(docid,doctag);
 create index on push.acris_master(docid,doctype);
+create index on push.acris_master(docid,docfam);
 
 drop table if exists push.acris_deeds cascade;
 create table push.acris_deeds as
