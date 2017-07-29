@@ -412,7 +412,7 @@ end
 $$ language plpgsql;
 
 create or replace function public.mkflags_acris (
-    partial boolean, easement char(1), rights_air boolean, rights_sub boolean)
+    easement boolean, partial char(1), rights_air boolean, rights_sub boolean)
 returns char(7) as $$
 begin
     return partial::text ||'-'|| 
