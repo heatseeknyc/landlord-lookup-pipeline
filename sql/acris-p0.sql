@@ -184,31 +184,5 @@ from p0.acris_coop_count as a
 left join p0.acris_coop_type as b on a.bbl = b.bbl;
 create index on p0.acris_coop(bbl);
 
-
 commit;
-
-/*
-create table t2.acris_legal_count as
-select 
-    docid, bbl, unit, 
-    count(*) as total,
-    count(distinct (easement,partial,rights_air,rights_sub)) as flags,
-    count(distinct (street_number,street_name)) as address,
-    count(distinct proptype) as proptype
-from push.acris_legal group by docid, bbl, unit;
-create index on t2.acris_legal_count(docid);
-create index on t2.acris_legal_count(bbl);
-create index on t2.acris_legal_count(bbl,unit);
-create index on t2.acris_legal_count(docid,bbl,unit);
-
-drop view if exists t2.acris_legal_xref1 cascade; 
-create view t2.acris_legal_xref1 as
-select 
-    a.*, b.doctype, 
-    a.bbl, a.unit, a.docid, a.total, b.doctype
-from t2.acris_legal_count   as a
-left join push.acris_master as b on a.docid = b.docid
-where a.total > 1;
-*/
-
 
