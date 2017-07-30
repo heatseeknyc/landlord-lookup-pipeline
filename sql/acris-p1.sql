@@ -10,7 +10,9 @@ begin;
 drop schema if exists p1 cascade;
 create schema p1;
 
+commit;
 
+/*
 
 -- 18101346 rows in about 5 min
 drop table if exists p1.acris_history cascade;
@@ -106,6 +108,5 @@ select a.bbl as basebbl, b.*
 from      p1.acris_history as a
 left join p1.acris_history as b on a.docid = b.docid;
 
-commit;
-
+*/
 
