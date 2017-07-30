@@ -88,6 +88,22 @@ create index on p1.acris_history_grouped(bbl);
 create index on p1.acris_history_grouped(docfam);
 create index on p1.acris_history_grouped(bbl,docfam);
 
+-- A view of the ACRIS parties the way they were "meant" to be viewed, 
+-- that is, as a time series adjoined to history, with all party fields 
+-- slotted in.  (We won't usually access this view directly, so we call
+-- it the "wide" view).
+create view p1.party_history_wide as
+select a.bbl, a.doctag, a.doctype, a.docfam, a.docdate, a.filedate, a.effdate, b.* 
+from      p1.acris_history as a
+left join push.acris_party as b on a.docid = b.docid;
+
+-- A somewhat tidier form the "party history" view. 
+create view p1.party_history as
+select 
+    bbl, docid, doctag, doctype, docfam, effdate, party_type as party,
+    substr(name,1,35) as name, substr(address1,1,35) as address1
+from p1.party_history_wide;
+
 --
 -- Sifting views - Declarations 
 --
@@ -188,22 +204,6 @@ drop table p1.last_convey_date;
 drop table p1.acris_history_count;
 
 
--- A view of the ACRIS parties the way they were "meant" to be viewed, 
--- that is, as a time series adjoined to history, with all party fields 
--- slotted in.  (We won't usually access this view directly, so we call
--- it the "wide" view).
-create view p1.party_history_wide as
-select a.bbl, a.doctag, a.doctype, a.docfam, a.date_filed, b.* 
-from p1.acris_history      as a
-left join push.acris_party as b on a.docid = b.docid;
-
--- A somewhat tidier form the "party history" view.  Let's make our 
--- default view on this rowset.
-create view p1.party_history as
-select 
-    bbl, docid, doctag, doctype, docfam, date_filed, party_type as party,
-    substr(name,1,35) as name, substr(address1,1,35) as address1
-from p1.party_history_wide;
 
 create view p1.doctype_count as
 select 
