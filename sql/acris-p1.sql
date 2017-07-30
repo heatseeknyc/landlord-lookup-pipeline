@@ -39,11 +39,15 @@ create index on p1.acris_legal(bbl,docid);
 -- a small number of rows (around 1700).  The 'ucount' column is included to advise
 -- as to the 'unit' column (see notes above).
 --
+-- BTW note that while every row will have a 'filedate', for some 60% of these rows, 
+-- the 'docdate' will be NULL.  So we coalesce them onto our "effective date" column. 
+--
 -- 18,050,615 rows
 create table p1.acris_history as
 select 
    a.bbl, a.docid, a.flags, a.proptype, a.unit, b.doctag, b.doctype, b.docfam,
    b.amount, b.percent, b.docdate, b.filedate,
+   coalesce(b.docdate,b.filedate) as effdate,
    a.ucount 
 from      p1.acris_legal    as a 
 left join push.acris_master as b on a.docid = b.docid;
