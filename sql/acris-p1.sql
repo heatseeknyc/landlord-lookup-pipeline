@@ -55,6 +55,11 @@ create index on p1.acris_history(bbl);
 create index on p1.acris_history(docid);
 create index on p1.acris_history(docid,bbl);
 
+create view p1.acris_history_tidy as
+select
+   bbl, docid, flags, proptype, unit, doctag, doctype, docfam, amount, percent, docdate, filedate
+from p1.acris_history;
+
 -- For every BBL in our (scrubbed) history, tells us:
 -- row count, docid count, min/max effective dates.
 -- 1,154,260 rows
