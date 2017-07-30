@@ -55,6 +55,34 @@ create index on p1.acris_history(bbl);
 create index on p1.acris_history(docid);
 create index on p1.acris_history(docid,bbl);
 
+-- For every BBL in our (scrubbed) history, tells us:
+-- row count, docid count, min/max effective dates.
+-- 1,154,260 rows
+create table p1.acris_history_count as 
+select 
+    bbl, 
+    count(*) as total, 
+    count(distinct docid) as docid,
+    min(effdate) as mindate,
+    max(effdate) as maxdate
+from p1.acris_history group by bbl;
+create index on p1.acris_history_count(bbl);
+
+
+-- Like the above, but tells us min/max/total within a given doctype family. 
+-- size = 2-3x the above
+create table p1.acris_history_grouped as
+select 
+    bbl, docfam, 
+    max(effdate) as maxdate,
+    min(effdate) as mindate,
+    count(*) as total
+from p1.acris_history where docfam is not null 
+group by bbl, docfam;
+create index on p1.acris_history_grouped(bbl);
+create index on p1.acris_history_grouped(docfam);
+create index on p1.acris_history_grouped(bbl,docfam);
+
 --
 -- Sifting views - Declarations 
 --
@@ -163,16 +191,6 @@ from p1.acris_history where docfam = 1 group by bbl;
 create index on p1.last_convey_date(bbl);
 
 -- 1154260 rows
-drop table if exists p1.acris_history_count cascade; 
-create table p1.acris_history_count as 
-select 
-    qblock, bbl, 
-    count(*) as total, 
-    count(distinct docid) as docid_count, 
-    min(date_filed) as mindate,
-    max(date_filed) as maxdate
-from p1.acris_history group by qblock, bbl;
-create index on p1.acris_history_count(bbl);
 
 --
 -- Now join them into a 'ledger' table.
