@@ -74,8 +74,8 @@ create index on p1.acris_history_count(bbl);
 create table p1.acris_history_grouped as
 select 
     bbl, docfam, 
-    max(effdate) as maxdate,
     min(effdate) as mindate,
+    max(effdate) as maxdate,
     count(*) as total
 from p1.acris_history where docfam is not null 
 group by bbl, docfam;
