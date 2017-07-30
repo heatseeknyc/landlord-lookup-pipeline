@@ -50,6 +50,7 @@ create index on push.acris_master(docid,doctype);
 create index on push.acris_master(docid,doctag);
 create index on push.acris_master(docid,docfam);
 
+-- 18,459,841 rows (July 2017)
 drop table if exists push.acris_legal cascade;
 create table push.acris_legal as
 select * from core.acris_legal;
