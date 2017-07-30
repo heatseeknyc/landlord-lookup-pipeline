@@ -87,6 +87,22 @@ create index on p0.acris_legal_count(bbl);
 create index on p0.acris_legal_count(docid);
 create index on p0.acris_legal_count(docid,bbl);
 
+-- Our final de-duping step, as described in the statement above, which
+-- gets passed directly into the hard table 'p1.acris_legal'.
+create view p0.acris_legal_clean as
+select
+    bbl, docid,
+    case when flags = 1 then minflags else null end as flags,
+    case when proptype = 1 then minprop else null end as proptype,
+    case when unit <= 1 then firstunit else null end as unit,
+    unit as ucount,
+    total
+from p0.acris_legal_count;
+
+
+--
+-- Analytic Views
+--
 
 --
 -- These next two views provide (when sorted on bbl-docid) groupings of rows which 
@@ -107,18 +123,6 @@ select b.*
 from p0.acris_legal_count as a 
 left join p0.acris_legal  as b on (a.bbl,a.docid) = (b.bbl,b.docid)
 where a.total > 1 and a.flags > 1 and a.unit <= 1;
-
--- Our final de-duping step, as described in the statement above, which
--- gets passed directly into the hard table 'p1.acris_legal'.
-create view p0.acris_legal_clean as
-select
-    bbl, docid,
-    case when flags = 1 then minflags else null end as flags,
-    case when proptype = 1 then minprop else null end as proptype,
-    case when unit <= 1 then firstunit else null end as unit,
-    unit as ucount,
-    total
-from p0.acris_legal_count;
 
 
 --
