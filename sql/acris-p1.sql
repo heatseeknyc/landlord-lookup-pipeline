@@ -32,6 +32,96 @@ create index on p1.acris_legal(bbl);
 create index on p1.acris_legal(docid);
 create index on p1.acris_legal(bbl,docid);
 
+--
+-- Our new history table, reasonably de-duped.
+--
+-- Now unique on (docid,bbl); 'proptype' and 'flags' will be non-null for all but 
+-- a small number of rows (around 1700).  The 'ucount' column is included to advise
+-- as to the 'unit' column (see notes above).
+--
+-- 18,050,615 rows
+create table p1.acris_history as
+select 
+   a.bbl, a.docid, a.flags, a.proptype, a.unit, b.doctag, b.doctype, b.docfam,
+   b.amount, b.percent, b.docdate, b.filedate,
+   a.ucount 
+from      p1.acris_legal    as a 
+left join push.acris_master as b on a.docid = b.docid;
+create index on p1.acris_history(bbl);
+create index on p1.acris_history(docid);
+create index on p1.acris_history(docid,bbl);
+
+--
+-- Sifting views - Declarations 
+--
+
+--
+-- A pair of counting tables on DocID and BBL, respectively, for transactions
+-- which represent some form of declaration (zoning or condo).  Note that these
+-- form the respective vertex sets of our bipartite graph of related transactions.
+--
+
+-- 349,654 rows
+create table p1.declare_bbl as
+select bbl, doctype, count(distinct docid) as docid, count(*) as total
+from p1.acris_history where docfam = 5
+group by bbl, doctype;
+create index on p1.declare_bbl(bbl);
+
+-- 24,200 rows
+create table p1.declare_docid as
+select 
+    docid, doctype, 
+    min(bbl) as minbbl,
+    max(bbl) as maxbbl,
+    count(distinct bbl) as total,
+    count(distinct bbl2block(bbl)) as qblock 
+from p1.acris_history where docfam = 5
+group by docid, doctype;
+create index on p1.declare_docid(docid);
+
+--
+-- Analytic views - Coops
+-- Row counts for July 2017
+
+-- 13386 rows
+create view p1.acris_coop_count as
+select bbl, count(distinct docid) as docid, count(*) as total
+from p1.acris_history where proptype in ('CP','SP','MP','SA') group by bbl;
+
+-- Approx 2-3x the above
+create table p1.acris_coop_proptype as
+select bbl, proptype, count(distinct docid) as docid, count(*) as total
+from p1.acris_history where proptype in ('CP','SP','MP','SA') 
+group by bbl, proptype;
+create index on p1.acris_coop_proptype(bbl);
+
+-- 
+-- For every BBL with at least one CP/SP record, tells us whether the property 
+-- appears to be residential ('resi'), commercial ('comm'), or perhaps both.
+--
+-- Note that not every coop BBL will necessarily appear in this view; it's possible 
+-- for a BBL to have solely MP/SA records.
+--
+-- 13063 rows
+create view p1.acris_coop_type as
+select
+    coalesce(a.bbl,b.bbl) as bbl,
+    a.bbl is not null as is_resi,
+    b.bbl is not null as is_comm
+from
+(select bbl from p1.acris_coop_proptype where proptype = 'SP') as a 
+full outer join
+(select bbl from p1.acris_coop_proptype where proptype = 'CP') as b on a.bbl = b.bbl;
+
+-- A unified view of what we know so far about coop-ish BBLs in ACRIS.
+-- 13386 rows
+create table p1.acris_coop as
+select a.*, b.is_resi, b.is_comm
+from p1.acris_coop_count as a  
+left join p1.acris_coop_type as b on a.bbl = b.bbl;
+create index on p1.acris_coop(bbl);
+
 commit;
 
 /*
