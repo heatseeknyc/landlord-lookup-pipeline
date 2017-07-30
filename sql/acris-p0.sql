@@ -108,6 +108,8 @@ from p0.acris_legal_count as a
 left join p0.acris_legal  as b on (a.bbl,a.docid) = (b.bbl,b.docid)
 where a.total > 1 and a.flags > 1 and a.unit <= 1;
 
+-- Our final de-duping step, as described in the statement above, which
+-- gets passed directly into the hard table 'p1.acris_legal'.
 create view p0.acris_legal_clean as
 select
     bbl, docid,
