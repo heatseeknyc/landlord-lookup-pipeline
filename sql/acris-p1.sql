@@ -10,6 +10,28 @@ begin;
 drop schema if exists p1 cascade;
 create schema p1;
 
+-- A direct pull of our de-duping table.
+-- Will be unique on (bbl,docid), and almost all of the key attributes
+-- (proptype, flags, unit) will be non-null and "correct" for that 
+-- composite key.  
+--
+-- However, around 1700 of these will have either 'proptype' and/or 'flags' 
+-- set to NULL, meaning "can't disambiguate".  And another 2300 will have 
+-- 'unit' set to null, also meaning "can't disambiguate".  (But unlke the 
+-- former 2 columns, 'unit' will frequently be null anyway, even though there
+-- was no disambiguation issue).
+--
+-- Again, the former batch are apparently failed updates (and there's really 
+-- isn't anything we can do to try to disambiguate them).  And the cases where 
+-- 'unit' is set to NULL probably indicate batches of multi-unit coop sales.
+-- These we could perhaps address, but for now we'll simply punt.
+--
+-- 18,050,615
+create table p1.acris_legal as select * from p0.acris_legal_clean;
+create index on p1.acris_legal(bbl);
+create index on p1.acris_legal(docid);
+create index on p1.acris_legal(bbl,docid);
+
 commit;
 
 /*
