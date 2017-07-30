@@ -85,6 +85,8 @@ create index on p1.declare_docid(docid);
 -- Row counts for July 2017
 
 -- 13386 rows
+-- Note that 'docid' and 'total' will be identical in this table (and downstream)
+-- due to our de-deping process, but that's OK (and these views help demonstrate that).
 create view p1.acris_coop_count as
 select bbl, count(distinct docid) as docid, count(*) as total
 from p1.acris_history where proptype in ('CP','SP','MP','SA') group by bbl;
@@ -114,8 +116,15 @@ from
 full outer join
 (select bbl from p1.acris_coop_proptype where proptype = 'CP') as b on a.bbl = b.bbl;
 
+--
 -- A unified view of what we know so far about coop-ish BBLs in ACRIS.
--- 13386 rows
+-- As in the upstream views, the 'docid' and 'total' columns will be identical.
+--
+-- Note that there are some 800+ coops in PAD not present in this table.  Many of them
+-- do have ACRIS transactions -- just no SP/CP transfers, for whatever reason.
+--
+-- 13386 rows, with sum(total) around 250k.
+--
 create table p1.acris_coop as
 select a.*, b.is_resi, b.is_comm
 from p1.acris_coop_count as a  
