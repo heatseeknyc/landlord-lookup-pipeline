@@ -103,12 +103,12 @@ from p0.acris_legal_count;
 create table p0.acris_legal_tally as
 select 
     a.*, 
-    b.doctag, b.doctype, b.docfam
+    b.doctag, b.doctype, b.docfam,
+    b.docdate, b.filedate
 from (select docid, count(*) as total from p0.acris_legal_clean group by docid) as a
 left join push.acris_master as b on a.docid = b.docid;
 create index on p0.acris_legal_tally(docid);
 create index on p0.acris_legal_tally(doctype);
-create index on p0.acris_legal_tally(total);
 
 --
 -- Analytic Views
