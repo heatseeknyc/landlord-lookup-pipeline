@@ -106,8 +106,8 @@ select
     b.doctag, b.doctype, b.docfam,
     b.docdate, b.filedate
 from (
-    select docid, 
-    count(*) as total 
+    select docid, count(*) as total,
+    min(bbl) as bblmin, max(bbl) as bblmax
     from p0.acris_legal_clean group by docid
 ) as a
 left join push.acris_master as b on a.docid = b.docid;
