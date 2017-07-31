@@ -291,12 +291,12 @@ select
     coalesce(a.bbl,b.bbl) as bbl,
     a.bbl is not null as in_acris, -- in ACRIS and has at least one coop-ish rec
     b.bbl is not null as in_pad,   -- in PAD and marked as a coop
-    a.docid, a.total
+    a.docid, a.total, a.is_resi, a.is_comm
 from p0.acris_coop as a
 full outer join push.dcp_coop as b on a.bbl = b.bbl;
 
--- The above BBL set, with Pluto details slotted in.
-create view omni.coopism as
+-- The above BBL set, with Pluto details + condo status slotted in
+create table omni.coopism as
 select 
     a.bbl,
     a.in_pad as pad,
@@ -306,9 +306,12 @@ select
     b.bldg_count as bldgs, 
     b.units_res as uresi,
     b.units_total as utotal,
-    a.docid, a.total
-from      omni.coop_outer   as a 
-left join push.pluto_taxlot as b on a.bbl = b.bbl;
+    a.docid, a.total, a.is_resi, a.is_comm,
+    c.bank
+from      omni.coop_outer    as a
+left join push.pluto_taxlot  as b on a.bbl = b.bbl
+left join omni.dcp_condo_map as c on a.bbl = c.unit;
+create index on omni.coopism(bbl);
 
 commit;
 
