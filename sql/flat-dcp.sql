@@ -79,5 +79,28 @@ create table flat.dcp_condo_map (
     UNIQUE(unit)
 );
 
+/* 
+Borough Code,Tax Block,Tax Lot,Zoning District 1,Zoning District 2,Zoning District 3,Zoning District 4,Commercial Overlay 1,Commercial Overlay 2,Special District 1,Special District 2,Special District 3,Limited Height District,Zoning Map Number,Zoning Map Code
+1,1,10,R3-2,,,,,,GI,,,,16A,Y
+1,1,101,R3-2,,,,,,,,,,16A,Y
+1,1,201,R3-2,,,,,,,,,,12B, */
+create table flat.dcp_zoning (
+    BoroughCode smallint not null,
+    TaxBlock integer not null,
+    TaxLot smallint not null,
+    ZoningDistrict1 text,
+    ZoningDistrict2 text,
+    ZoningDistrict3 text,
+    ZoningDistrict4 text,
+    CommercialOverlay1 text,
+    CommercialOverlay2 text,
+    SpecialDistrict1 text,
+    SpecialDistrict2 text,
+    SpecialDistrict3 text,
+    LimitedHeightDistrict text,
+    ZoningMapNumber text,
+    ZoningMapCode text
+);
+
 commit;
 
