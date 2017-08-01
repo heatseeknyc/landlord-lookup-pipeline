@@ -68,6 +68,11 @@ create index on push.dcp_pad_keytup(bbl);
 create index on push.dcp_pad_keytup(bin);
 create index on push.dcp_pad_keytup(bbl,bin);
 
+drop table if exists push.dcp_zoning cascade;
+create table push.dcp_zoning as select * from core.dcp_zoning;
+create index on push.dcp_zoning(bbl);
+create index on push.dcp_zoning(zd1);
+create index on push.dcp_zoning(mapnum);
 
 commit;
 
