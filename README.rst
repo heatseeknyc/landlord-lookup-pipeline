@@ -50,4 +50,3 @@ The overall architecture of the portal, as such, is extremely simple.  Basically
 The basic idea is that 3 repos provide for natural segregation into functional areas (database, gateway, frontend) -- based on "separation of concern"-- that makes the source trees (and their dependencies) easier to manage and reason about.
 
 
-
