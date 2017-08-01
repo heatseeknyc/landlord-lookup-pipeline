@@ -88,18 +88,18 @@ create table flat.dcp_zoning (
     BoroughCode smallint not null,
     TaxBlock integer not null,
     TaxLot smallint not null,
-    ZoningDistrict1 text,
-    ZoningDistrict2 text,
+    ZoningDistrict1 text not null,
+    ZoningDistrict2 text, -- the rest of these are almost always null
     ZoningDistrict3 text,
     ZoningDistrict4 text,
-    CommercialOverlay1 text,
-    CommercialOverlay2 text,
-    SpecialDistrict1 text,
+    CommercialOverlay1 char(4), -- usually null
+    CommercialOverlay2 char(4),
+    SpecialDistrict1 text, -- usually null
     SpecialDistrict2 text,
     SpecialDistrict3 text,
-    LimitedHeightDistrict text,
-    ZoningMapNumber text,
-    ZoningMapCode text
+    LimitedHeightDistrict text, -- almost always null
+    ZoningMapNumber text, -- almost always non-null
+    ZoningMapCode text -- usually null
 );
 
 commit;
