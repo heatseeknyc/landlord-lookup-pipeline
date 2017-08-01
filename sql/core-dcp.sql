@@ -53,5 +53,24 @@ select
     normfw(interior) as interior
 from flat.dcp_pad_bbl;
 
+-- A passthru of all fields (except BBL) with tidier column names 
+-- (as most of these fields themselvs are tidy, if not usually NULL). 
+create view core.dcp_zoning as
+select
+    make_bbl(BoroughCode,TaxBlock,TaxLot) as bbl,
+    ZoningDistrict1 as zd1, 
+    ZoningDistrict2 as zd2, 
+    ZoningDistrict3 as zd3, 
+    ZoningDistrict4 as zd4, 
+    CommercialOverlay1 as cov1, 
+    CommercialOverlay2 as cov2, 
+    SpecialDistrict1 as sd1, 
+    SpecialDistrict2 as sd2, 
+    SpecialDistrict3 as sd3, 
+    LimitedHeightDistrict as lhd, 
+    ZoningMapNumber as mapnum, 
+    ZoningMapCode as mapcode 
+from flat.dcp_zoning;
+
 commit;
 
