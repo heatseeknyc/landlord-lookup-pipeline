@@ -6,6 +6,7 @@
  name:  affordable
  label: Affordable-Housing
  slug: 'x9h2-i4fk'
+ active: false
 
 - 
  name:  building
