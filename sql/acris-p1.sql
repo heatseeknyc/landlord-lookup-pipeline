@@ -104,6 +104,9 @@ select
     substr(name,1,35) as name, substr(address1,1,35) as address1
 from p1.party_history_wide;
 
+
+
+
 --
 -- Sifting views - Declarations 
 --
