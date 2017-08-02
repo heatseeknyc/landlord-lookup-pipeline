@@ -75,3 +75,4 @@ create table flat.ecb_violation (
 );
 
 commit;
+
