@@ -88,6 +88,21 @@ create index on p1.acris_history_grouped(bbl);
 create index on p1.acris_history_grouped(docfam);
 create index on p1.acris_history_grouped(bbl,docfam);
 
+-- A restriction of the history table to records which, for a given
+-- taxlot and document family, occur on the latest effective date
+-- for that document family (for that taxlot).
+create view p1.acris_history_blocks as
+select b.* 
+from p1.acris_history_grouped as a
+left join p1.acris_history    as b on (a.bbl,a.docfam,a.maxdate) = (b.bbl,b.docfam,b.effdate);
+
+-- A tidier view ot the above.
+create view p1.acris_history_bloks as
+select bbl, docid, flags, proptype, unit, doctag, doctype, docfam, amount, percent, effdate
+from p1.acris_history_blocks;
+
+
+
 -- A view of the ACRIS parties the way they were "meant" to be viewed, 
 -- that is, as a time series adjoined to history, with all party fields 
 -- slotted in.  (We won't usually access this view directly, so we call
