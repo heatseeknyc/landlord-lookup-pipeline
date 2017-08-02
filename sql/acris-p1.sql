@@ -101,6 +101,24 @@ create view p1.acris_history_bloks as
 select bbl, docid, flags, proptype, unit, doctag, doctype, docfam, amount, percent, effdate
 from p1.acris_history_blocks;
 
+-- Let's now find out which properties have multiple records (within a docfam)
+-- on the last observed effdate - and pick up the highest-numbered (and presumably,
+-- most recently occuring) docid in that batch, as well.
+--
+-- 2.23M rows (July 2017).  Only 100k with total > 1, and 1654 rows with total > 5. 
+-- But total can run quite high (low 50s, or up to 131).
+create table p1.acris_history_tally as
+select
+    bbl, docfam, effdate,
+    max(docid) as docid,
+    count(*) as total
+from p1.acris_history_blocks
+group by bbl, docfam, effdate;
+create index on p1.acris_history_tally(bbl);
+create index on p1.acris_history_tally(docid);
+create index on p1.acris_history_tally(effdate);
+create index on p1.acris_history_tally(total);
+
 
 
 -- A view of the ACRIS parties the way they were "meant" to be viewed, 
