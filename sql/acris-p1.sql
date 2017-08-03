@@ -57,7 +57,9 @@ create index on p1.acris_history(docid,bbl);
 
 create view p1.acris_history_tidy as
 select
-   bbl, docid, flags, proptype, unit, doctag, doctype, docfam, amount, percent, docdate, filedate
+    bbl, docid, flags, proptype, 
+    unit, doctag, doctype, docfam, 
+    amount, percent, docdate, filedate
 from p1.acris_history;
 
 -- For every BBL in our (scrubbed) history, tells us:
@@ -117,7 +119,13 @@ group by bbl, docfam, effdate;
 create index on p1.acris_history_tally(bbl);
 create index on p1.acris_history_tally(docid);
 create index on p1.acris_history_tally(effdate);
-create index on p1.acris_history_tally(total);
+
+create view p1.acris_history_profile as
+select 
+    a.*, 
+    b.doctag, b.doctype, b.amount, b.percent 
+from p1.acris_history_tally as a 
+left join push.acris_master as b on a.docid = b.docid;
 
 
 
