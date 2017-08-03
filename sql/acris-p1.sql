@@ -59,7 +59,7 @@ create view p1.acris_history_tidy as
 select
     bbl, docid, flags, proptype, 
     unit, doctag, doctype, docfam, 
-    amount, percent, docdate, filedate
+    amount, percent, docdate, filedate, effdate
 from p1.acris_history;
 
 -- For every BBL in our (scrubbed) history, tells us:
