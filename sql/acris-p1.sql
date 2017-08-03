@@ -57,9 +57,9 @@ create index on p1.acris_history(docid,bbl);
 
 create view p1.acris_history_tidy as
 select
-    bbl, docid, flags, proptype, 
-    unit, doctag, doctype, docfam, 
-    amount, percent, docdate, filedate, effdate
+    bbl, docid, flags, proptype as ptype, 
+    unit, doctag, doctype, docfam as fam, 
+    amount, percent as pct, docdate, filedate, effdate
 from p1.acris_history;
 
 -- For every BBL in our (scrubbed) history, tells us:
