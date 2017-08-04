@@ -10,8 +10,8 @@
 begin;
 
 
-drop materialized view if exists core.acris_refdata_control cascade;
-create materialized view core.acris_refdata_control as
+drop table if exists core.acris_refdata_control cascade;
+create table core.acris_refdata_control as
 select
   doctype, description, classcode, ptype1, ptype2, ptype3,
   case
