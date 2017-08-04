@@ -24,16 +24,17 @@ from      core.acris_master             as a
 left join push.acris_master_docid_count as b on a.docid = b.docid
 where b.docid is null;
 
--- A tidier view of the master table, restricted to essential columns 
+-- A tidier view of the master table, restricted to essential columns;
+-- and with date fields names normalized; and doctag/docfam slotted in.
 drop view if exists push.acris_master_tidy cascade; 
 create view push.acris_master_tidy as  
 select 
-    docid, b.doctag, a.doctype, c.docfam, 
+    docid, b.doctag, a.doctype, c.family as docfam, 
     amount, percentage as percent,
     date_document as docdate,
     date_filed as filedate
 from push.acris_master_clean         as a
-left join core.acris_refdata_control as b on a.doctype = b.doctype;
+left join core.acris_refdata_control as b on a.doctype = b.doctype
 left join core.acris_refdata_docfam  as c on a.doctype = c.doctype;
 
 --

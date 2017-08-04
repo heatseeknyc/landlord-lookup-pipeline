@@ -26,7 +26,7 @@ create index on core.acris_refdata_control(doctype);
 
 -- A nearly trivial push, just to have it in the core schema (and indexed).
 drop table if exists core.acris_refdata_docfam cascade;
-create table view core.acris_refdata_docfam as
+create table core.acris_refdata_docfam as
 select * from flat.acris_refdata_docfam;
 create index on core.acris_refdata_docfam(doctype);
 
