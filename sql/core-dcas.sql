@@ -42,8 +42,8 @@ drop view if exists core.dcas_ipis cascade;
 create view core.dcas_ipis as 
 select
     bbl, 
-    parcel_name,
-    parcel_address,
+    parcel_name as name,
+    parcel_address as address,
     juris,
     agency,
     -- jurisdiction_description text,
