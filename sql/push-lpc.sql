@@ -19,6 +19,23 @@ select a.bbl, a.bin, total, names, b.lmk_name, b.pluto_addr
 from push.lpc_indiv_count as a
 left join push.lpc_indiv  as b on (a.bbl,a.bin) = (b.bbl,b.bin);
 
+-- A counting table of all the distinct lmkname -markings- per BBL/BIN (that is, 
+-- relations from BBL/BIN to lmkname).  Because many of these are useless historic 
+-- district names (and because we couldn't think of any non-awkward names for 
+-- this particular aggreagation) -- and because it's a temp table, anyway -- 
+-- we chose the name below. 
+drop table if exists push.lpc_indiv_badname cascade;
+create table push.lpc_indiv_badname as 
+select bbl, bin, lmk_name as name, count(*) as total 
+from push.lpc_indiv group by bbl, bin, lmk_name;
+create index on push.lpc_indiv_badname(bbl,bin);
+
+-- A much smaller aggregation of relations, restricted to more plausible 
+-- individual building/taxlot names.  Will still require manual curation,
+-- but be much more focused and manageable.
+create view push.lpc_indiv_okname as
+select * from push.lpc_indiv_badname where name !~ 'Historic.District'; 
+
 commit;
 
 
