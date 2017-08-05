@@ -55,12 +55,3 @@ from core.lpc_clean group by bbl, bin;
 
 commit;
 
-/*
-drop view if exists core.lpc_clean_block cascade;
-create view core.lpc_clean_block as 
-select a.bbl, a.bin, total, names, b.lmk_name, b.pluto_addr
-from core.lpc_clean_count as a
-left join core.lpc_indiv  as b on (a.bbl,a.bin) = (a.bbl,b.bin);
-*/
-
-
