@@ -38,5 +38,15 @@ create table flat.lpc_indiv (
     second_bldg smallint 
 );
 
+-- An overlay tables for entity names in the above table that would be hard
+-- to disambiguate automatically - so we do it by hand.  
+drop table if exists flat.lpc_indiv_name cascade;
+create table flat.lpc_indiv_name (
+    bbl bigint CHECK (is_valid_bbl(bbl)),
+    bin integer CHECK (is_valid_bin(bin)),
+    name text not null,
+    UNIQUE (bbl,bin)
+);
+
 commit;
 
