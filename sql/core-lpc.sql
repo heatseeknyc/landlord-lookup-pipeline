@@ -29,7 +29,9 @@ select
     second_bldg as bldg2
 from flat.lpc_indiv where is_valid_bbl(bbl) and not is_degenerate_bbl(bbl);
 
+commit;
 
+/*
 -- 36680 rows, some 4520 with names > 1
 drop view if exists core.lpc_indiv_count cascade;
 create view core.lpc_indiv_count as
@@ -52,6 +54,6 @@ drop view if exists core.lpc_clean_count cascade;
 create view core.lpc_clean_count as
 select bbl, bin, count(*) as total, count(distinct lmk_name) as names
 from core.lpc_clean group by bbl, bin;
+*/
 
-commit;
 
