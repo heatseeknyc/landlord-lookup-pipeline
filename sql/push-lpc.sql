@@ -31,10 +31,13 @@ from push.lpc_indiv group by bbl, bin, lmk_name;
 create index on push.lpc_indiv_badname(bbl,bin);
 
 -- A much smaller aggregation of relations, restricted to more plausible 
--- individual building/taxlot names.  Will still require manual curation,
--- but be much more focused and manageable.
+-- individual building/taxlot names (the ones being excluded being those whose
+-- 'landmark name' is the name of some historic district),  It will still 
+-- require manual curation, but be much more focused and manageable.
 create view push.lpc_indiv_okname as
-select * from push.lpc_indiv_badname where name !~ 'Historic.District'; 
+select * from push.lpc_indiv_badname where 
+    name !~ 'Historic.District' and 
+    name !~ '^Greenwich Village -' 
 
 commit;
 
