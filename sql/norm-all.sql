@@ -52,5 +52,9 @@ from push.dcp_pad_bbl where is_condo_bbl(bill_bbl) and
     not (is_condo_bbl(lo_bbl) or is_condo_bbl(hi_bbl)) and lo_bbl <= hi_bbl
 order by bill_bbl, lo_bbl, bbl;
 
+create view norm.acris_declare_simple as
+select bbl, docid, doctype from p0.acris_history where docfam = 5
+order by bbl, docid, doctype;
+
 commit;
 
