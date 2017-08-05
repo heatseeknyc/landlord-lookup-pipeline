@@ -56,5 +56,8 @@ create view norm.acris_declare_simple as
 select bbl, docid, doctype from p0.acris_history where docfam = 5
 order by bbl, docid, doctype;
 
+create view norm.lpd_indiv_okname as
+select * from push.lpc_indiv_okname order by bbl, bin, name;
+
 commit;
 
