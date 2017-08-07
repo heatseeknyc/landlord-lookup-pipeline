@@ -22,6 +22,11 @@ create index on push.pluto_building(bbl);
 create index on push.pluto_building(bin);
 create index on push.pluto_building(bbl,bin);
 
+drop view if exists push.pluto_building_tidy cascade; 
+create view push.pluto_building_tidy as
+select bbl, bin, lat_ctr, lon_ctr, radius, parts, length(points)
+from push.pluto_building;
+
 drop materialized view if exists push.pluto_building_count cascade; 
 create materialized view push.pluto_building_count as
 select bbl, count(*) as total, count(distinct bin) as building
