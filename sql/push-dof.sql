@@ -4,6 +4,7 @@ begin;
 create table push.dof_rolling as
 select * from core.dof_rolling;
 create index on push.dof_rolling(bbl);
+create index on push.dof_rolling(sale_date);
 
 create view push.dof_rolling_tidy as
 select 
