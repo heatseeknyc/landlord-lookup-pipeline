@@ -4,6 +4,7 @@ drop table if exists push.pluto_taxlot cascade;
 create table push.pluto_taxlot as
 select * from core.pluto_taxlot_remix;
 create index on push.pluto_taxlot(bbl);
+create index on push.pluto_taxlot(comm_dist);
 
 drop view if exists push.pluto_taxlot_tidy cascade; 
 create view push.pluto_taxlot_tidy as
