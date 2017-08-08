@@ -56,8 +56,11 @@ create view norm.acris_declare_simple as
 select bbl, docid, doctype from p0.acris_history where docfam = 5
 order by bbl, docid, doctype;
 
+-- A one-off view to extract aggregated name markings,
+-- with a few columns slotted in contaiing default values for
+-- the manual curation process
 create view norm.lpc_indiv_okname as
-select bbl, bin, name from push.lpc_indiv_okname order by bbl, bin, name;
+select bbl, bin, 'Y' as keep, name, '-' as remark from push.lpc_indiv_okname order by bbl, bin, name;
 
 commit;
 
