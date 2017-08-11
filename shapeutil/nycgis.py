@@ -12,7 +12,7 @@ import pyproj
 
 
 """
-An alternate way of referenicng the NYS projection, per the following StackOverflow post:
+An alternate way of referencing the NYS projection, per the following StackOverflow post:
 
   https://github.com/jswhit/pyproj/issues/67
 
