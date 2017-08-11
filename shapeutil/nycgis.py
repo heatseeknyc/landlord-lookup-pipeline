@@ -12,7 +12,7 @@ import pyproj
 
 
 """
-An alternate way of referencing the NYS projection, per the following StackOverflow post:
+An alternate way of referencing the NYS projection, per the following issue writeup:
 
   https://github.com/jswhit/pyproj/issues/67
 
@@ -43,6 +43,8 @@ def stateplane2lonlat(t):
     return _stateplane2lonlat(*t)
 
 def demo():
+    """A simple unit test, as it were.  Returns a coordinate pair almost exactly 
+    in the middle of Ellis Island."""
     e,n = 981106.0,195544.0
     lon,lat = stateplane2lonlat(e,n)
     print(lon,lat)
