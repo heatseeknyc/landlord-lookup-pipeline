@@ -48,9 +48,6 @@ create index on push.acris_master(docid);
 create index on push.acris_master(doctype);
 create index on push.acris_master(doctag);
 create index on push.acris_master(docfam);
--- create index on push.acris_master(docid,doctype);
--- create index on push.acris_master(docid,doctag);
--- create index on push.acris_master(docid,docfam);
 
 -- 18,459,841 rows (July 2017)
 drop table if exists push.acris_legal cascade;
@@ -58,13 +55,12 @@ create table push.acris_legal as
 select * from core.acris_legal;
 create index on push.acris_legal(bbl);
 create index on push.acris_legal(docid);
-create index on push.acris_legal(docid,bbl);
 
 drop table if exists push.acris_party cascade;
 create table push.acris_party as
 select * from core.acris_party;
 create index on push.acris_party(docid);
-create index on push.acris_party(docid,party_type);
+create index on push.acris_party(party_type);
 
 -- A crucial table telling us the number of parties of a given transaction and party_type.
 -- 27,684,101 rows - 5 min  
@@ -73,30 +69,29 @@ create table push.acris_party_count as
 select docid, party_type, count(*) as total
 from push.acris_party group by docid, party_type;
 create index on push.acris_party_count(docid);
-create index on push.acris_party_count(docid,party_type);
-
-/*
-create table push.acris_party_single as
-select
-    a.docid, a.party_type,
-    name, address1, address2, country, city, state, postal
-from push.acris_party_count as a
-left join push.acris_party  as b on (a.docid,a.party_type) = (b.docid,b.party_type)
-where a.total = 1;
-create index on push.acris_party_single(docid,party_type);
-*/
+create index on push.acris_party_count(party_type);
 
 -- A nifty view showing name+address for single-party transactions only,
 -- where these are known.  Note that it gets a crucial lift from the index 
 -- on 'acris_party_count' - if that index drops, then select times on this
 -- view will grind form to a hald.
 create view push.acris_party_single as
-select
-    a.docid, a.party_type,
-    name, address1, address2, country, city, state, postal
+select a.*, b.name, b.address1, b.address2, b.country, b.city, b.state, b.postal
 from push.acris_party_count as a
 left join push.acris_party  as b on (a.docid,a.party_type) = (b.docid,b.party_type)
 where a.total = 1;
+
+drop view push.acris_party_simple cascade;
+create view push.acris_party_simple as
+select
+    a.*,
+    case when a.total = 1 then b.name else 'MULTIPARTY' end as name
+    -- case
+    --    when a.total = 1 then mkaddr_acris(b.address1, b.address2, b.country, b.city, b.state, b.postal)
+    --    else null
+    -- end as address
+from push.acris_party_count        as a
+left join push.acris_party_single  as b on (a.docid,a.party_type) = (b.docid,b.party_type);
 
 
 --
