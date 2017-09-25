@@ -131,4 +131,3 @@ And information about JK's taxbill scrapes can be found here:
     http://taxbill.nyc/
 
 
-
