@@ -2,15 +2,15 @@ Notes about exported datasets having to do with rent stabilization.
 
 Currently we have two datasets available for export::
  
-    export/stable_confirmed_restricted.csv   |  46441 data rows 
-    export/stable_confirmed_withorphans.csv  |  47260 data rows 
+    export/stable_confirmed_restricted.csv   |  46,929 data rows 
+    export/stable_confirmed_withorphans.csv  |  47,774 data rows 
 
 Each dataset represents a *union* of the two datasets currently available for rent 
 stabilization (per BBL) to the extent to which each of these could be cleanly scraped 
 and parsed, an of course, the extent to which the sets can be cleanly joined: 
 
  - The DHCR 2015 Rent Stabilization list 
- - JK's taxbill scrapes 2007-105
+ - JK's taxbill scrapes 2007-2016 (corresponding to the Summer 2017 release) 
 
 The basic idea is that instead of wrestling with the two datasets (and their 
 attendant caveats) individually, you can work with (and quickly import) a single 
@@ -83,6 +83,8 @@ things as clear as possible:
    may therefore somtimes be NULL even though the row was present in the source dataset).
 
 As an illustration, here's a random select of 10 rows from the SQL perspective::
+
+*(Note that this exact values in this dataset, and in the summary counts, are by now (late 2017) a bit out of synch with the current release - but this should give you a general idea of what the combined rowset looks like).* 
 
   select * from push.stable_combined order by bbl limit 10;
 
