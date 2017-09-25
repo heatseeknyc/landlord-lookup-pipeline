@@ -1,4 +1,4 @@
-Notes about exported datasets having to do with rent stabilization. 
+Notes about exported datasets having to do with rent stabilization (last updated July 2017).
 
 Currently we have two datasets available for export::
  
